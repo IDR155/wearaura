@@ -477,7 +477,7 @@ async function loadStories() {
   const bar = document.getElementById('stories-bar');
   if (!bar) return;
   bar.innerHTML = `<div class="story-item" role="button" tabindex="0" aria-label="Ajouter une story" onclick="openStoryCam()" onkeydown="if(event.key==='Enter'||event.key===' ')openStoryCam()">
-    ${_myStoryBubble(null)}<div class="story-label">Ma story</div></div>`;
+    ${_myStoryBubble(null)}<div class="story-label">${t('ma_story')}</div></div>`;
   if (!dbOk || !me) return;
 
   const { data: follows } = await sb.from('follows').select('following_id').eq('follower_id', me.id);
@@ -519,7 +519,7 @@ async function loadStories() {
   const myAction = myData ? `openStoryViewer('${me.id}')` : 'openStoryCam()';
   const myLabel = myData ? 'Voir ma story' : 'Ajouter une story';
   let html = `<div class="story-item" role="button" tabindex="0" aria-label="${myLabel}" onclick="${myAction}" onkeydown="if(event.key==='Enter'||event.key===' ')${myAction}">
-    ${_myStoryBubble(myData)}<div class="story-label">Ma story</div></div>`;
+    ${_myStoryBubble(myData)}<div class="story-label">${t('ma_story')}</div></div>`;
 
   Object.entries(_storiesData)
     .filter(([uid]) => uid !== me.id)

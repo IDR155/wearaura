@@ -199,7 +199,7 @@
   <div class="bq-search-bar">
     <div class="exp-search-wrap">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(237,228,207,0.4)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" id="bq-search-input" placeholder="Marques, boutiques, vendeurs…" oninput="bqSearch(this.value)" class="exp-search-input">
+      <input type="text" id="bq-search-input" data-i18n="bq_search_ph" data-i18n-attr="placeholder" placeholder="Marques, boutiques, vendeurs…" oninput="bqSearch(this.value)" class="exp-search-input">
       <div id="bq-search-clear" class="bq-search-clear" onclick="bqSearchClear()">×</div>
     </div>
     <div id="bq-sort-trigger" class="bq-sort-btn" onclick="bqOpenSortMenu(this)" title="Trier">
@@ -209,8 +209,8 @@
 
   <!-- Toggle vue + brand filter badge -->
   <div class="bq-view-bar">
-    <div class="bq-view-chip active" data-view="pieces" onclick="bqViewToggle(this,'pieces')">Pièces</div>
-    <div class="bq-view-chip" data-view="marques" onclick="bqViewToggle(this,'marques')">Marques</div>
+    <div class="bq-view-chip active" data-view="pieces" onclick="bqViewToggle(this,'pieces')" data-i18n="tab_pieces">Pièces</div>
+    <div class="bq-view-chip" data-view="marques" onclick="bqViewToggle(this,'marques')" data-i18n="tab_brands">Marques</div>
     <div id="bq-brand-filter" role="button" tabindex="0" aria-label="Supprimer le filtre marque" onclick="bqClearBrandFilter()" onkeydown="if(event.key==='Enter'||event.key===' ')bqClearBrandFilter()">
       <span id="bq-brand-filter-name"></span>
       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true" style="flex-shrink:0"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -644,7 +644,7 @@
     <div style="display:flex;border-bottom:1px solid rgba(240,234,216,0.08)">
       <div id="ntab-msgs" onclick="_ntab('msgs')" style="flex:1;text-align:center;padding:10px 0;font-size:12px;font-weight:600;color:var(--white);border-bottom:2px solid var(--gold);cursor:pointer;letter-spacing:.5px;transition:color .2s,border-color .2s">Messages</div>
       <div id="ntab-act" onclick="_ntab('act')" style="flex:1;text-align:center;padding:10px 0;font-size:12px;color:var(--wd);border-bottom:2px solid transparent;cursor:pointer;letter-spacing:.5px;transition:color .2s,border-color .2s;position:relative">
-        Activité
+        <span data-i18n="activity_title">Activité</span>
         <div id="ntab-act-dot" style="display:none;position:absolute;top:10px;right:calc(50% - 30px);width:7px;height:7px;background:#E8312A;border-radius:50%"></div>
       </div>
     </div>
@@ -682,7 +682,7 @@
         </div>
         <div class="exp-search-wrap flex-1">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(237,228,207,0.4)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="msg-srch-input" placeholder="Rechercher un utilisateur…" oninput="doMsgSearch(this.value)" class="exp-search-input" style="font-size:14px">
+          <input type="text" id="msg-srch-input" data-i18n="dm_search_ph" data-i18n-attr="placeholder" placeholder="Rechercher un utilisateur…" oninput="doMsgSearch(this.value)" class="exp-search-input" style="font-size:14px">
           <div id="msg-srch-clear" onclick="clearMsgSearch()" style="display:none;cursor:pointer;color:var(--wd);font-size:20px;line-height:1">×</div>
         </div>
       </div>
@@ -730,11 +730,11 @@
           <div style="display:flex;gap:8px">
             <div class="prof-card prof-card-stat" onclick="openFollowList('followers',me?.id)" style="cursor:pointer;flex:1;padding:10px 8px">
               <div class="stat2-n" id="my-followers">0</div>
-              <div class="stat2-l">Abonnés</div>
+              <div class="stat2-l" data-i18n="followers">Abonnés</div>
             </div>
             <div class="prof-card prof-card-stat" onclick="openFollowList('following',me?.id)" style="cursor:pointer;flex:1;padding:10px 8px">
               <div class="stat2-n" id="my-following">0</div>
-              <div class="stat2-l">Suivis</div>
+              <div class="stat2-l" data-i18n="following">Suivis</div>
             </div>
           </div>
           <!-- Bio -->
@@ -746,7 +746,7 @@
           <div style="display:flex;gap:8px">
             <button class="prof-btn-edit" style="flex:1;border-radius:10px;padding:10px 0;font-size:11px;border-color:var(--gold-b);color:var(--gold);display:flex;align-items:center;justify-content:center;gap:6px" onclick="openEditProfile()">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-              Modifier
+              <span data-i18n="modifier">Modifier</span>
             </button>
             <button class="prof-btn-share" onclick="navigator.share&&navigator.share({title:'WearAura',url:location.href})" style="border-radius:10px;padding:10px 12px">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
@@ -766,15 +766,15 @@
       </div>
       <div id="tab-prof-saved" class="prof-tab" onclick="showProfileTab('saved')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
-        <span>Enregistrés</span>
+        <span data-i18n="tab_saved">Enregistrés</span>
       </div>
       <div id="tab-prof-liked" class="prof-tab" onclick="showProfileTab('liked')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-        <span>Aimés</span>
+        <span data-i18n="tab_liked">Aimés</span>
       </div>
       <div id="tab-prof-wishlist" class="prof-tab" onclick="showProfileTab('wishlist')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-        <span>Envies</span>
+        <span data-i18n="tab_wishlist">Envies</span>
       </div>
     </div>
     <div class="pgrid" id="my-grid"></div>
@@ -840,7 +840,7 @@
 
     <div class="sett-item" onclick="openEditPreferences()">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
-      <span>Mes préférences</span>
+      <span data-i18n="mes_preferences">Mes préférences</span>
       <svg class="sett-arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
 
@@ -1191,7 +1191,7 @@
             </div>
             <div class="prof-card prof-card-stat" onclick="openFollowList('following',viewUid)" style="cursor:pointer;flex:1;padding:10px 8px">
               <div class="stat2-n" id="vp-following">0</div>
-              <div class="stat2-l">Suivis</div>
+              <div class="stat2-l" data-i18n="following">Suivis</div>
             </div>
           </div>
           <!-- Bio -->
@@ -1952,16 +1952,16 @@
 <div id="share-overlay" onclick="closeShareSheet()" class="overlay-blur" style="display:none"></div>
 <div id="share-sheet" class="bottom-sheet" style="display:none">
   <div class="sheet-handle" class="sheet-grip"></div>
-  <div style="text-align:center;font-family:var(--fd);font-size:18px;font-weight:300;color:var(--white);padding:4px 0 12px;flex-shrink:0">Partager</div>
+  <div data-i18n="share" style="text-align:center;font-family:var(--fd);font-size:18px;font-weight:300;color:var(--white);padding:4px 0 12px;flex-shrink:0">Partager</div>
   <div style="padding:0 16px 8px;flex-shrink:0">
     <div class="exp-search-wrap" class="bg-subtle">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(237,228,207,0.4)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" id="share-search" placeholder="Rechercher un ami" oninput="filterShareList(this.value)" class="exp-search-input" style="font-size:13px">
+      <input type="text" id="share-search" data-i18n="search_friend_ph" data-i18n-attr="placeholder" placeholder="Rechercher un ami" oninput="filterShareList(this.value)" class="exp-search-input" style="font-size:13px">
     </div>
   </div>
   <div id="share-list" style="flex:1;overflow-y:auto;scrollbar-width:none;padding:0 16px"></div>
   <div style="padding:12px 16px calc(20px + var(--sab,0px));flex-shrink:0;border-top:1px solid rgba(240,234,216,0.08)">
-    <button onclick="sharePostExternal()" style="width:100%;padding:14px;background:transparent;border:1px solid var(--gold-b);border-radius:50px;color:var(--gold);font-family:var(--fb);font-size:11px;letter-spacing:1px;cursor:pointer">Partager hors de l'app</button>
+    <button onclick="sharePostExternal()" style="width:100%;padding:14px;background:transparent;border:1px solid var(--gold-b);border-radius:50px;color:var(--gold);font-family:var(--fb);font-size:11px;letter-spacing:1px;cursor:pointer" data-i18n="share_external">Partager hors de l'app</button>
   </div>
 </div>
 
@@ -1973,7 +1973,7 @@
   <div id="po-own-opts" style="display:none">
     <div class="post-opt" onclick="deletePostFromFeed()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,80,80,0.9)" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
-      <div style="color:rgba(255,80,80,0.9);font-size:14px">Supprimer ce post</div>
+      <div data-i18n="delete_post" style="color:rgba(255,80,80,0.9);font-size:14px">Supprimer ce post</div>
     </div>
   </div>
   <!-- Options pour les posts des autres -->
@@ -1993,9 +1993,9 @@
   </div>
   <div class="post-opt" onclick="savePostFromOptions()">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--wd)" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-    <div style="color:var(--white);font-size:14px">Enregistrer dans la galerie</div>
+    <div data-i18n="save_to_gallery" style="color:var(--white);font-size:14px">Enregistrer dans la galerie</div>
   </div>
-  <div class="post-opt" onclick="closePostOptions()" style="display:flex;align-items:center;justify-content:center;padding:14px 24px;cursor:pointer;color:var(--wd);font-size:13px;border-top:1px solid var(--gold-b);margin-top:8px">Annuler</div>
+  <div class="post-opt" data-i18n="annuler" onclick="closePostOptions()" style="display:flex;align-items:center;justify-content:center;padding:14px 24px;cursor:pointer;color:var(--wd);font-size:13px;border-top:1px solid var(--gold-b);margin-top:8px">Annuler</div>
 </div>
 
 <!-- Follow list sheet (followers / following) -->
@@ -2027,8 +2027,8 @@
     <button onclick="closeEditProfilePanel()" aria-label="Retour" style="background:none;border:none;color:var(--white);cursor:pointer;padding:8px;margin:-8px;opacity:.7;display:flex;align-items:center;justify-content:center;flex-shrink:0">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
-    <div style="font-family:var(--fd);font-size:22px;font-weight:300;letter-spacing:2px;color:var(--white)">Modifier le profil</div>
-    <button id="ep-save-btn" onclick="saveProfile2()" style="background:none;border:none;color:var(--gold);font-family:var(--fb);font-size:13px;font-weight:600;letter-spacing:.5px;cursor:pointer;padding:8px;margin:-8px;transition:opacity .2s;flex-shrink:0">Enregistrer</button>
+    <div style="font-family:var(--fd);font-size:22px;font-weight:300;letter-spacing:2px;color:var(--white)" data-i18n="modifier_profil">Modifier le profil</div>
+    <button id="ep-save-btn" onclick="saveProfile2()" style="background:none;border:none;color:var(--gold);font-family:var(--fb);font-size:13px;font-weight:600;letter-spacing:.5px;cursor:pointer;padding:8px;margin:-8px;transition:opacity .2s;flex-shrink:0" data-i18n="sauvegarder">Enregistrer</button>
   </div>
 
   <!-- Scrollable body -->
@@ -2043,14 +2043,14 @@
         </div>
       </div>
       <input type="file" id="ep-avatar-input" accept="image/*" style="display:none" onchange="onEditProfileAvatarSelect(event)">
-      <div style="margin-top:10px;font-size:11px;color:var(--gold);letter-spacing:.8px;opacity:.6;font-family:var(--fb);text-transform:uppercase">Changer la photo</div>
+      <div data-i18n="change_photo" style="margin-top:10px;font-size:11px;color:var(--gold);letter-spacing:.8px;opacity:.6;font-family:var(--fb);text-transform:uppercase">Changer la photo</div>
     </div>
 
     <!-- Fields -->
     <div style="padding:0 24px">
 
       <div class="sep-row">
-        <div class="label-gold-b">Nom complet</div>
+        <div class="label-gold-b" data-i18n="nom_complet">Nom complet</div>
         <input id="ep-name2" type="text" placeholder="Ton nom complet" autocomplete="name" style="width:100%;background:none;border:none;outline:none;color:var(--white);font-family:var(--fb);font-size:15px;padding:0;caret-color:var(--gold)">
       </div>
 
@@ -2065,7 +2065,7 @@
 
       <div class="sep-row">
         <div class="label-gold-b">Bio</div>
-        <textarea id="ep-bio2" rows="3" placeholder="Parle-nous de ton style..." maxlength="80" style="width:100%;background:none;border:none;outline:none;color:var(--white);font-family:var(--fb);font-size:15px;padding:0;resize:none;caret-color:var(--gold);line-height:1.7" oninput="epBioCount(this)"></textarea>
+        <textarea id="ep-bio2" rows="3" data-i18n="bio_ph" data-i18n-attr="placeholder" placeholder="Parle-nous de ton style…" maxlength="80" style="width:100%;background:none;border:none;outline:none;color:var(--white);font-family:var(--fb);font-size:15px;padding:0;resize:none;caret-color:var(--gold);line-height:1.7" oninput="epBioCount(this)"></textarea>
         <div id="ep-bio-count" style="font-size:10px;color:var(--wd);opacity:.4;text-align:right;font-family:var(--fb);margin-top:2px">0 / 80</div>
       </div>
 
@@ -2091,8 +2091,8 @@
 
   <!-- Tabs -->
   <div class="scan-tabs-bar" role="tablist" aria-label="WearScan">
-    <div class="scan-tab active" role="tab" aria-selected="true" tabindex="0" onclick="switchScanTab('scan')" onkeydown="if(event.key==='Enter'||event.key===' ')switchScanTab('scan')">Scanner</div>
-    <div class="scan-tab" role="tab" aria-selected="false" tabindex="-1" onclick="switchScanTab('history')" onkeydown="if(event.key==='Enter'||event.key===' ')switchScanTab('history')">Historique</div>
+    <div class="scan-tab active" role="tab" aria-selected="true" tabindex="0" onclick="switchScanTab('scan')" onkeydown="if(event.key==='Enter'||event.key===' ')switchScanTab('scan')" data-i18n="tab_scanner">Scanner</div>
+    <div class="scan-tab" role="tab" aria-selected="false" tabindex="-1" onclick="switchScanTab('history')" onkeydown="if(event.key==='Enter'||event.key===' ')switchScanTab('history')" data-i18n="tab_history">Historique</div>
   </div>
 
   <!-- SCANNER BODY -->
@@ -2104,17 +2104,17 @@
         <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="rgba(240,234,216,.7)" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 8V5a1 1 0 011-1h3"/><path d="M4 16v3a1 1 0 001 1h3"/><path d="M16 4h3a1 1 0 011 1v3"/><path d="M20 16v3a1 1 0 01-1 1h-3"/><circle cx="12" cy="12" r="2.5"/></svg>
       </div>
       <div style="text-align:center">
-        <div class="scan-empty-title">Analyse ta tenue</div>
-        <div class="scan-empty-sub" style="margin-top:8px">Prends ou importe une photo — l'IA identifie chaque pièce et trouve des alternatives éthiques</div>
+        <div class="scan-empty-title" data-i18n="scan_empty_title">Analyse ta tenue</div>
+        <div class="scan-empty-sub" style="margin-top:8px" data-i18n="scan_empty_sub">Prends ou importe une photo — l'IA identifie chaque pièce et trouve des alternatives éthiques</div>
       </div>
       <div class="scan-pick-btns">
         <button class="scan-pick-btn" onclick="scanFromCamera()" aria-label="Prendre une photo">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-          Caméra
+          <span data-i18n="camera_btn">Caméra</span>
         </button>
         <button class="scan-pick-btn" onclick="scanFromGallery()" aria-label="Choisir depuis la galerie">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          Galerie
+          <span data-i18n="gallery_btn">Galerie</span>
         </button>
       </div>
       <input type="file" id="scan-file-input" accept="image/*" style="display:none" onchange="handleScanFile(event)">
@@ -2279,18 +2279,18 @@
 </div>
 
 <script src="js/config.js?v=2" defer></script>
-<script src="js/i18n.js" defer></script>
+<script src="js/i18n.js?v=2" defer></script>
 <script src="js/utils.js?v=3" defer></script>
 <script src="js/nav.js?v=3" defer></script>
 <script src="js/search.js" defer></script>
 <script src="js/auth.js" defer></script>
 <script src="js/camera.js?v=4" defer></script>
 <script src="js/feed.js?v=7" defer></script>
-<script src="js/boutique.js?v=2" defer></script>
+<script src="js/boutique.js?v=3" defer></script>
 <script src="js/create.js?v=15" defer></script>
 <script src="js/messages.js?v=3" defer></script>
 <script src="js/profile.js?v=7" defer></script>
-<script src="js/stories.js?v=3" defer></script>
+<script src="js/stories.js?v=4" defer></script>
 <script src="js/scan.js?v=50" defer></script>
 <script src="js/app.js?v=4" defer></script>
 <!-- ═══════════════════════════════════════════ -->

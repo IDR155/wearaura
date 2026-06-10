@@ -178,7 +178,7 @@ function renderBoutiqueContent(products,filter=''){
   // Mise à jour stats header
   const brandsCount=[...new Set(products.map(p=>p.marque).filter(Boolean))].length;
   const statsEl=document.getElementById('bq-stats');
-  if(statsEl)statsEl.textContent=`${products.length} pièces · ${brandsCount} marques`;
+  if(statsEl)statsEl.textContent=`${products.length} ${t('bq_pieces_label')} · ${brandsCount} ${t('bq_brands_label')}`;
 
   // Page partenaire (a la priorité — peut être déclenchée depuis vue marques)
   if(bqCurrentBrand){
@@ -262,7 +262,7 @@ function renderBoutiqueContent(products,filter=''){
   }
 
   // ── Tout le catalogue ──
-  html+=`<div class="bq-section-title" style="margin-top:18px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Tout le catalogue · ${sorted.length}</div>
+  html+=`<div class="bq-section-title" style="margin-top:18px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>${t('bq_all_catalogue')} · ${sorted.length}</div>
   <div class="bq-all-grid">${sorted.map(p=>bqProductCard(p)).join('')}</div>`;
 
   content.innerHTML=html||`<div class="empty-state"><img src="mascote_ivory/the_gatherer.png" alt=""><div>${t('no_products')}</div></div>`;
@@ -293,7 +293,7 @@ function bqCarouselCard(p){
   const imgContent=p.image_url
     ?`<img src="${p.image_url}" alt="${escapeHtml(p.nom)}" onerror="this.style.display='none';this.parentNode.querySelector('.bq-emoji-fb').style.display='flex'">`:'';
   const stars=`<span style="display:inline-flex;gap:1px">${_ecoLeaves(p.score_eco)}</span>`;
-  const demoBadge=p._isDemo?'<div class="demo-badge">Aperçu démo</div>':'';
+  const demoBadge=p._isDemo?`<div class="demo-badge">${t('bq_apercu_demo')}</div>`:'';
   const credit=p.image_photographer?`<div class="pexels-credit" title="Photo via Pexels">${escapeHtml(p.image_photographer)}</div>`:'';
   return `<div class="bq-carousel-card"
     onclick="_bqClick(${idx})"
@@ -324,7 +324,7 @@ function bqProductCard(p){
   const idx=_bqRegister(p);
   const imgContent=p.image_url
     ?`<img src="${p.image_url}" alt="${escapeHtml(p.nom)}" onerror="this.style.display='none';this.parentNode.querySelector('.bq-emoji-fb').style.display='flex'">`:'';
-  const demoBadge=p._isDemo?'<div class="demo-badge">Aperçu démo</div>':'';
+  const demoBadge=p._isDemo?`<div class="demo-badge">${t('bq_apercu_demo')}</div>`:'';
   const credit=p.image_photographer?`<div class="pexels-credit" title="Photo via Pexels">${escapeHtml(p.image_photographer)}</div>`:'';
   return `<div class="bq-product-card"
     onclick="_bqClick(${idx})"

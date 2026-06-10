@@ -2513,7 +2513,7 @@ function renderShareList(users){
         <div class="txt-sm-ellipsis">${escapeHtml(p.username||'utilisateur')}</div>
         <div class="txt-xs-ellipsis">${escapeHtml(p.full_name||'')}</div>
       </div>
-      <button class="flw-btn flw-btn-primary" style="flex-shrink:0">Envoyer</button>
+      <button class="flw-btn flw-btn-primary" style="flex-shrink:0">${t('envoyer_btn')}</button>
     </div>`;
   }).join('');
 }
