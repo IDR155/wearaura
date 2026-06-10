@@ -111,7 +111,7 @@
     <div class="ni active" role="button" tabindex="0" aria-label="Accueil" onclick="goTab('feed')" onkeydown="if(event.key==='Enter'||event.key===' ')goTab('feed')"><span class="ni-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12L12 4l9 8"/><path d="M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg></span></div>
     <div class="ni" role="button" tabindex="0" aria-label="Messages" onclick="goTab('notif')" onkeydown="if(event.key==='Enter'||event.key===' ')goTab('notif')" id="ni-notif"><span class="ni-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span><span class="ni-label">Messages</span></div>
     <div class="ni-center" role="button" tabindex="0" aria-label="Créer un post" onclick="dismissPlusHint();goTab('create')" onkeydown="if(event.key==='Enter'||event.key===' '){dismissPlusHint();goTab('create')}"><svg viewBox="0 0 24 24" stroke="#07101E" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
-    <div class="ni" role="button" tabindex="0" aria-label="Boutique" onclick="goTab('boutique')" onkeydown="if(event.key==='Enter'||event.key===' ')goTab('boutique')"><span class="ni-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span><span class="ni-label">Shop</span></div>
+    <div class="ni" id="ni-shop" role="button" tabindex="0" aria-label="Boutique" onclick="goTab('boutique')" onkeydown="if(event.key==='Enter'||event.key===' ')goTab('boutique')"><span class="ni-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span><span class="ni-label">Shop</span></div>
     <div class="ni" role="button" tabindex="0" aria-label="Mon profil" onclick="goTab('profile')" onkeydown="if(event.key==='Enter'||event.key===' ')goTab('profile')"><span class="ni-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="ni-label">Profil</span></div>
   </nav>
 </div>
@@ -2282,9 +2282,9 @@
 </div>
 
 <script src="js/config.js?v=2" defer></script>
-<script src="js/i18n.js?v=3" defer></script>
+<script src="js/i18n.js?v=4" defer></script>
 <script src="js/utils.js?v=3" defer></script>
-<script src="js/nav.js?v=3" defer></script>
+<script src="js/nav.js?v=4" defer></script>
 <script src="js/search.js" defer></script>
 <script src="js/auth.js" defer></script>
 <script src="js/camera.js?v=4" defer></script>
@@ -2295,6 +2295,7 @@
 <script src="js/profile.js?v=7" defer></script>
 <script src="js/stories.js?v=4" defer></script>
 <script src="js/scan.js?v=51" defer></script>
+<script src="js/coach.js?v=1" defer></script>
 <script src="js/app.js?v=4" defer></script>
 <!-- ═══════════════════════════════════════════ -->
 <!-- POC : Détection on-device via Transformers.js (Web Worker pour ne pas bloquer l'UI) -->

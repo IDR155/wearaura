@@ -126,22 +126,13 @@ function skipPreferences(){
 function obSkip(){
   localStorage.setItem('wa_onboarded','1');
   document.getElementById('sc-onboarding').style.display='none';
-  // Pulse sur le bouton + de la nav pour indiquer où poster
-  if(!localStorage.getItem('wa_plus_hinted')){
-    setTimeout(()=>{
-      document.querySelectorAll('.ni-center').forEach(el=>{el.setAttribute('data-hint',t('hint_post_first'));el.classList.add('hint-pulse');});
-    },400);
-  }
-  // Overlay hotspot — déclenché ici, après que l'utilisateur a
-  // vraiment terminé l'onboarding et atterri sur le feed.
-  // Le flag loadFeed() s'exécute trop tôt (pendant prefs/onboarding)
-  // donc on appelle _showHotspotOnboard() directement depuis ici.
-  if(!localStorage.getItem('wa_hotspots_hinted')){
-    // Nettoyer l'ancien flag (consommé à tort par loadFeed trop tôt)
+  // Visite guidée (coach marks) — remplace l'ancien pulse "+" et
+  // l'overlay hotspots, intégrés comme étapes du parcours (coach.js).
+  if(!localStorage.getItem('wa_coach_done')){
     localStorage.removeItem('wa_hotspot_onboard_pending');
     setTimeout(()=>{
-      if(typeof _showHotspotOnboard==='function') _showHotspotOnboard();
-    },1000);
+      if(typeof startCoachMarks==='function') startCoachMarks();
+    },600);
   }
 }
 function dismissPlusHint(){
@@ -173,7 +164,18 @@ async function init() {
     _DBG.err('init()', e);
   }
   clearTimeout(hardTimeout);
-  if (me) { startGlobalRealtime(); loadFeed(); goS('sc-feed'); setTimeout(()=>{const a=document.querySelector('#feed-tabs-pill .ft.active');if(a)moveFtSlider(a);},250); handleDeepLink(); }
+  if (me) {
+    startGlobalRealtime(); loadFeed(); goS('sc-feed');
+    setTimeout(()=>{const a=document.querySelector('#feed-tabs-pill .ft.active');if(a)moveFtSlider(a);},250);
+    handleDeepLink();
+    // Visite guidée pour les utilisateurs existants (déjà onboardés
+    // mais qui n'ont jamais vu les coach marks)
+    if(!localStorage.getItem('wa_coach_done')&&localStorage.getItem('wa_onboarded')){
+      setTimeout(()=>{
+        if(typeof startCoachMarks==='function') startCoachMarks();
+      },1500);
+    }
+  }
   else {
     // Mémorise le post cible pour l'ouvrir après login
     const _pid=new URLSearchParams(location.search).get('post');
