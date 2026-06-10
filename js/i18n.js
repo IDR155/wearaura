@@ -294,7 +294,7 @@ const I18N = {
     coach_next:'Suivant',
     coach_finish:"C'est parti",
     coach_t5:'Explore le look ✦',
-    coach_b5:'Touche les points dorés sur la photo ou « voir plus » pour découvrir chaque pièce et son alternative éthique ou seconde main.',
+    coach_b5:'Touche « voir plus » sous un look pour ouvrir sa fiche complète : toutes les pièces, le style et où les trouver.',
   },
   en: {
     sign_in:'Sign In',sign_up:'Sign Up',
@@ -589,7 +589,7 @@ const I18N = {
     coach_next:'Next',
     coach_finish:"Let's go",
     coach_t5:'Explore the look ✦',
-    coach_b5:'Tap the golden dots on the photo or "see more" to discover every item and its ethical or secondhand alternative.',
+    coach_b5:'Tap "see more" under a look to open its full card: every item, the style and where to find them.',
   }
 };
 

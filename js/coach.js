@@ -11,6 +11,9 @@ const _COACH_STEPS = [
   { sel:'.ft-scan',        title:'coach_t2', body:'coach_b2', pad:8, round:true },
   { sel:'.ni-center',      title:'coach_t3', body:'coach_b3', pad:8, round:true },
   { sel:'#ni-shop',        title:'coach_t4', body:'coach_b4', pad:6 },
+  // Révèle les points dorés du premier post visible et en encadre un ;
+  // carte centrée en secours si aucun post avec hotspots n'est à l'écran
+  { getTarget:'hotspots',  title:'hint_onboard_title', body:'hint_onboard_body', pad:14, round:true, centerFallback:true },
   // Pointe le « voir plus » du premier post visible ; carte centrée
   // en secours si aucun post avec look n'est à l'écran
   { sel:'.slide-voir-plus', title:'coach_t5', body:'coach_b5', pad:10, centerFallback:true },
@@ -26,7 +29,30 @@ function _coachFindTarget(sel){
   return null;
 }
 
-const _coach = { idx:0, ov:null, spot:null, card:null };
+// Cible « hotspots » : affiche les points dorés du post au centre de
+// l'écran (masqués par défaut dans le feed) et retourne le premier point
+function _coachHotspotTarget(){
+  const vh = window.innerHeight;
+  for (const z of document.querySelectorAll('[id^="hzone-"]')){
+    const r = z.getBoundingClientRect();
+    if (r.height > 0 && r.top < vh/2 && r.bottom > vh/2){
+      const dots = document.getElementById('hdots-' + z.id.slice(6));
+      const dot = dots?.querySelector('.slide-hotspot');
+      if (!dot) continue;
+      dots.style.display = 'block';
+      _coach.shownDots = dots;
+      return dot;
+    }
+  }
+  return null;
+}
+
+// Remasque les points révélés pour l'étape hotspots
+function _coachHotspotRestore(){
+  if (_coach.shownDots){ _coach.shownDots.style.display = 'none'; _coach.shownDots = null; }
+}
+
+const _coach = { idx:0, ov:null, spot:null, card:null, shownDots:null };
 
 function startCoachMarks(){
   if (localStorage.getItem('wa_coach_done')) return;
@@ -58,12 +84,14 @@ function startCoachMarks(){
 
 function _coachStep(i){
   const steps = _COACH_STEPS;
+  _coachHotspotRestore();
   // Saute les étapes dont la cible est absente (sauf si secours centré)
   while (i < steps.length && steps[i].sel && !steps[i].centerFallback && !_coachFindTarget(steps[i].sel)) i++;
   if (i >= steps.length) return _coachFinish();
   _coach.idx = i;
   const st = steps[i];
-  const el = st.sel ? _coachFindTarget(st.sel) : null;
+  const el = st.getTarget === 'hotspots' ? _coachHotspotTarget()
+           : st.sel ? _coachFindTarget(st.sel) : null;
   const { spot, card } = _coach;
   const vh = window.innerHeight;
 
@@ -131,6 +159,7 @@ function _coachFinish(){
   localStorage.setItem('wa_coach_done','1');
   localStorage.setItem('wa_plus_hinted','1');
   localStorage.setItem('wa_hotspots_hinted','1');
+  _coachHotspotRestore();
   window.removeEventListener('resize', _coachReposition);
   const ov = _coach.ov;
   if (ov) { ov.style.opacity = '0'; setTimeout(() => ov.remove(), 320); }
