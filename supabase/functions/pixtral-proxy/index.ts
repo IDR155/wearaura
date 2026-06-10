@@ -4,13 +4,31 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+// Origines autorisées à appeler la fonction depuis un navigateur.
+// Tout autre site web sera bloqué par le CORS.
+const ALLOWED_ORIGINS = new Set([
+  "https://wearaura.fr",
+  "https://www.wearaura.fr",
+  // Tests locaux (Live Server VS Code + npx serve)
+  "http://localhost:3333",
+  "http://localhost:5500",
+  "http://127.0.0.1:3333",
+  "http://127.0.0.1:5500",
+]);
+
+function corsHeaders(req: Request) {
+  const origin = req.headers.get("origin") ?? "";
+  return {
+    "Access-Control-Allow-Origin": ALLOWED_ORIGINS.has(origin) ? origin : "https://wearaura.fr",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Vary": "Origin",
+  };
+}
 
 serve(async (req) => {
+  const CORS = corsHeaders(req);
+
   // Preflight CORS
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: CORS });
