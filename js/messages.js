@@ -807,16 +807,16 @@ function _showBrowserNotif(title, body){
     navigator.serviceWorker.ready.then(reg=>{
       reg.showNotification(title,{
         body,
-        icon:'/icone_App.png',
-        badge:'/icone_App.png',
+        icon:'/icon-192.png',
+        badge:'/icon-192.png',
         vibrate:[200,100,200],
         tag:'wa-notif',
         renotify:true,
         data:{url:location.origin+'/?tab=notif'}
       });
-    }).catch(()=>new Notification(title,{body,icon:'/icone_App.png'}));
+    }).catch(()=>new Notification(title,{body,icon:'/icon-192.png'}));
   }else{
-    new Notification(title,{body,icon:'/icone_App.png'});
+    new Notification(title,{body,icon:'/icon-192.png'});
   }
 }
 

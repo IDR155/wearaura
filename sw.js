@@ -4,7 +4,7 @@
 //             Network-first pour API Supabase/Jamendo
 // ═══════════════════════════════════════════
 
-const CACHE = 'wa-v78';
+const CACHE = 'wa-v79';
 
 // Assets à précacher à l'installation
 const STATIC = [
@@ -24,10 +24,12 @@ const STATIC = [
   '/js/messages.js',
   '/js/profile.js',
   '/js/stories.js',
+  '/js/scan.js',
   '/js/app.js',
+  '/manifest.json',
   '/wolf.png',
   '/couronne.png',
-  '/icone_App.png',
+  '/icon-192.png',
   '/catalog-demo.json',
 ];
 
@@ -124,8 +126,8 @@ self.addEventListener('push', e => {
   const title = data.title || 'WearAura';
   const options = {
     body: data.body || 'Tu as une nouvelle notification',
-    icon: '/icone_App.png',
-    badge: '/icone_App.png',
+    icon: '/icon-192.png',
+    badge: '/icon-192.png',
     vibrate: [200, 100, 200],
     tag: 'wa-notif',
     renotify: true,
