@@ -768,9 +768,21 @@ setInterval(() => {
 // sans que l'utilisateur ait à sortir et re-choisir sa photo
 let _lastDetectSrc = null;
 
+// Masque les boutons "Relancer" pendant une détection active — un double
+// lancement ferait deux appels Pixtral concurrents sur la même photo
+let _detectInProgress = false;
+function _setDetectRunning(running) {
+  _detectInProgress = running;
+  const pill = document.getElementById('redetect-btn');
+  const icon = document.getElementById('redetect-btn-2');
+  if (pill) pill.style.display = running ? 'none' : 'flex';
+  if (icon) icon.style.display = running ? 'none' : 'flex';
+}
+
 // Relance complète : efface les hotspots auto et re-détecte depuis la photo d'origine.
 // Le resize est refait de zéro (image désormais bien décodée) → qualité du "2e essai manuel".
 function redetectHspots() {
+  if (_detectInProgress) return;
   if (!_lastDetectSrc) { toast('Aucune photo à analyser', 2500); return; }
   if (typeof clearHspots === 'function') clearHspots();
   else if (hspots) hspots.length = 0;
@@ -791,6 +803,7 @@ async function autoDetectHspots(dataUrl) {
   const indicatorText = indicator?.querySelector('span, .scan-hint-text') || indicator;
   if (indicatorText) indicatorText.textContent = 'Détection IA en cours…';
   if (indicator) indicator.style.display = 'flex';
+  _setDetectRunning(true);
 
   // Mémorise la source pour le bouton "Relancer la détection"
   _lastDetectSrc = dataUrl;
@@ -835,6 +848,7 @@ async function autoDetectHspots(dataUrl) {
       _DBG.err(`autoDetectHspots attempt ${attempt + 1}`, e);
       if (attempt === 4 && !best) {
         if (indicator) indicator.style.display = 'none';
+        _setDetectRunning(false);
         toast('Détection impossible — ajoute les pièces manuellement', 3500);
         return;
       }
@@ -843,6 +857,7 @@ async function autoDetectHspots(dataUrl) {
 
   pieces = best;
   if (indicator) indicator.style.display = 'none';
+  _setDetectRunning(false);
   if (!pieces || pieces.length === 0) return;
 
   // Guard race condition
