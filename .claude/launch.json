@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "wearaura",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-l", "3333", "."],
+      "port": 3333
+    },
+    {
+      "name": "wearaura-beta",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-l", "3334", "C:\\WearAura_beta"],
+      "port": 3334
+    }
+  ]
+}

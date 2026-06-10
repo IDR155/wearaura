@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CGU & Confidentialité — WearAura</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --gold: #D4AF37; --black: #0B0B0B; --white: #F5F0E8; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--black); color: var(--white); font-family: 'Montserrat', sans-serif; font-weight: 300; line-height: 1.8; padding: 40px 24px 80px; max-width: 680px; margin: 0 auto; }
+  .logo { font-family: 'Cormorant Garamond', serif; font-size: 22px; letter-spacing: 8px; color: var(--gold); margin-bottom: 40px; display: block; }
+  .back { display: inline-flex; align-items: center; gap: 8px; color: var(--gold); font-size: 12px; letter-spacing: 1px; text-decoration: none; margin-bottom: 32px; cursor: pointer; }
+  .back:hover { opacity: 0.7; }
+  .tabs { display: flex; border: 1px solid rgba(212,175,55,0.3); border-radius: 50px; padding: 4px; margin-bottom: 40px; }
+  .tab { flex: 1; text-align: center; padding: 10px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: rgba(245,240,232,0.5); cursor: pointer; border-radius: 50px; transition: background-color 200ms cubic-bezier(0.23,1,0.32,1), color 200ms cubic-bezier(0.23,1,0.32,1); }
+  .tab.active { background: var(--gold); color: var(--black); font-weight: 500; }
+  .content { display: none; }
+  .content.active { display: block; }
+  h1 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; color: var(--gold); margin-bottom: 8px; letter-spacing: 2px; }
+  .date { font-size: 11px; color: rgba(245,240,232,0.4); letter-spacing: 1px; margin-bottom: 40px; }
+  h2 { font-size: 13px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin: 36px 0 12px; }
+  p { font-size: 13px; color: rgba(245,240,232,0.8); margin-bottom: 14px; }
+  ul { padding-left: 20px; margin-bottom: 14px; }
+  li { font-size: 13px; color: rgba(245,240,232,0.8); margin-bottom: 6px; }
+  .highlight { background: rgba(212,175,55,0.1); border-left: 2px solid var(--gold); padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 12px; color: rgba(245,240,232,0.9); }
+  .affil-badge { display: inline-block; background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.3); border-radius: 4px; padding: 2px 8px; font-size: 10px; letter-spacing: 1px; color: var(--gold); }
+  a { color: var(--gold); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .contact-box { border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 20px; margin-top: 40px; }
+  .contact-box p { margin: 0; font-size: 12px; }
+  .divider { height: 1px; background: rgba(212,175,55,0.15); margin: 32px 0; }
+</style>
+</head>
+<body>
+
+<span class="logo">WEARAURA</span>
+<a class="back" onclick="history.back()">← Retour</a>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('cgu')">CGU</div>
+  <div class="tab" onclick="switchTab('privacy')">Confidentialité</div>
+  <div class="tab" onclick="switchTab('affil')">Liens affiliés</div>
+</div>
+
+<!-- ══ CGU ══ -->
+<div id="tab-cgu" class="content active">
+  <h1>Conditions Générales d'Utilisation</h1>
+  <div class="date">Dernière mise à jour : Mai 2025 — Version bêta</div>
+
+  <div class="highlight">
+    WearAura est actuellement en phase bêta privée. Ces CGU s'appliquent à tous les utilisateurs invités à tester l'application.
+  </div>
+
+  <h2>1. Présentation du service</h2>
+  <p>WearAura est une application permettant aux utilisateurs de partager des "looks" mode avec des hotspots interactifs sur les vêtements, et d'explorer des alternatives éthiques ou de seconde main aux produits identifiés.</p>
+  <p>Éditeur : WearAura (projet en phase de lancement). Contact : <a href="mailto:hello@wearaura.app">hello@wearaura.app</a></p>
+
+  <h2>2. Accès au service</h2>
+  <p>L'accès à WearAura est gratuit pour les utilisateurs bêta invités. Un compte est nécessaire pour publier des contenus. La création de compte requiert une adresse email valide et un mot de passe.</p>
+  <p>WearAura se réserve le droit de désactiver un compte bêta à tout moment pendant la phase de test, sans préavis.</p>
+
+  <h2>3. Contenus publiés par les utilisateurs</h2>
+  <p>En publiant un look sur WearAura, vous déclarez :</p>
+  <ul>
+    <li>Être l'auteur de la photo ou disposer des droits nécessaires pour la diffuser</li>
+    <li>Ne pas publier de contenu illicite, offensant, ou portant atteinte à des droits tiers</li>
+    <li>Accepter que votre contenu soit visible par tous les utilisateurs de la plateforme</li>
+  </ul>
+  <p>WearAura ne revendique aucune propriété sur vos contenus. Vous conservez l'intégralité de vos droits. En publiant, vous accordez à WearAura une licence non exclusive, gratuite, mondiale pour afficher votre contenu dans l'application.</p>
+
+  <h2>4. Comportements interdits</h2>
+  <ul>
+    <li>Publier des contenus contrefaisants, illicites ou portant atteinte à la vie privée</li>
+    <li>Harceler ou menacer d'autres utilisateurs</li>
+    <li>Tenter d'accéder aux données d'autres utilisateurs</li>
+    <li>Utiliser des bots ou scripts automatisés</li>
+    <li>Publier des fausses informations sur des produits (fausses références, faux labels)</li>
+  </ul>
+
+  <h2>5. Liens affiliés et rémunération</h2>
+  <p>WearAura affiche des liens vers des produits tiers (alternatives éthiques, seconde main). Certains de ces liens sont des <span class="affil-badge">LIENS AFFILIÉS</span> : WearAura perçoit une commission si vous effectuez un achat via ces liens, sans surcoût pour vous.</p>
+  <p>Tous les liens affiliés sont clairement identifiés dans l'interface. Cette pratique est conforme à la directive européenne sur les pratiques commerciales déloyales (2005/29/CE).</p>
+
+  <h2>6. Disponibilité et modifications</h2>
+  <p>WearAura est fourni "tel quel" en phase bêta. Nous ne garantissons pas une disponibilité continue. Des modifications, interruptions ou évolutions peuvent survenir à tout moment.</p>
+  <p>Ces CGU peuvent être modifiées. En cas de modification substantielle, les utilisateurs seront notifiés par email.</p>
+
+  <h2>7. Droit applicable</h2>
+  <p>Ces CGU sont soumises au droit français. En cas de litige, les parties s'efforceront de trouver une solution amiable. À défaut, les tribunaux français seront compétents.</p>
+
+  <div class="divider"></div>
+  <div class="contact-box">
+    <p>Questions ? Contactez-nous à <a href="mailto:hello@wearaura.app">hello@wearaura.app</a></p>
+  </div>
+</div>
+
+<!-- ══ PRIVACY ══ -->
+<div id="tab-privacy" class="content">
+  <h1>Politique de Confidentialité</h1>
+  <div class="date">Dernière mise à jour : Mai 2025 — Conforme RGPD</div>
+
+  <div class="highlight">
+    WearAura collecte uniquement les données nécessaires au fonctionnement du service. Aucune donnée n'est vendue à des tiers. Cette politique est conforme au Règlement Général sur la Protection des Données (RGPD — UE 2016/679).
+  </div>
+
+  <h2>1. Responsable du traitement</h2>
+  <p>WearAura — <a href="mailto:hello@wearaura.app">hello@wearaura.app</a></p>
+
+  <h2>2. Données collectées</h2>
+  <p><strong style="color:var(--white)">Données de compte :</strong> adresse email, prénom, nom, nom d'utilisateur, mot de passe (haché, non lisible).</p>
+  <p><strong style="color:var(--white)">Données de profil :</strong> photo de profil, bio, localisation (optionnelle).</p>
+  <p><strong style="color:var(--white)">Contenus publiés :</strong> photos de looks, hotspots, légendes, tags, localisation du look (optionnelle).</p>
+  <p><strong style="color:var(--white)">Données comportementales :</strong> clics sur les hotspots, clics sur les alternatives, types d'alternatives consultées (éthique / seconde main), temps de publication d'un look. Ces données sont collectées de manière anonymisée et agrégée.</p>
+
+  <h2>3. Finalités du traitement</h2>
+  <ul>
+    <li>Fournir et améliorer le service WearAura</li>
+    <li>Afficher les contenus et les alternatives pertinentes</li>
+    <li>Mesurer l'usage de l'application (analytics)</li>
+    <li>Produire des études de tendances anonymisées (données comportementales agrégées — voir section 5)</li>
+    <li>Envoyer des notifications liées à votre activité (likes, commentaires, follows)</li>
+  </ul>
+
+  <h2>4. Base légale</h2>
+  <ul>
+    <li><strong style="color:var(--white)">Exécution du contrat</strong> : données de compte et de profil</li>
+    <li><strong style="color:var(--white)">Intérêt légitime</strong> : analytics d'usage, amélioration du service</li>
+    <li><strong style="color:var(--white)">Consentement</strong> : données comportementales utilisées à des fins d'études de tendances</li>
+  </ul>
+
+  <h2>5. Données comportementales et études de tendances</h2>
+  <div class="highlight">
+    WearAura peut utiliser des données comportementales anonymisées et agrégées (ex : "65% des utilisateurs ayant consulté une veste en polyester ont cliqué sur une alternative en coton recyclé") à des fins d'études de tendances commercialisées auprès de bureaux de style ou de marques de mode. Ces données ne permettent en aucun cas d'identifier un utilisateur individuel.
+  </div>
+  <p>Vous pouvez retirer votre consentement à tout moment via les paramètres de votre compte.</p>
+
+  <h2>6. Partage des données</h2>
+  <p>WearAura ne vend jamais vos données personnelles. Les données peuvent être partagées avec :</p>
+  <ul>
+    <li><strong style="color:var(--white)">Supabase</strong> (hébergement base de données — serveurs EU)</li>
+    <li><strong style="color:var(--white)">OpenAI</strong> (analyse d'images pour la suggestion d'alternatives — données non conservées)</li>
+    <li><strong style="color:var(--white)">Posthog / Mixpanel</strong> (analytics anonymisés)</li>
+    <li><strong style="color:var(--white)">Plateformes d'affiliation</strong> (Awin, Effiliation) — uniquement les clics trackés, sans données personnelles</li>
+  </ul>
+
+  <h2>7. Conservation des données</h2>
+  <ul>
+    <li>Données de compte : conservées jusqu'à suppression du compte</li>
+    <li>Contenus publiés : conservés jusqu'à suppression manuelle ou du compte</li>
+    <li>Données comportementales agrégées : conservées indéfiniment sous forme anonymisée</li>
+    <li>Logs techniques : 90 jours</li>
+  </ul>
+
+  <h2>8. Vos droits (RGPD)</h2>
+  <p>Conformément au RGPD, vous disposez des droits suivants :</p>
+  <ul>
+    <li><strong style="color:var(--white)">Accès</strong> : obtenir une copie de vos données</li>
+    <li><strong style="color:var(--white)">Rectification</strong> : corriger vos données</li>
+    <li><strong style="color:var(--white)">Effacement</strong> : supprimer votre compte et vos données</li>
+    <li><strong style="color:var(--white)">Portabilité</strong> : recevoir vos données dans un format structuré</li>
+    <li><strong style="color:var(--white)">Opposition</strong> : vous opposer au traitement pour intérêt légitime</li>
+    <li><strong style="color:var(--white)">Retrait du consentement</strong> : à tout moment pour les traitements basés sur le consentement</li>
+  </ul>
+  <p>Pour exercer vos droits : <a href="mailto:hello@wearaura.app">hello@wearaura.app</a>. Délai de réponse : 30 jours maximum.</p>
+  <p>Vous pouvez également déposer une réclamation auprès de la CNIL : <a href="https://www.cnil.fr" target="_blank">www.cnil.fr</a></p>
+
+  <div class="divider"></div>
+  <div class="contact-box">
+    <p>Délégué à la protection des données : <a href="mailto:hello@wearaura.app">hello@wearaura.app</a></p>
+  </div>
+</div>
+
+<!-- ══ AFFILIATION ══ -->
+<div id="tab-affil" class="content">
+  <h1>Politique d'Affiliation</h1>
+  <div class="date">Transparence sur notre modèle de rémunération</div>
+
+  <div class="highlight">
+    WearAura croit en la transparence totale. Cette page explique comment et pourquoi certains liens dans l'application génèrent une commission pour nous.
+  </div>
+
+  <h2>Qu'est-ce qu'un lien affilié ?</h2>
+  <p>Lorsque vous cliquez sur une alternative (éthique ou seconde main) dans WearAura et que vous effectuez un achat sur le site partenaire, WearAura peut percevoir une commission sur cette vente. Cette commission est versée par le partenaire — elle n'entraîne <strong style="color:var(--white)">aucun surcoût pour vous</strong>.</p>
+
+  <h2>Comment les identifier dans l'app ?</h2>
+  <p>Tous les liens affiliés dans WearAura sont signalés par le badge <span class="affil-badge">LIEN AFFILIÉ</span> visible sous chaque alternative. Cette identification est une obligation légale (directive EU 2005/29/CE sur les pratiques commerciales) que nous respectons intégralement.</p>
+
+  <h2>Nos partenaires d'affiliation</h2>
+  <ul>
+    <li><strong style="color:var(--white)">Vestiaire Collective</strong> — plateforme de mode de luxe de seconde main</li>
+    <li><strong style="color:var(--white)">Vinted</strong> — plateforme de seconde main généraliste</li>
+    <li><strong style="color:var(--white)">Veja</strong> — sneakers éthiques</li>
+    <li><strong style="color:var(--white)">Sézane</strong> — mode française responsable</li>
+    <li><strong style="color:var(--white)">Patagonia</strong> — vêtements outdoor éthiques</li>
+    <li>Et d'autres marques certifiées Aura Verified</li>
+  </ul>
+
+  <h2>Nos engagements</h2>
+  <ul>
+    <li>Nous ne recommandons jamais un produit uniquement parce qu'il génère une commission</li>
+    <li>Toutes les alternatives affichées sont sélectionnées sur critères éthiques (matières, certifications, seconde main)</li>
+    <li>Une marque ne peut apparaître en position "boostée" que si elle est certifiée Aura Verified</li>
+    <li>Les positions boostées sont clairement identifiées comme "Sponsorisé"</li>
+  </ul>
+
+  <h2>Réseaux d'affiliation utilisés</h2>
+  <p>WearAura utilise les réseaux <strong style="color:var(--white)">Awin</strong> et <strong style="color:var(--white)">Effiliation</strong> pour gérer les liens affiliés. Ces réseaux collectent uniquement des données de clic anonymisées (sans données personnelles) pour le suivi des commissions.</p>
+
+  <div class="divider"></div>
+  <div class="contact-box">
+    <p>Questions sur notre politique d'affiliation : <a href="mailto:hello@wearaura.app">hello@wearaura.app</a></p>
+  </div>
+</div>
+
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach((tabEl, i) => {
+    tabEl.classList.toggle('active', ['cgu','privacy','affil'][i] === tab);
+  });
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>

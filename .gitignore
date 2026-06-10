@@ -1,0 +1,10 @@
+# Fichiers de travail — jamais déployés ni versionnés
+_dev/
+
+# Réglages locaux des outils
+.claude/settings.local.json
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini

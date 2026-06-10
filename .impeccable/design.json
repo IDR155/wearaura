@@ -1,0 +1,65 @@
+{
+  "name": "WearAura",
+  "description": "La première app sociale qui allie partage de looks et découverte éthique.",
+  "register": "product",
+  "northStar": "The Ivory Atelier",
+  "colors": {
+    "midnight-encre": "#07101E",
+    "deep-midnight": "#0C1828",
+    "ink-navy": "#111F32",
+    "creme-de-mode": "#F0EAD8",
+    "creme-lumiere": "#F7F2E8",
+    "editorial-cream": "#EDE4CF",
+    "muted-cream": "rgba(237,228,207,0.65)",
+    "gold-border": "#4A4035"
+  },
+  "typography": {
+    "display": {
+      "fontFamily": "'Cormorant Garamond', Georgia, serif",
+      "fontWeight": 300,
+      "letterSpacing": "0.5px",
+      "lineHeight": 1.2,
+      "sizes": ["19px", "32px"]
+    },
+    "body": {
+      "fontFamily": "'Montserrat', system-ui, sans-serif",
+      "fontWeight": 400,
+      "lineHeight": 1.5,
+      "sizes": ["13px", "15px"]
+    },
+    "label": {
+      "fontFamily": "'Montserrat', system-ui, sans-serif",
+      "fontWeight": 600,
+      "letterSpacing": "2px",
+      "textTransform": "uppercase",
+      "sizes": ["9px", "11px"]
+    }
+  },
+  "radius": {
+    "sm": "8px",
+    "md": "12px",
+    "lg": "16px",
+    "xl": "20px",
+    "pill": "50px"
+  },
+  "spacing": {
+    "xs": "4px",
+    "sm": "8px",
+    "md": "16px",
+    "lg": "24px",
+    "xl": "32px"
+  },
+  "easing": {
+    "wearaura": "cubic-bezier(0.23, 1, 0.32, 1)",
+    "drawer": "cubic-bezier(0.32, 0.72, 0, 1)"
+  },
+  "rules": {
+    "accent": "Crème de Mode (#F0EAD8) occupies ≤15% of any given screen",
+    "backgrounds": "No pure #000 or #fff — every black tilts blue-night, every white tilts ivory",
+    "typography": "Cormorant Garamond for identity, Montserrat for action — never mixed in same component",
+    "elevation": "Flat by default; shadows only on floating elements (nav, drawers, modals)",
+    "interactions": "transform: scale(0.97) on all pressable elements — mandatory",
+    "animations": "Only transform and opacity for continuous animation — never box-shadow, width, height",
+    "noGreen": "No green accent or eco badge — ethics is in the product, never the discourse"
+  }
+}
