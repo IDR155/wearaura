@@ -314,6 +314,45 @@ function observeLazy(root){
   (root||document).querySelectorAll('img[data-src]').forEach(img=>obs.observe(img));
 }
 
+// ── Compression image avant upload ────────────────
+// Redimensionne (côté long ≤ maxPx) puis encode en WebP q0.85.
+// Replis : JPEG q0.88 si le navigateur ne sait pas encoder le WebP
+// (Safari < 17 renvoie un PNG énorme), original si le décodage échoue
+// ou si le résultat n'est pas plus léger.
+// Une photo galerie 12 MP (~4-6 Mo) descend à ~150-400 Ko.
+function compressImageForUpload(file, maxPx = 1920) {
+  return new Promise(resolve => {
+    let url;
+    const giveUp = () => { if (url) URL.revokeObjectURL(url); resolve(file); };
+    try { url = URL.createObjectURL(file); } catch (e) { resolve(file); return; }
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const w = img.naturalWidth, h = img.naturalHeight;
+        const scale = Math.min(1, maxPx / Math.max(w, h));
+        const c = document.createElement('canvas');
+        c.width  = Math.round(w * scale);
+        c.height = Math.round(h * scale);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        const keep = b => b && (b.size < file.size || scale < 1);
+        c.toBlob(blob => {
+          if (blob && blob.type === 'image/webp' && keep(blob)) {
+            resolve(new File([blob], `wearaura_${Date.now()}.webp`, { type: 'image/webp' }));
+            return;
+          }
+          c.toBlob(b => {
+            if (keep(b)) resolve(new File([b], `wearaura_${Date.now()}.jpg`, { type: 'image/jpeg' }));
+            else resolve(file);
+          }, 'image/jpeg', 0.88);
+        }, 'image/webp', 0.85);
+      } catch (e) { giveUp(); }
+    };
+    img.onerror = giveUp;
+    img.src = url;
+  });
+}
+
 function _toastShow(el,msg,duration,type){
   el.textContent=msg;
   el.className='toast show'+(type==='error'?' toast--error':type==='success'?' toast--success':'');

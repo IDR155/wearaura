@@ -1189,9 +1189,11 @@ async function publishStory() {
   btn.disabled = true; btn.textContent = '…';
   try {
     const isVid = _scMediaType === 'video';
-    const ext   = isVid ? 'webm' : 'jpg';
+    // Photos : compression WebP avant upload (repli JPEG/original dans le helper)
+    const upBlob = isVid ? _scBlob : await compressImageForUpload(_scBlob);
+    const ext   = isVid ? 'webm' : (upBlob.type === 'image/webp' ? 'webp' : 'jpg');
     const path  = `${me.id}/story_${Date.now()}.${ext}`;
-    const { error: upErr } = await sb.storage.from('posts').upload(path, _scBlob, { upsert: true, contentType: isVid ? 'video/webm' : 'image/jpeg' });
+    const { error: upErr } = await sb.storage.from('posts').upload(path, upBlob, { upsert: true, contentType: isVid ? 'video/webm' : (upBlob.type || 'image/jpeg') });
     if (upErr) throw upErr;
     const { data: urlData } = sb.storage.from('posts').getPublicUrl(path);
     const caption = document.getElementById('story-caption-input').value.trim();

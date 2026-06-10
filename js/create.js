@@ -274,9 +274,12 @@ async function doPublish(){
   btn.disabled=true;btn.textContent=t('publishing');
   let imageUrl=null;
   if(selFile){
-    const ext=selFile.name.split('.').pop();
+    // Compression avant upload : WebP ≤1920px (repli JPEG/original dans le helper).
+    // Indispensable pour le chemin galerie où selFile est la photo d'origine (12 MP possibles).
+    const upFile=await compressImageForUpload(selFile);
+    const ext=upFile.name.split('.').pop();
     const path=`${me.id}/${Date.now()}.${ext}`;
-    const {error:upErr}=await sb.storage.from('posts').upload(path,selFile);
+    const {error:upErr}=await sb.storage.from('posts').upload(path,upFile,{contentType:upFile.type||'image/jpeg'});
     if(upErr){
       btn.disabled=false;btn.textContent=t('publish');
       return toast('❌ '+t('upload_conn_error'));
