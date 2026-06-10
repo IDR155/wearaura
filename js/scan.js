@@ -20,7 +20,8 @@ let _scan = {
   tab: 'scan',
   image: null,
   pieces: [],
-  history: []
+  history: [],
+  editMode: false
 };
 
 // ── OPEN / CLOSE ──────────────────────────
@@ -650,6 +651,8 @@ async function loadScanHistory() {
 function _renderScanHistory(items) {
   const grid = document.getElementById('scan-hist-grid');
   if (!items.length) {
+    _scan.editMode = false;
+    _syncHistEditBtn();
     grid.innerHTML = `<div class="scan-hist-empty">
       <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--wd)" stroke-width="1.5" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
       <p>Aucun scan pour l'instant</p>
@@ -657,18 +660,53 @@ function _renderScanHistory(items) {
     </div>`;
     return;
   }
+  const em = _scan.editMode;
   grid.innerHTML = items.map((item, i) => {
     const date  = new Date(item.created_at).toLocaleDateString('fr', { day: 'numeric', month: 'short' });
     const count = (item.detected_pieces || []).length;
-    return `<div class="scan-hist-item" onclick="openHistoryScan(${i})">
+    const delBtn = em
+      ? `<button class="scan-hist-del-btn" onclick="deleteScanItem('${item.id}',event)" aria-label="Supprimer">
+           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+         </button>`
+      : '';
+    return `<div class="scan-hist-item${em ? ' edit-mode' : ''}" ${em ? '' : `onclick="openHistoryScan(${i})"`}>
       <div class="scan-hist-thumb">
-        <img src="${item.image_url}" alt="Scan du ${date}" loading="lazy"
-          onerror="this.style.display='none'">
+        <img src="${item.image_url}" alt="Scan du ${date}" loading="lazy" onerror="this.style.display='none'">
         <div class="scan-hist-badge">${count} pièce${count > 1 ? 's' : ''}</div>
+        ${delBtn}
       </div>
       <div class="scan-hist-date">${date}</div>
     </div>`;
   }).join('');
+}
+
+function _syncHistEditBtn() {
+  const btn = document.getElementById('scan-hist-edit-btn');
+  if (!btn) return;
+  const key = _scan.editMode ? 'hist_done' : 'hist_edit';
+  btn.setAttribute('data-i18n', key);
+  btn.textContent = t(key);
+  btn.style.borderColor = _scan.editMode ? 'var(--gold-b)' : 'rgba(240,234,216,0.2)';
+  btn.style.color       = _scan.editMode ? 'var(--gold)'   : 'var(--wd)';
+}
+
+function toggleHistoryEdit() {
+  _scan.editMode = !_scan.editMode;
+  _syncHistEditBtn();
+  _renderScanHistory(_scan.history);
+}
+
+function deleteScanItem(itemId, event) {
+  event.stopPropagation();
+  _scan.history = _scan.history.filter(item => String(item.id) !== String(itemId));
+  // Supprimer du localStorage
+  try {
+    const local = _getLocalScans().filter(item => String(item.id) !== String(itemId));
+    localStorage.setItem(_SCAN_HIST_KEY, JSON.stringify(local));
+  } catch(e) {}
+  // Supprimer de Supabase (non-bloquant)
+  if (me) sb.from('scan_history').delete().eq('id', itemId).eq('user_id', me.id).catch(() => {});
+  _renderScanHistory(_scan.history);
 }
 
 function openHistoryScan(index) {

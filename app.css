@@ -1067,6 +1067,10 @@ img.img-lazy--in{animation:imgFadeIn 380ms cubic-bezier(0.23,1,0.32,1) forwards}
 .scan-hist-empty{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:12px;padding:60px 20px;text-align:center}
 .scan-hist-empty p{color:var(--wd);font-size:13px}
 .scan-hist-empty span{color:rgba(237,228,207,0.4);font-size:11px}
+.scan-hist-del-btn{position:absolute;top:6px;right:6px;width:28px;height:28px;border-radius:50%;background:rgba(200,45,45,0.9);border:1.5px solid rgba(255,100,100,0.35);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;backdrop-filter:blur(6px);transition:transform .12s,background .15s;padding:0;flex-shrink:0}
+.scan-hist-del-btn:active{transform:scale(.84);background:rgba(200,45,45,1)}
+.scan-hist-item.edit-mode{cursor:default}
+.scan-hist-item.edit-mode:active{transform:none;border-color:rgba(240,234,216,0.08)}
 
 /* Icône dans le feed header */
 .ft-scan{position:absolute;left:14px;top:50%;transform:translateY(-50%);padding:6px 8px;color:rgba(237,228,207,0.7);cursor:pointer;transition:color .2s;display:flex;align-items:center;justify-content:center;touch-action:manipulation}
