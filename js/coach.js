@@ -11,9 +11,20 @@ const _COACH_STEPS = [
   { sel:'.ft-scan',        title:'coach_t2', body:'coach_b2', pad:8, round:true },
   { sel:'.ni-center',      title:'coach_t3', body:'coach_b3', pad:8, round:true },
   { sel:'#ni-shop',        title:'coach_t4', body:'coach_b4', pad:6 },
-  // Étape centrée (pas de cible) : réutilise le message hotspots existant
-  { sel:null, title:'hint_onboard_title', body:'hint_onboard_body' },
+  // Pointe le « voir plus » du premier post visible ; carte centrée
+  // en secours si aucun post avec look n'est à l'écran
+  { sel:'.slide-voir-plus', title:'coach_t5', body:'coach_b5', pad:10, centerFallback:true },
 ];
+
+// Premier élément correspondant ET entièrement visible à l'écran
+function _coachFindTarget(sel){
+  const vh = window.innerHeight, vw = window.innerWidth;
+  for (const el of document.querySelectorAll(sel)){
+    const r = el.getBoundingClientRect();
+    if (r.width > 0 && r.height > 0 && r.top >= 0 && r.bottom <= vh && r.left >= 0 && r.right <= vw) return el;
+  }
+  return null;
+}
 
 const _coach = { idx:0, ov:null, spot:null, card:null };
 
@@ -47,18 +58,18 @@ function startCoachMarks(){
 
 function _coachStep(i){
   const steps = _COACH_STEPS;
-  // Saute les étapes dont la cible est absente
-  while (i < steps.length && steps[i].sel && !document.querySelector(steps[i].sel)) i++;
+  // Saute les étapes dont la cible est absente (sauf si secours centré)
+  while (i < steps.length && steps[i].sel && !steps[i].centerFallback && !_coachFindTarget(steps[i].sel)) i++;
   if (i >= steps.length) return _coachFinish();
   _coach.idx = i;
   const st = steps[i];
+  const el = st.sel ? _coachFindTarget(st.sel) : null;
   const { spot, card } = _coach;
   const vh = window.innerHeight;
 
   card.style.opacity = '0';
 
-  if (st.sel) {
-    const el = document.querySelector(st.sel);
+  if (el) {
     const r = el.getBoundingClientRect();
     const pad = st.pad || 6;
     spot.style.top    = (r.top - pad) + 'px';
@@ -68,7 +79,8 @@ function _coachStep(i){
     spot.style.borderRadius = st.round ? '50%' : '16px';
     spot.style.borderWidth = '1.5px';
   } else {
-    // Étape centrée : spotlight réduit à un point, l'ombre couvre tout
+    // Étape centrée (pas de cible ou cible hors écran) :
+    // spotlight réduit à un point, l'ombre couvre tout
     spot.style.top = (vh/2) + 'px';
     spot.style.left = '50%';
     spot.style.width = '0px';
@@ -93,10 +105,10 @@ function _coachStep(i){
   // Position de la carte : sous la cible si elle est en haut, au-dessus sinon
   requestAnimationFrame(() => {
     const ch = card.offsetHeight;
-    if (!st.sel) {
+    if (!el) {
       card.style.top = Math.max(16, (vh - ch) / 2) + 'px';
     } else {
-      const r = document.querySelector(st.sel).getBoundingClientRect();
+      const r = el.getBoundingClientRect();
       const below = r.bottom + 16 + ch < vh - 16;
       card.style.top = below ? (r.bottom + 16) + 'px' : Math.max(16, r.top - ch - 16) + 'px';
     }

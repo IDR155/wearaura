@@ -4,7 +4,7 @@
 //             Network-first pour API Supabase/Jamendo
 // ═══════════════════════════════════════════
 
-const CACHE = 'wa-v84';
+const CACHE = 'wa-v85';
 
 // Assets à précacher à l'installation
 const STATIC = [

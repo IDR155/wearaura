@@ -293,6 +293,8 @@ const I18N = {
     coach_skip:'Passer',
     coach_next:'Suivant',
     coach_finish:"C'est parti",
+    coach_t5:'Explore le look ✦',
+    coach_b5:'Touche les points dorés sur la photo ou « voir plus » pour découvrir chaque pièce et son alternative éthique ou seconde main.',
   },
   en: {
     sign_in:'Sign In',sign_up:'Sign Up',
@@ -586,6 +588,8 @@ const I18N = {
     coach_skip:'Skip',
     coach_next:'Next',
     coach_finish:"Let's go",
+    coach_t5:'Explore the look ✦',
+    coach_b5:'Tap the golden dots on the photo or "see more" to discover every item and its ethical or secondhand alternative.',
   }
 };
 
