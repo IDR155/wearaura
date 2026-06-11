@@ -12,6 +12,7 @@ function _ecoLeaves(n){
   const off=Array.from({length:5-c},()=>`<span style="color:var(--gold-b);opacity:.5;line-height:1">${_leafSvg}</span>`).join('');
   return on+off;
 }
+function pNom(p){return(typeof currentLang!=='undefined'&&currentLang!=='fr'&&p.name_en)||p.nom||'';}
 let bqCurrentFilter='';
 let bqAllProducts=[];
 let bqCurrentView='pieces';
@@ -291,7 +292,7 @@ function _bqClick(idx){
 function bqCarouselCard(p){
   const idx=_bqRegister(p);
   const imgContent=p.image_url
-    ?`<img src="${p.image_url}" alt="${escapeHtml(p.nom)}" onerror="this.style.display='none';this.parentNode.querySelector('.bq-emoji-fb').style.display='flex'">`:'';
+    ?`<img src="${p.image_url}" alt="${escapeHtml(pNom(p))}" onerror="this.style.display='none';this.parentNode.querySelector('.bq-emoji-fb').style.display='flex'">`:'';
   const stars=`<span style="display:inline-flex;gap:1px">${_ecoLeaves(p.score_eco)}</span>`;
   const demoBadge=p._isDemo?`<div class="demo-badge">${t('bq_apercu_demo')}</div>`:'';
   const credit=p.image_photographer?`<div class="pexels-credit" title="Photo via Pexels">${escapeHtml(p.image_photographer)}</div>`:'';
@@ -309,7 +310,7 @@ function bqCarouselCard(p){
       ${credit}
     </div>
     <div class="bq-carousel-info">
-      <div class="bq-carousel-name">${escapeHtml(p.nom)}</div>
+      <div class="bq-carousel-name">${escapeHtml(pNom(p))}</div>
       <div class="bq-carousel-brand">${escapeHtml(p.marque)}</div>
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div class="bq-carousel-price">${escapeHtml(String(p.prix))}€</div>
@@ -323,7 +324,7 @@ function bqCarouselCard(p){
 function bqProductCard(p){
   const idx=_bqRegister(p);
   const imgContent=p.image_url
-    ?`<img src="${p.image_url}" alt="${escapeHtml(p.nom)}" onerror="this.style.display='none';this.parentNode.querySelector('.bq-emoji-fb').style.display='flex'">`:'';
+    ?`<img src="${p.image_url}" alt="${escapeHtml(pNom(p))}" onerror="this.style.display='none';this.parentNode.querySelector('.bq-emoji-fb').style.display='flex'">`:'';
   const demoBadge=p._isDemo?`<div class="demo-badge">${t('bq_apercu_demo')}</div>`:'';
   const credit=p.image_photographer?`<div class="pexels-credit" title="Photo via Pexels">${escapeHtml(p.image_photographer)}</div>`:'';
   return `<div class="bq-product-card"
@@ -340,7 +341,7 @@ function bqProductCard(p){
       ${credit}
     </div>
     <div class="bq-product-info">
-      <div class="bq-product-name">${escapeHtml(p.nom)}</div>
+      <div class="bq-product-name">${escapeHtml(pNom(p))}</div>
       <div class="bq-product-brand">${escapeHtml(p.marque)}</div>
       ${p.matiere?`<div style="font-size:10px;color:var(--wd);margin-bottom:4px">${escapeHtml(p.matiere)}</div>`:''}
       <div class="bq-product-footer">
@@ -354,12 +355,12 @@ function bqProductCard(p){
 
 function bqSecondhandCard(p){
   const imgContent=p.image_url
-    ?`<img src="${p.image_url}" alt="${escapeHtml(p.nom)}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`
+    ?`<img src="${p.image_url}" alt="${escapeHtml(pNom(p))}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`
     :_clotheSvgFb;
   return `<div class="bq-sm-card" onclick="window.open('${safeUrl(p.url)}','_blank')">
     <div class="bq-sm-img">${imgContent}</div>
     <div style="flex:1;min-width:0">
-      <div style="font-size:12px;font-weight:500;color:var(--white);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(p.nom)}</div>
+      <div style="font-size:12px;font-weight:500;color:var(--white);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(pNom(p))}</div>
       <div style="font-size:10px;color:var(--gold);margin-bottom:4px">${escapeHtml(p.marque)}</div>
       <div style="font-size:13px;color:var(--gold-l);font-weight:600;margin-bottom:4px">${escapeHtml(String(p.prix))}€</div>
       <div class="aff-badge">${t('aff_badge')}</div>
@@ -405,7 +406,7 @@ function bqCtxShow(p){
   const nameEl=document.getElementById('bq-ctx-name');
   const brandEl=document.getElementById('bq-ctx-brand');
   const priceEl=document.getElementById('bq-ctx-price');
-  if(nameEl) nameEl.textContent=p.nom||'';
+  if(nameEl) nameEl.textContent=pNom(p)||'';
   if(brandEl) brandEl.textContent=p.marque||'';
   if(priceEl) priceEl.textContent=p.prix?p.prix+'€':'';
   const saveLabel=document.getElementById('bq-ctx-save-label');
@@ -449,7 +450,7 @@ function bqCtxSendDm(){
   const p=_bqCtxProduct;if(!p)return;
   closeBqCtx();
   if(navigator.share){
-    navigator.share({title:p.nom,text:`${p.marque} — ${p.prix}€`,url:p.url}).catch(()=>{});
+    navigator.share({title:pNom(p),text:`${p.marque} — ${p.prix}€`,url:p.url}).catch(()=>{});
   }else{
     goTab('notif');toast('Partage via les Messages');
   }
