@@ -8,3 +8,10 @@ _dev/
 Thumbs.db
 .DS_Store
 desktop.ini
+
+# Fichiers temporaires PowerPoint
+~$*.pptx
+
+# Dossiers de travail présentation
+unpacked/
+WearAura_Presentation_v2.pptx
