@@ -639,6 +639,7 @@ function applyLang(){
   });
   const ld=document.getElementById('lang-display');
   if(ld)ld.textContent=currentLang==='fr'?'Français':'English';
+  document.querySelectorAll('.auth-lang-btn').forEach(b=>b.classList.toggle('active',b.id===`auth-lang-${currentLang}`));
 }
 
 function openLangPicker(){
