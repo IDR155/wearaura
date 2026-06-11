@@ -106,7 +106,13 @@ Deno.serve(async (req) => {
   }
 
   const msg = compose(type, name, lang);
-  const url = (type === 'message' || type === 'message_request') ? '/?tab=notif' : '/?tab=notif';
+  const url = '/?tab=notif';
+
+  // Compteur de non-lus → badge numérique sur l'icône de l'app (app fermée).
+  const { count: unread } = await sb
+    .from('notifications').select('*', { count: 'exact', head: true })
+    .eq('user_id', userId).eq('read', false);
+  const badge = typeof unread === 'number' ? unread : undefined;
 
   const { data: subs } = await sb
     .from('push_subscriptions').select('id,endpoint,p256dh,auth').eq('user_id', userId);
@@ -116,7 +122,7 @@ Deno.serve(async (req) => {
     try {
       await webpush.sendNotification(
         { endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } },
-        JSON.stringify({ ...msg, url }),
+        JSON.stringify({ ...msg, url, badge }),
       );
       sent++;
     } catch (err) {

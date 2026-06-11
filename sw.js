@@ -4,7 +4,7 @@
 //             Network-first pour API Supabase/Jamendo
 // ═══════════════════════════════════════════
 
-const CACHE = 'wa-v93';
+const CACHE = 'wa-v94';
 
 // Assets à précacher à l'installation
 const STATIC = [
@@ -134,8 +134,13 @@ self.addEventListener('push', e => {
     renotify: true,
     data: { url: data.url || '/?tab=notif' },
   };
-  // Pastille sur l'icône de l'app (Badging API, dispo aussi en contexte SW)
-  if ('setAppBadge' in self.navigator) self.navigator.setAppBadge().catch(() => {});
+  // Badge sur l'icône de l'app : chiffre si le push porte un compteur, sinon
+  // simple pastille (Badging API, dispo aussi en contexte SW — iOS 16.4+).
+  if ('setAppBadge' in self.navigator) {
+    const n = Number(data.badge);
+    if (Number.isFinite(n) && n > 0) self.navigator.setAppBadge(n).catch(() => {});
+    else self.navigator.setAppBadge().catch(() => {});
+  }
   e.waitUntil(self.registration.showNotification(title, options));
 });
 
