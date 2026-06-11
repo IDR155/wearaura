@@ -54,6 +54,7 @@
 
   <h2>2. Accès au service</h2>
   <p>L'accès à WearAura est gratuit. Un compte est nécessaire pour publier des contenus. La création de compte requiert une adresse email valide et un mot de passe.</p>
+  <p>WearAura est réservé aux personnes âgées de <strong style="color:var(--white)">15 ans ou plus</strong>, conformément à l'âge du consentement numérique en France (article 45 de la loi Informatique et Libertés).</p>
   <p>WearAura se réserve le droit de désactiver un compte à tout moment, notamment en cas de non-respect des présentes CGU.</p>
 
   <h2>3. Contenus publiés par les utilisateurs</h2>
@@ -65,7 +66,7 @@
   </ul>
   <p>WearAura ne revendique aucune propriété sur vos contenus. Vous conservez l'intégralité de vos droits. En publiant, vous accordez à WearAura une licence non exclusive, gratuite, mondiale pour afficher votre contenu dans l'application.</p>
 
-  <h2>4. Comportements interdits</h2>
+  <h2>4. Comportements interdits et modération</h2>
   <ul>
     <li>Publier des contenus contrefaisants, illicites ou portant atteinte à la vie privée</li>
     <li>Harceler ou menacer d'autres utilisateurs</li>
@@ -73,6 +74,12 @@
     <li>Utiliser des bots ou scripts automatisés</li>
     <li>Publier des fausses informations sur des produits (fausses références, faux labels)</li>
   </ul>
+  <p>WearAura applique une politique de <strong style="color:var(--white)">tolérance zéro</strong> envers les contenus abusifs ou choquants. Chaque utilisateur dispose d'outils intégrés à l'application pour :</p>
+  <ul>
+    <li><strong style="color:var(--white)">Signaler</strong> un contenu ou un utilisateur inapproprié</li>
+    <li><strong style="color:var(--white)">Bloquer</strong> un utilisateur abusif (ses contenus et messages ne vous seront plus visibles)</li>
+  </ul>
+  <p>Les contenus signalés sont examinés dans un délai de <strong style="color:var(--white)">24 heures</strong>. Tout contenu contraire aux présentes CGU est retiré et son auteur peut être exclu de la plateforme.</p>
 
   <h2>5. Liens affiliés et rémunération</h2>
   <p>WearAura affiche des liens vers des produits tiers (alternatives éthiques, seconde main). Certains de ces liens sont des <span class="affil-badge">LIENS AFFILIÉS</span> : WearAura perçoit une commission si vous effectuez un achat via ces liens, sans surcoût pour vous.</p>
@@ -108,6 +115,7 @@
   <p><strong style="color:var(--white)">Données de profil :</strong> photo de profil, bio, localisation (optionnelle).</p>
   <p><strong style="color:var(--white)">Contenus publiés :</strong> photos de looks, hotspots, légendes, tags, localisation du look (optionnelle).</p>
   <p><strong style="color:var(--white)">Données comportementales :</strong> clics sur les hotspots, clics sur les alternatives, types d'alternatives consultées (éthique / seconde main), temps de publication d'un look. Ces données sont collectées de manière anonymisée et agrégée.</p>
+  <p><strong style="color:var(--white)">Permissions de l'appareil :</strong> l'accès à la <strong style="color:var(--white)">caméra</strong> et à la <strong style="color:var(--white)">galerie photos</strong> est utilisé uniquement pour capturer ou importer vos looks et analyser une image (scan). Aucun accès n'a lieu en arrière-plan. Les <strong style="color:var(--white)">notifications push</strong> ne sont envoyées qu'avec votre autorisation explicite, modifiable à tout moment dans les réglages de votre appareil.</p>
 
   <h2>3. Finalités du traitement</h2>
   <ul>
@@ -162,7 +170,7 @@
   <ul>
     <li><strong style="color:var(--white)">Accès</strong> : obtenir une copie de vos données</li>
     <li><strong style="color:var(--white)">Rectification</strong> : corriger vos données</li>
-    <li><strong style="color:var(--white)">Effacement</strong> : supprimer votre compte et vos données</li>
+    <li><strong style="color:var(--white)">Effacement</strong> : supprimer votre compte et toutes vos données, directement depuis l'application (Profil → Signaler un problème → catégorie "Suppression de compte") ou par email — traitement sous 30 jours maximum</li>
     <li><strong style="color:var(--white)">Portabilité</strong> : recevoir vos données dans un format structuré</li>
     <li><strong style="color:var(--white)">Opposition</strong> : vous opposer au traitement pour intérêt légitime</li>
     <li><strong style="color:var(--white)">Retrait du consentement</strong> : à tout moment pour les traitements basés sur le consentement</li>
@@ -263,6 +271,10 @@ function switchTab(tab) {
   document.getElementById('tab-' + tab).classList.add('active');
   window.scrollTo(0, 0);
 }
+// Lien direct vers un onglet : terms.html#privacy / #affil / #cgu
+// (URL exigée par App Store Connect et Google Play Console pour la politique de confidentialité)
+const initialTab = location.hash.replace('#', '');
+if (['cgu', 'privacy', 'affil'].includes(initialTab)) switchTab(initialTab);
 </script>
 </body>
 </html>
