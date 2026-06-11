@@ -410,7 +410,7 @@ function bqCtxShow(p){
   if(priceEl) priceEl.textContent=p.prix?p.prix+'€':'';
   const saveLabel=document.getElementById('bq-ctx-save-label');
   const isSaved=_bqSavedKeys.has(p.url);
-  if(saveLabel) saveLabel.textContent=isSaved?'Retirer des envies':'Enregistrer dans mes envies';
+  if(saveLabel) saveLabel.textContent=isSaved?t('unsave_wishlist'):t('save_wishlist');
   if(overlay){overlay.style.display='block';}
   sheet.style.display='block';
   requestAnimationFrame(()=>requestAnimationFrame(()=>{sheet.style.transform='translateY(0)';}));

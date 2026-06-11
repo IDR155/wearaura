@@ -9,29 +9,34 @@ const _DBG = {
 };
 
 // ── Wrapper d'erreurs Supabase / friendly messages ──
-const SB_FRIENDLY_ERRORS = {
-  '23505': "Cette action a déjà été effectuée.",
-  '23503': "Référence introuvable.",
-  '42501': "Tu n'as pas la permission pour cette action.",
-  'PGRST116': "Cet élément n'existe plus.",
-  'PGRST301': "Tu n'as pas la permission.",
-  'JWT expired': "Ta session a expiré. Reconnecte-toi.",
-  'invalid_token': "Ta session a expiré. Reconnecte-toi.",
-  'refresh_token_not_found': "Ta session a expiré. Reconnecte-toi.",
-  'Failed to fetch': "Pas de connexion réseau. Vérifie ta connexion.",
-  'NetworkError': "Problème réseau. Réessaye.",
-  'Email not confirmed': "Confirme ton email d'abord.",
-  'Invalid login credentials': "Email ou mot de passe incorrect.",
-  'User already registered': "Cet email est déjà utilisé.",
-  'over_email_send_rate_limit': "Trop d'envois. Réessaye dans quelques minutes.",
+const SB_FRIENDLY_ERROR_KEYS = {
+  '23505': 'err_already_done',
+  '23503': 'err_ref_not_found',
+  '42501': 'err_perm',
+  'PGRST116': 'err_not_found',
+  'PGRST301': 'err_perm',
+  'JWT expired': 'err_session',
+  'invalid_token': 'err_session',
+  'refresh_token_not_found': 'err_session',
+  'Failed to fetch': 'err_network',
+  'NetworkError': 'err_network',
+  'Email not confirmed': 'err_email_confirm',
+  'Invalid login credentials': 'err_bad_credentials',
+  'User already registered': 'err_email_taken',
+  'over_email_send_rate_limit': 'err_rate_limit',
+};
+const SB_FRIENDLY_ERRORS_FR = {
+  'err_already_done': "Cette action a déjà été effectuée.",
+  'err_ref_not_found': "Référence introuvable.",
+  'err_not_found': "Cet élément n'existe plus.",
 };
 function friendlyError(error){
-  if(!error)return "Une erreur est survenue.";
+  if(!error)return t('err_generic')||"Something went wrong.";
   const txt=(error.code||'')+' '+(error.message||error.error_description||error.toString());
-  for(const [key,msg] of Object.entries(SB_FRIENDLY_ERRORS)){
-    if(txt.includes(key))return msg;
+  for(const [key,msgKey] of Object.entries(SB_FRIENDLY_ERROR_KEYS)){
+    if(txt.includes(key))return t(msgKey)||SB_FRIENDLY_ERRORS_FR[msgKey]||msgKey;
   }
-  return "Quelque chose s'est mal passé. Réessaye.";
+  return t('err_fallback')||"Something went wrong. Please try again.";
 }
 async function safeRun(promiseOrFn, opts={}){
   const{friendly,silent,fallback=null,context=''}=opts;
@@ -51,8 +56,8 @@ async function safeRun(promiseOrFn, opts={}){
 }
 
 // Détection online/offline
-window.addEventListener('offline',()=>{toast("Tu es hors ligne. Certaines actions seront en attente.",3200,{type:'error'});});
-window.addEventListener('online',()=>{toast("Connexion rétablie ✨",2200,{type:'success'});});
+window.addEventListener('offline',()=>{toast(t('offline_msg'),3200,{type:'error'});});
+window.addEventListener('online',()=>{toast(t('online_back'),2200,{type:'success'});});
 
 // ── MASCOTTE LOUP — avatar universel ──
 // Affiche wolf.png si disponible, fallback 🐺 sinon

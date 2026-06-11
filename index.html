@@ -383,13 +383,13 @@
             </svg>
           </div>
           <!-- Message -->
-          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--white);letter-spacing:1px;margin-bottom:10px;text-align:center">Accès caméra</div>
+          <div data-i18n="cam_access_title" style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--white);letter-spacing:1px;margin-bottom:10px;text-align:center">Accès caméra</div>
           <div style="font-size:13px;color:rgba(245,240,232,.5);text-align:center;line-height:1.7;padding:0 16px;margin-bottom:8px">
-            <span id="cam-fallback-msg">WearAura a besoin de ta caméra pour créer un post.</span>
+            <span id="cam-fallback-msg" data-i18n="cam_fallback_msg">WearAura a besoin de ta caméra pour créer un post.</span>
           </div>
           <div id="cam-fallback-sub" style="font-size:11px;color:rgba(245,240,232,.3);text-align:center;line-height:1.6;padding:0 24px;margin-bottom:28px" data-i18n="cam_settings">Autorise l'accès dans les paramètres de ton navigateur</div>
           <!-- CTA principal : demander permission -->
-          <div onclick="requestCamPermission()" style="width:100%;max-width:280px;background:var(--white);border:none;border-radius:50px;padding:15px 28px;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;font-weight:600;color:#07101E;cursor:pointer;text-align:center;margin-bottom:12px">
+          <div onclick="requestCamPermission()" data-i18n="cam_allow_btn" style="width:100%;max-width:280px;background:var(--white);border:none;border-radius:50px;padding:15px 28px;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;font-weight:600;color:#07101E;cursor:pointer;text-align:center;margin-bottom:12px">
             Autoriser la caméra
           </div>
           <!-- Fallback galerie -->
@@ -466,7 +466,7 @@
           <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
           <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
         </svg>
-        <span style="font-size:12px;color:var(--wd);flex:1">Recadrer pour le feed ?</span>
+        <span data-i18n="crop_for_feed" style="font-size:12px;color:var(--wd);flex:1">Recadrer pour le feed ?</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--wd)" stroke-width="2" stroke-linecap="round" style="opacity:.5"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
       <div style="margin:0 20px 10px;display:flex;gap:10px">
@@ -886,7 +886,7 @@
         <div class="pref-chip" data-val="XXL" onclick="toggleEpChip(this,'sizes')">XXL</div>
       </div>
       <div class="label-gold">Mes styles préférés</div>
-      <div style="font-size:10px;color:var(--wd);margin-bottom:8px">Jusqu'à 3</div>
+      <div data-i18n="max_three_hint" style="font-size:10px;color:var(--wd);margin-bottom:8px">Jusqu'à 3</div>
       <div class="tags-wrap-mb" id="ep-styles-list">
         <div class="pref-chip" data-val="minimaliste" onclick="toggleEpChip(this,'styles',3)">Minimaliste</div>
         <div class="pref-chip" data-val="vintage" onclick="toggleEpChip(this,'styles',3)">Vintage</div>
@@ -1090,7 +1090,7 @@
         <div style="font-size:10px;color:rgba(245,240,232,.3);margin-top:6px;letter-spacing:1px">Version 2.0 · Beta</div>
       </div>
       <div style="margin:0 20px 16px;padding:14px 16px;background:var(--black-3);border-radius:12px;border:1px solid var(--gold-b)">
-        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Notre mission</div>
+        <div data-i18n="our_mission" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Notre mission</div>
         <div style="font-size:12px;color:var(--wd);line-height:1.7">WearAura connecte l'inspiration mode à la consommation responsable. Un look, une information, un choix — éthique, seconde main, ou simplement plus conscient.</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 20px 16px">
@@ -1478,12 +1478,12 @@
       <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="rgba(255,100,100,0.9)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10v2a7 7 0 0014 0v-2M12 19v3M8 22h8"/></svg>
     </div>
     <div id="mrec-timer" style="font-size:40px;font-family:var(--fd);font-weight:300;color:var(--white);letter-spacing:4px;margin:16px 0 4px">0:00</div>
-    <div id="mrec-status" style="font-size:12px;color:var(--wd);letter-spacing:.5px;margin-bottom:16px">Appuie pour enregistrer</div>
+    <div id="mrec-status" data-i18n="tap_to_record" style="font-size:12px;color:var(--wd);letter-spacing:.5px;margin-bottom:16px">Appuie pour enregistrer</div>
     <canvas id="mrec-wave" width="280" height="44" style="border-radius:8px;background:rgba(240,234,216,0.04);margin-bottom:20px"></canvas>
     <div id="mrec-actions" style="display:none;flex-direction:column;gap:10px;width:100%">
       <audio id="mrec-preview" controls style="width:100%;border-radius:8px;margin-bottom:4px"></audio>
-      <button onclick="_useRecording()" id="mrec-use-btn" style="width:100%;height:48px;background:var(--gold);color:var(--black);border:none;border-radius:50px;font-family:var(--fb);font-size:11px;letter-spacing:2px;font-weight:700;cursor:pointer">UTILISER CE VOCAL</button>
-      <div onclick="_resetRecording()" style="text-align:center;font-size:12px;color:var(--wd);cursor:pointer;padding:8px 0;opacity:.7">Recommencer</div>
+      <button onclick="_useRecording()" id="mrec-use-btn" data-i18n="use_audio_btn" style="width:100%;height:48px;background:var(--gold);color:var(--black);border:none;border-radius:50px;font-family:var(--fb);font-size:11px;letter-spacing:2px;font-weight:700;cursor:pointer">UTILISER CE VOCAL</button>
+      <div onclick="_resetRecording()" data-i18n="retouche_reset" style="text-align:center;font-size:12px;color:var(--wd);cursor:pointer;padding:8px 0;opacity:.7">Recommencer</div>
     </div>
   </div>
 
@@ -1707,19 +1707,19 @@
   <div style="padding:6px 0 calc(16px + var(--sab,0px))">
     <div class="bq-ctx-action" onclick="bqCtxSave()">
       <div class="bq-ctx-action-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></div>
-      <span id="bq-ctx-save-label">Enregistrer dans mes envies</span>
+      <span id="bq-ctx-save-label" data-i18n="save_wishlist">Enregistrer dans mes envies</span>
     </div>
     <div class="bq-ctx-action" onclick="bqCtxSendDm()">
       <div class="bq-ctx-action-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
-      <span>Envoyer à un ami</span>
+      <span data-i18n="send_to_friend">Envoyer à un ami</span>
     </div>
     <div class="bq-ctx-action" onclick="bqCtxCopy()">
       <div class="bq-ctx-action-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
-      <span>Copier le lien affilié</span>
+      <span data-i18n="copy_affiliate">Copier le lien affilié</span>
     </div>
     <div class="bq-ctx-action" onclick="bqCtxOpen()">
       <div class="bq-ctx-action-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
-      <span>Ouvrir dans le navigateur</span>
+      <span data-i18n="open_browser">Ouvrir dans le navigateur</span>
     </div>
   </div>
 </div>
@@ -1838,7 +1838,7 @@
   <div id="conv-request-bar" style="display:none;flex-direction:column;flex-shrink:0;background:var(--black);border-top:1px solid rgba(240,234,216,0.1)">
     <div style="padding:14px 20px 6px;text-align:center">
       <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px" id="conv-req-title">veut t'envoyer un message</div>
-      <div class="txt-xs-body">Si tu acceptes, cette personne pourra<br>continuer à te contacter.</div>
+      <div class="txt-xs-body" data-i18n="follow_req_hint">Si tu acceptes, cette personne pourra continuer à te contacter.</div>
     </div>
     <div style="display:flex;border-top:1px solid rgba(240,234,216,0.08);flex-shrink:0">
       <button onclick="blockMsgRequest()" style="flex:1;padding:16px 8px;background:transparent;border:none;border-right:1px solid rgba(240,234,216,0.08);font-family:var(--fb);font-size:13px;color:var(--wd);cursor:pointer">Bloquer</button>
@@ -1907,7 +1907,7 @@
     <!-- Styles -->
     <div style="margin-bottom:8px">
       <div class="label-gold-lg">Tes styles préférés</div>
-      <div class="txt-xs-dim-mb">Jusqu'à 3 — pour affiner les suggestions</div>
+      <div class="txt-xs-dim-mb" data-i18n="max_styles_hint">Jusqu'à 3 — pour affiner les suggestions</div>
       <div class="tags-wrap-lg" id="pref-styles-list">
         <div class="pref-chip" data-val="minimaliste" onclick="togglePrefChip(this,'styles',3)">Minimaliste</div>
         <div class="pref-chip" data-val="vintage" onclick="togglePrefChip(this,'styles',3)">Vintage</div>
@@ -2152,10 +2152,10 @@
 
       <!-- Footer pièces -->
       <div class="scan-footer">
-        <div id="scan-no-result">Aucune pièce détectée — essaie une autre photo.</div>
-        <div id="scan-pieces-label">Tape une pièce pour corriger ou trouver des alternatives</div>
+        <div id="scan-no-result" data-i18n="scan_no_result_msg">Aucune pièce détectée — essaie une autre photo.</div>
+        <div id="scan-pieces-label" data-i18n="scan_pieces_hint">Tape une pièce pour corriger ou trouver des alternatives</div>
         <div id="scan-pieces-bar"></div>
-        <button class="btn scan-retry-btn" onclick="_scanResetPanel()">Analyser une autre tenue</button>
+        <button class="btn scan-retry-btn" data-i18n="analyser_autre" onclick="_scanResetPanel()">Analyser une autre tenue</button>
       </div>
 
       <!-- Panel édition pièce (slide depuis le bas) -->
@@ -2617,7 +2617,7 @@
     const shown=localStorage.getItem('wa_ios_hint');
     if(!shown){
       setTimeout(()=>{
-        toast('Appuie sur ⎙ puis "Sur l\'écran d\'accueil" pour installer',4500,{type:'info'});
+        toast(t('ios_install_hint'),4500,{type:'info'});
         localStorage.setItem('wa_ios_hint','1');
       },25000);
     }
