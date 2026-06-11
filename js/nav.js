@@ -167,7 +167,7 @@ async function init() {
   if (me) {
     _armBack();
     // Présence : horodatage de dernière visite (ciblage du push de ré-engagement)
-    sb.from('profiles').update({last_seen:new Date().toISOString()}).eq('id',me.id).then(()=>{},()=>{});
+    sb.from('profiles').update({last_seen:new Date().toISOString(),lang:(typeof currentLang!=='undefined'?currentLang:'fr')}).eq('id',me.id).then(()=>{},()=>{});
     startGlobalRealtime(); loadFeed(); goS('sc-feed');
     setTimeout(()=>{const a=document.querySelector('#feed-tabs-pill .ft.active');if(a)moveFtSlider(a);},250);
     handleDeepLink();

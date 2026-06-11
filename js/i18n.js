@@ -747,6 +747,8 @@ function setLang(lang){
   document.getElementById('lang-check-fr').style.display=lang==='fr'?'inline':'none';
   document.getElementById('lang-check-en').style.display=lang==='en'?'inline':'none';
   toast(lang==='fr'?'🇫🇷 Français':'🇬🇧 English');
+  // Persiste la langue côté profil (texte des push serveur)
+  try{if(typeof me!=='undefined'&&me&&typeof sb!=='undefined'&&sb){sb.from('profiles').update({lang}).eq('id',me.id).then(()=>{},()=>{});}}catch(e){}
 }
 
 function applyLang(){
