@@ -165,6 +165,7 @@ async function init() {
   }
   clearTimeout(hardTimeout);
   if (me) {
+    _armBack();
     startGlobalRealtime(); loadFeed(); goS('sc-feed');
     setTimeout(()=>{const a=document.querySelector('#feed-tabs-pill .ft.active');if(a)moveFtSlider(a);},250);
     handleDeepLink();
@@ -190,8 +191,8 @@ function handleDeepLink(){
     ||sessionStorage.getItem('wa_pending_post');
   if(!postId) return;
   sessionStorage.removeItem('wa_pending_post');
-  // Nettoie l'URL sans recharger la page
-  history.replaceState(null,'',location.pathname);
+  // Nettoie l'URL sans recharger la page (en préservant la sentinelle du bouton retour)
+  history.replaceState(history.state,'',location.pathname);
   // Attend que le feed soit rendu avant d'ouvrir le post
   setTimeout(()=>openPostView(postId),500);
 }
@@ -229,6 +230,7 @@ function goS(id) {
 
 function goTab(tab) {
   cancelBackConfirm();
+  _armBack();
   if (tab !== 'create') { stopCamera(); }
   if (tab !== 'notif') onLeaveMessagesTab();
   if (tab==='explore') { openSearch(); return; }
@@ -284,6 +286,67 @@ function moveFtSlider(el){
   slider.style.width=elRect.width+'px';
   slider.style.opacity='1';
 }
+// ═══════════════════════════════════════════
+// BOUTON RETOUR SYSTÈME (Android / geste navigateur)
+// Pattern sentinelle : une entrée d'historique reste armée en permanence.
+// Un retour système ferme l'overlay le plus haut au lieu de quitter l'app,
+// puis ré-arme la sentinelle. Sur le feed sans overlay : toast + sortie au
+// retour suivant (comportement natif Android).
+// ═══════════════════════════════════════════
+function _armBack(){
+  if(!me)return;
+  if(!history.state||!history.state.wa)history.pushState({wa:1},'');
+}
+function _bkShow(id){const el=document.getElementById(id);return !!el&&el.classList.contains('show');}
+function _bkDisp(id){const el=document.getElementById(id);return !!el&&getComputedStyle(el).display!=='none';}
+function _bkScreen(id){const el=document.getElementById(id);return !!el&&el.classList.contains('active');}
+// Du plus haut (fermé en premier) au plus bas. Chaque entrée : [test, fermeture].
+const _BACK_CHECKS=[
+  [()=>_bkDisp('msg-ctx-menu'),()=>closeMsgCtx()],
+  [()=>_bkDisp('post-opts-sheet'),()=>closePostOptions()],
+  [()=>_bkDisp('bq-ctx-sheet'),()=>closeBqCtx()],
+  [()=>_bkDisp('sv-views-panel'),()=>closeStoryViewsPanel()],
+  [()=>_bkDisp('music-picker-sheet'),()=>closeMusicPicker()],
+  [()=>_bkDisp('story-cam-overlay'),()=>closeStoryCam()],
+  [()=>_bkDisp('story-create-overlay'),()=>closeStoryCreate()],
+  [()=>_bkDisp('story-viewer'),()=>closeStoryViewer()],
+  [()=>['sheet-comments','prod-sheet','alt-sheet','sheet-share','retouche-sheet'].some(_bkShow),()=>closeAll()],
+  [()=>_bkShow('filter-overlay'),()=>closeFilterSheet()],
+  [()=>_bkDisp('group-info-sheet'),()=>closeGroupInfo()],
+  [()=>_bkDisp('flw-sheet'),()=>closeFollowList()],
+  [()=>_bkDisp('sc-new-dm'),()=>closeNewDM()],
+  [()=>_bkDisp('sc-new-group'),()=>closeNewGroup()],
+  [()=>_bkDisp('sc-conversation'),()=>closeConversationScreen()],
+  [()=>{const p=document.getElementById('settings-panel');return !!p&&p.style.right==='0px';},()=>closeSettings()],
+  [()=>_bkScreen('sc-postview'),()=>goS(prevScreen)],
+  [()=>_bkScreen('sc-vprofile'),()=>goS(prevScreen)],
+  [()=>_bkScreen('sc-search'),()=>closeSearch()],
+  [()=>_bkScreen('sc-scan'),()=>closeScan()],
+  [()=>_bkScreen('sc-create'),()=>goTab('feed')],
+];
+window.addEventListener('popstate',()=>{
+  if(!me)return;
+  for(const[test,close]of _BACK_CHECKS){
+    let open=false;
+    try{open=test();}catch(_){}
+    if(open){
+      try{close();}catch(e){_DBG&&_DBG.err&&_DBG.err('backHandler',e);}
+      _armBack();
+      return;
+    }
+  }
+  // Aucun overlay : si on n'est pas sur le feed, y revenir
+  const nav=document.getElementById('shared-bnav');
+  const activeIdx=nav?[...nav.querySelectorAll('.ni')].findIndex(el=>el.classList.contains('active')):-1;
+  if(activeIdx>0){
+    goTab('feed');
+    _armBack();
+    return;
+  }
+  // Sur le feed, rien d'ouvert : prévenir, le retour suivant quitte l'app
+  try{toast(typeof currentLang!=='undefined'&&currentLang==='en'?'Press back again to exit':'Appuie encore pour quitter');}catch(_){}
+});
+
 function ftSelect(el, tab) {
   document.querySelectorAll('.ft').forEach(ftEl => {ftEl.classList.remove('active');ftEl.setAttribute('aria-selected','false');ftEl.setAttribute('tabindex','-1');});
   el.classList.add('active');el.setAttribute('aria-selected','true');el.setAttribute('tabindex','0');

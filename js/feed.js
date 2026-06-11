@@ -614,6 +614,7 @@ function toggleSound(el) {
     const audio = document.getElementById('feed-ambient');
     if (!audio) return;
     if (isMuted) {
+      if (!audio.src) { toast(typeof currentLang!=='undefined'&&currentLang==='en'?'Music unavailable offline':'Musique indisponible hors ligne'); return; }
       audio.play().catch(() => toast('Autorise le son dans le navigateur'));
       isMuted = false;
       el.classList.remove('vinyl-paused');
@@ -1141,6 +1142,27 @@ function countrySel(el,val){
   else if(_srchFcatCurrent==='occasion') loadExplore(val,'');
   else loadExplore('',val);
 }
+
+// ═══════════════════════════════════════════
+// AMBIANCE FEED — piste Jamendo libre de droits
+// Remplace l'ancienne démo SoundHelix codée en dur. Seule l'URL est résolue
+// au démarrage (JSON ~1 Ko) ; le mp3 n'est téléchargé qu'à la première
+// lecture (preload="none"). Hors ligne : le vinyle affiche un toast.
+// ═══════════════════════════════════════════
+(async () => {
+  const audio = document.getElementById('feed-ambient');
+  if (!audio || audio.getAttribute('src')) return;
+  try {
+    const params = new URLSearchParams({
+      client_id: 'fd86bffe', format: 'json', limit: '3',
+      audioformat: 'mp31', tags: 'ambient', boost: 'popularity_total',
+    });
+    const res = await fetch(`https://api.jamendo.com/v3.0/tracks/?${params}`);
+    const data = await res.json();
+    const track = (data.results || []).find(t => t.audio);
+    if (track) audio.src = track.audio;
+  } catch (_) { /* hors ligne — géré au moment du tap vinyle */ }
+})();
 
 function demoExpGrid(){
   const items=[
