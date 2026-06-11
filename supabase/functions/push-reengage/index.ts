@@ -22,12 +22,30 @@ const MESSAGES = [
 
 const INACTIVE_DAYS = 7;
 
+// Décode le rôle d'un JWT Supabase sans vérifier la signature
+// (le gateway Supabase l'a déjà validée si "Verify JWT" est activé).
+function jwtRole(authHeader: string): string {
+  try {
+    const tok = (authHeader || '').replace(/^Bearer\s+/i, '').trim();
+    let b64 = tok.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    b64 = b64.padEnd(b64.length + (4 - (b64.length % 4)) % 4, '=');
+    return (JSON.parse(atob(b64)) as { role?: string })?.role ?? '';
+  } catch {
+    return '';
+  }
+}
+
 Deno.serve(async (req) => {
-  // Seul le cron (clé service_role) peut déclencher l'envoi
-  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
-  const auth = req.headers.get('Authorization') ?? '';
-  if (!serviceKey || !auth.includes(serviceKey)) {
+  // Seul un appel en service_role (cron / Dashboard) peut déclencher l'envoi.
+  // On vérifie le rôle décodé du JWT plutôt que la valeur exacte de la clé :
+  // avec le nouveau système de clés Supabase, SUPABASE_SERVICE_ROLE_KEY injecté
+  // peut différer de la clé legacy, ce qui faisait échouer la comparaison (403).
+  if (jwtRole(req.headers.get('Authorization') ?? '') !== 'service_role') {
     return new Response('Forbidden', { status: 403 });
+  }
+  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
+  if (!serviceKey) {
+    return new Response(JSON.stringify({ error: 'SERVICE_ROLE_KEY manquant' }), { status: 500 });
   }
   if (!VAPID_PUBLIC || !VAPID_PRIVATE) {
     return new Response(JSON.stringify({ error: 'VAPID secrets manquants' }), { status: 500 });
