@@ -60,6 +60,8 @@ function _showMsgNavDot(){
   dot.className='msg-unread-dot';
   dot.style.cssText='position:absolute;top:2px;right:8px;width:8px;height:8px;background:#1E4FD8;border-radius:50%;border:1.5px solid var(--black)';
   nav.appendChild(dot);
+  // Pastille générique sur l'icône de l'app si aucun compteur notifs déjà affiché
+  if('setAppBadge' in navigator&&!document.querySelector('.notif-badge'))navigator.setAppBadge().catch(()=>{});
 }
 function _hideMsgNavDot(){document.querySelectorAll('.msg-unread-dot').forEach(d=>d.remove());}
 function startGroupPoll(){
@@ -789,13 +791,52 @@ async function checkUnreadActivity(){
         badge.remove();
       }
     });
+    // Pastille sur l'icône de l'app installée (Android / desktop / iOS 16.4+)
+    if('setAppBadge' in navigator){
+      if(count>0)navigator.setAppBadge(count).catch(()=>{});
+      else if(document.querySelector('.msg-unread-dot'))navigator.setAppBadge().catch(()=>{});
+      else navigator.clearAppBadge().catch(()=>{});
+    }
   }catch(e){}
 }
 
 // ── Notifications navigateur ─────────────────────
 function _requestNotifPermission(){
-  if(!('Notification' in window)||Notification.permission!=='default')return;
-  Notification.requestPermission();
+  if(!('Notification' in window))return;
+  if(Notification.permission==='granted'){_initPushSubscription();return;}
+  if(Notification.permission!=='default')return;
+  Notification.requestPermission().then(p=>{if(p==='granted')_initPushSubscription();});
+}
+
+// ── Web Push : souscription serveur (ré-engagement) ──────────────
+// Enregistre l'appareil dans push_subscriptions pour recevoir des push
+// même app fermée. Clé publique VAPID dans config.js ; envoi côté
+// Edge Function push-reengage (max 1/semaine, charte non-intrusive).
+function _vapidB64ToU8(b64){
+  const pad='='.repeat((4-b64.length%4)%4);
+  const raw=atob((b64+pad).replace(/-/g,'+').replace(/_/g,'/'));
+  return Uint8Array.from(raw,c=>c.charCodeAt(0));
+}
+async function _initPushSubscription(){
+  try{
+    if(!me||!dbOk)return;
+    if(typeof WA_VAPID_PUBLIC_KEY==='undefined'||!WA_VAPID_PUBLIC_KEY)return;
+    if(!('serviceWorker' in navigator)||!('PushManager' in window))return;
+    const reg=await navigator.serviceWorker.ready;
+    let sub=await reg.pushManager.getSubscription();
+    if(!sub){
+      sub=await reg.pushManager.subscribe({
+        userVisibleOnly:true,
+        applicationServerKey:_vapidB64ToU8(WA_VAPID_PUBLIC_KEY),
+      });
+    }
+    const j=sub.toJSON();
+    if(!j?.keys?.p256dh)return;
+    await sb.from('push_subscriptions').upsert(
+      {user_id:me.id,endpoint:sub.endpoint,p256dh:j.keys.p256dh,auth:j.keys.auth},
+      {onConflict:'endpoint'}
+    );
+  }catch(e){_DBG.log('push subscribe: '+(e?.message||e));}
 }
 
 function _showBrowserNotif(title, body){

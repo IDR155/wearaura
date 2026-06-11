@@ -247,6 +247,8 @@ textarea.fi{resize:none;line-height:1.6}
 .slide-caption.expanded{-webkit-line-clamp:unset;overflow:visible}
 /* Pulse borné : 4 cycles (~11s) — s'arrête seul après la fenêtre d'affichage.
    En mode hint-active, l'animation repasse en infinite pour attirer l'attention. */
+/* ── Look du jour : badge éditorial sur le premier slide ── */
+.ldj-badge{position:absolute;top:calc(112px + var(--sat,0px));left:50%;transform:translateX(-50%);z-index:11;padding:7px 18px;border-radius:50px;background:rgba(7,16,30,0.6);border:1px solid var(--gold-b);color:var(--gold);font-family:var(--fb);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;pointer-events:none;white-space:nowrap}
 .slide-hotspot{position:absolute;width:30px;height:30px;border-radius:50%;border:1.5px solid rgba(240,234,216,0.7);background:rgba(240,234,216,0.12);cursor:pointer;display:flex;align-items:center;justify-content:center;animation:hotspotLuxury 2.8s ease-in-out 4;transform:translate(-50%,-50%);z-index:10;will-change:transform,opacity;animation-fill-mode:forwards}
 .hotspot-hint-active .slide-hotspot{border-color:var(--gold);background:var(--gold-dim);box-shadow:0 0 24px var(--gold-dim);animation:hotspotLuxury 2.8s ease-in-out infinite}
 .hotspot-hint-active::after{content:attr(data-hint);position:fixed;top:calc(135px + var(--sat,0px));left:50%;transform:translateX(-50%);background:var(--gold);color:var(--black);font-size:11px;font-weight:600;letter-spacing:.5px;padding:6px 12px;border-radius:50px;white-space:nowrap;box-shadow:0 4px 16px rgba(212,175,111,.4);z-index:51;pointer-events:none;animation:hintFloat 2s ease-in-out infinite}

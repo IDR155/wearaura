@@ -4,7 +4,7 @@
 //             Network-first pour API Supabase/Jamendo
 // ═══════════════════════════════════════════
 
-const CACHE = 'wa-v90';
+const CACHE = 'wa-v91';
 
 // Assets à précacher à l'installation
 const STATIC = [
@@ -134,6 +134,8 @@ self.addEventListener('push', e => {
     renotify: true,
     data: { url: data.url || '/?tab=notif' },
   };
+  // Pastille sur l'icône de l'app (Badging API, dispo aussi en contexte SW)
+  if ('setAppBadge' in self.navigator) self.navigator.setAppBadge().catch(() => {});
   e.waitUntil(self.registration.showNotification(title, options));
 });
 

@@ -31,6 +31,29 @@
       "purpose": "maskable"
     }
   ],
+  "screenshots": [
+    {
+      "src": "screenshots/shot-1-looks.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Partage tes looks avec hotspots interactifs"
+    },
+    {
+      "src": "screenshots/shot-2-ethique.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Des alternatives éthiques et seconde main"
+    },
+    {
+      "src": "screenshots/shot-3-scan.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Scanne une pièce, trouve mieux"
+    }
+  ],
   "shortcuts": [
     {
       "name": "Feed Mode",

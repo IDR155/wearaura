@@ -57,6 +57,21 @@ async function loadFeed() {
     });
     console.log('[WA] filtered='+filtered.length+'/'+data.length+' | me.id='+me?.id?.slice(0,8)+' | uids='+[...new Set(data.map(p=>p.user_id?.slice(0,8)))].join(','));
     if(!filtered.length){clearTimeout(safeTimer);console.warn('[WA] filtered=0 → démos');renderSlides(DEMOS,true);return;}
+    // ── Look du jour : le post le plus aimé des dernières 24h passe en tête ──
+    if(filtered.length>=3){
+      const dayAgo=Date.now()-86400000;
+      let best=null;
+      for(const p of filtered){
+        if(new Date(p.created_at).getTime()<dayAgo)continue;
+        if((p.likes_count||0)<1)continue;
+        if(!best||(p.likes_count||0)>(best.likes_count||0))best=p;
+      }
+      if(best){
+        filtered.splice(filtered.indexOf(best),1);
+        filtered.unshift(best);
+        best._lookDuJour=true;
+      }
+    }
     // Likes & saves : tables optionnelles — ne jamais bloquer le feed
     clearTimeout(safeTimer);
     let likedIds=[], savedIds=[];
@@ -69,7 +84,7 @@ async function loadFeed() {
       savedIds=(savesRes.status==='fulfilled'?(savesRes.value?.data||[]):[]).map(s=>s.post_id);
     }catch(_){ /* tables absentes → likes/saves ignorés */ }
     console.log('[WA] → renderSlides RÉELS posts='+filtered.length);
-    renderSlides(filtered.map(p=>({id:p.id,imageUrl:p.image_url,uid:p.user_id,user:pm[p.user_id]?.username||pm[p.user_id]?.full_name||'user',avatarUrl:pm[p.user_id]?.avatar_url,caption:p.caption||'',likes:p.likes_count||0,comments_count:p.comments_count||0,hotspots:p.hotspots||[],tags:p.tags||{},followed:followed.includes(p.user_id),liked:likedIds.includes(p.id),saved:savedIds.includes(p.id),musicUrl:p.music_url||'',musicTitle:p.music_title||'',musicStart:p.music_start||0})),false);
+    renderSlides(filtered.map(p=>({id:p.id,imageUrl:p.image_url,uid:p.user_id,user:pm[p.user_id]?.username||pm[p.user_id]?.full_name||'user',avatarUrl:pm[p.user_id]?.avatar_url,caption:p.caption||'',likes:p.likes_count||0,comments_count:p.comments_count||0,hotspots:p.hotspots||[],tags:p.tags||{},followed:followed.includes(p.user_id),liked:likedIds.includes(p.id),saved:savedIds.includes(p.id),musicUrl:p.music_url||'',musicTitle:p.music_title||'',musicStart:p.music_start||0,lookDuJour:!!p._lookDuJour})),false);
     resyncFeedCounts(filtered.map(p=>p.id));
   }catch(e){
     clearTimeout(safeTimer);
@@ -184,6 +199,7 @@ function renderSlides(posts,isDemo,containerId='feed-scroll'){
     return `<div class="feed-slide ${!p.imageUrl?bg:''}" data-pid="${pid}" data-demo="${isDemo}" ondblclick="doubleTapLike(event,this,'${p.id}','${isDemo}')">
       ${p.imageUrl?`<div style="position:absolute;inset:0;background:#07101E;z-index:0"></div>`:''}
       ${img}<div class="slide-gradient"></div>
+      ${p.lookDuJour?`<div class="ldj-badge">${t('look_du_jour')}</div>`:''}
       ${hotspotsZone}
       <div class="slide-right" role="group" aria-label="Actions sur ce post">
         <div class="slide-action" role="button" tabindex="0" aria-label="${!isDemo&&p.liked?'Retirer le like':'Aimer ce post'}" aria-pressed="${!isDemo&&p.liked?'true':'false'}" onclick="${isDemo?'demLike(this)':'toggleLike(\''+pid+'\')'}" onkeydown="if(event.key==='Enter'||event.key===' '){${isDemo?'demLike(this)':'toggleLike(\''+pid+'\')'}}">

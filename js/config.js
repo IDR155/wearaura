@@ -94,6 +94,9 @@ const _sbMock = {
   channel: () => ({ on: () => ({subscribe: ()=>{}}), subscribe: ()=>{} }),
   removeChannel: ()=>{}
 };
+// ── Web Push : clé publique VAPID (la clé privée est un secret Supabase, jamais ici) ──
+const WA_VAPID_PUBLIC_KEY = 'BGXt-IqDdApkWNDx_JNLSc5mKFCvm8Y4IJwLLnG1hfwl0e_WKXIVQCNHB0HOMEBC3m68ZPjLBJXFB_mWtS6dDK8';
+
 let sb;
 try {
   sb = supabase.createClient(
