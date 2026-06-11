@@ -861,22 +861,22 @@
     </div>
 
     <div id="edit-prefs-form" style="display:none;padding:14px 20px 16px;background:var(--black-3);border-bottom:1px solid var(--gold-b)">
-      <div class="label-gold">Budget moyen par pièce</div>
+      <div data-i18n="prefs_budget_label" class="label-gold">Budget moyen par pièce</div>
       <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px" id="ep-budget-list">
         <div class="pref-card" data-val="economique" onclick="selEpPrefSingle(this,'budget')">
-          <div class="txt-sm-bold">Économique</div>
-          <div class="txt-xs-muted">Moins de 50€</div>
+          <div data-i18n="prefs_eco" class="txt-sm-bold">Économique</div>
+          <div data-i18n="prefs_eco_sub" class="txt-xs-muted">Moins de 50€</div>
         </div>
         <div class="pref-card" data-val="equilibre" onclick="selEpPrefSingle(this,'budget')">
-          <div class="txt-sm-bold">Équilibré</div>
-          <div class="txt-xs-muted">50€ à 150€</div>
+          <div data-i18n="prefs_mid" class="txt-sm-bold">Équilibré</div>
+          <div data-i18n="prefs_mid_sub" class="txt-xs-muted">50€ à 150€</div>
         </div>
         <div class="pref-card" data-val="premium" onclick="selEpPrefSingle(this,'budget')">
           <div class="txt-sm-bold">Premium</div>
-          <div class="txt-xs-muted">150€ et plus</div>
+          <div data-i18n="prefs_premium_sub" class="txt-xs-muted">150€ et plus</div>
         </div>
       </div>
-      <div class="label-gold">Mes tailles</div>
+      <div data-i18n="my_sizes_label" class="label-gold">Mes tailles</div>
       <div class="tags-wrap-mb" id="ep-sizes-list">
         <div class="pref-chip" data-val="XS" onclick="toggleEpChip(this,'sizes')">XS</div>
         <div class="pref-chip" data-val="S" onclick="toggleEpChip(this,'sizes')">S</div>
@@ -885,18 +885,18 @@
         <div class="pref-chip" data-val="XL" onclick="toggleEpChip(this,'sizes')">XL</div>
         <div class="pref-chip" data-val="XXL" onclick="toggleEpChip(this,'sizes')">XXL</div>
       </div>
-      <div class="label-gold">Mes styles préférés</div>
+      <div data-i18n="my_styles_label" class="label-gold">Mes styles préférés</div>
       <div data-i18n="max_three_hint" style="font-size:10px;color:var(--wd);margin-bottom:8px">Jusqu'à 3</div>
       <div class="tags-wrap-mb" id="ep-styles-list">
-        <div class="pref-chip" data-val="minimaliste" onclick="toggleEpChip(this,'styles',3)">Minimaliste</div>
-        <div class="pref-chip" data-val="vintage" onclick="toggleEpChip(this,'styles',3)">Vintage</div>
-        <div class="pref-chip" data-val="sport" onclick="toggleEpChip(this,'styles',3)">Sport</div>
-        <div class="pref-chip" data-val="elegant" onclick="toggleEpChip(this,'styles',3)">Élégant</div>
-        <div class="pref-chip" data-val="streetwear" onclick="toggleEpChip(this,'styles',3)">Streetwear</div>
-        <div class="pref-chip" data-val="boheme" onclick="toggleEpChip(this,'styles',3)">Bohème</div>
-        <div class="pref-chip" data-val="classique" onclick="toggleEpChip(this,'styles',3)">Classique</div>
+        <div data-i18n="style_minimalist" class="pref-chip" data-val="minimaliste" onclick="toggleEpChip(this,'styles',3)">Minimaliste</div>
+        <div data-i18n="style_vintage" class="pref-chip" data-val="vintage" onclick="toggleEpChip(this,'styles',3)">Vintage</div>
+        <div data-i18n="style_sport" class="pref-chip" data-val="sport" onclick="toggleEpChip(this,'styles',3)">Sport</div>
+        <div data-i18n="style_elegant" class="pref-chip" data-val="elegant" onclick="toggleEpChip(this,'styles',3)">Élégant</div>
+        <div data-i18n="style_streetwear" class="pref-chip" data-val="streetwear" onclick="toggleEpChip(this,'styles',3)">Streetwear</div>
+        <div data-i18n="style_boheme" class="pref-chip" data-val="boheme" onclick="toggleEpChip(this,'styles',3)">Bohème</div>
+        <div data-i18n="style_classic" class="pref-chip" data-val="classique" onclick="toggleEpChip(this,'styles',3)">Classique</div>
       </div>
-      <button onclick="saveEditedPreferences()" class="btn">Mettre à jour</button>
+      <button data-i18n="prefs_save" onclick="saveEditedPreferences()" class="btn">Mettre à jour</button>
       <div onclick="document.getElementById('edit-prefs-form').style.display='none'" class="link-gold">Annuler</div>
     </div>
 
@@ -1867,33 +1867,33 @@
   <div style="overflow-y:auto;flex:1;padding:0 24px;scrollbar-width:none">
     <div style="text-align:center;margin-bottom:24px">
       <img src="mascote_ivory/the_caregiver.png" alt="" style="width:130px;height:130px;object-fit:contain;margin:0 auto -8px;opacity:0.95;display:block">
-      <div style="font-family:var(--fd);font-size:26px;font-weight:300;color:var(--gold);letter-spacing:1px;margin-bottom:6px">Personnalise tes alternatives</div>
-      <div style="font-size:12px;color:var(--wd);line-height:1.6;max-width:300px;margin:0 auto">Aide-nous à te proposer des looks qui te correspondent vraiment.</div>
+      <div data-i18n="prefs_title" style="font-family:var(--fd);font-size:26px;font-weight:300;color:var(--gold);letter-spacing:1px;margin-bottom:6px">Personnalise tes alternatives</div>
+      <div data-i18n="prefs_subtitle" style="font-size:12px;color:var(--wd);line-height:1.6;max-width:300px;margin:0 auto">Aide-nous à te proposer des looks qui te correspondent vraiment.</div>
     </div>
 
     <!-- Budget -->
     <div class="mb-22">
-      <div class="label-gold-lg">Budget moyen par pièce</div>
+      <div data-i18n="prefs_budget_label" class="label-gold-lg">Budget moyen par pièce</div>
       <div style="display:flex;flex-direction:column;gap:8px" id="pref-budget-list">
         <div class="pref-card" data-val="economique" onclick="selPrefSingle(this,'budget')">
-          <div class="txt-md-bold">Économique</div>
-          <div class="txt-xs-sub">Moins de 50€</div>
+          <div data-i18n="prefs_eco" class="txt-md-bold">Économique</div>
+          <div data-i18n="prefs_eco_sub" class="txt-xs-sub">Moins de 50€</div>
         </div>
         <div class="pref-card" data-val="equilibre" onclick="selPrefSingle(this,'budget')">
-          <div class="txt-md-bold">Équilibré</div>
-          <div class="txt-xs-sub">50€ à 150€</div>
+          <div data-i18n="prefs_mid" class="txt-md-bold">Équilibré</div>
+          <div data-i18n="prefs_mid_sub" class="txt-xs-sub">50€ à 150€</div>
         </div>
         <div class="pref-card" data-val="premium" onclick="selPrefSingle(this,'budget')">
           <div class="txt-md-bold">Premium</div>
-          <div class="txt-xs-sub">150€ et plus</div>
+          <div data-i18n="prefs_premium_sub" class="txt-xs-sub">150€ et plus</div>
         </div>
       </div>
     </div>
 
     <!-- Tailles -->
     <div class="mb-22">
-      <div class="label-gold-lg">Tes tailles</div>
-      <div class="txt-xs-dim-mb">Sélectionne celles qui te correspondent (plusieurs possibles)</div>
+      <div data-i18n="prefs_sizes_label" class="label-gold-lg">Tes tailles</div>
+      <div data-i18n="prefs_sizes_hint" class="txt-xs-dim-mb">Sélectionne celles qui te correspondent (plusieurs possibles)</div>
       <div class="tags-wrap-lg" id="pref-sizes-list">
         <div class="pref-chip" data-val="XS" onclick="togglePrefChip(this,'sizes')">XS</div>
         <div class="pref-chip" data-val="S" onclick="togglePrefChip(this,'sizes')">S</div>
@@ -1906,25 +1906,25 @@
 
     <!-- Styles -->
     <div style="margin-bottom:8px">
-      <div class="label-gold-lg">Tes styles préférés</div>
+      <div data-i18n="prefs_styles_label" class="label-gold-lg">Tes styles préférés</div>
       <div class="txt-xs-dim-mb" data-i18n="max_styles_hint">Jusqu'à 3 — pour affiner les suggestions</div>
       <div class="tags-wrap-lg" id="pref-styles-list">
-        <div class="pref-chip" data-val="minimaliste" onclick="togglePrefChip(this,'styles',3)">Minimaliste</div>
-        <div class="pref-chip" data-val="vintage" onclick="togglePrefChip(this,'styles',3)">Vintage</div>
-        <div class="pref-chip" data-val="sport" onclick="togglePrefChip(this,'styles',3)">Sport</div>
-        <div class="pref-chip" data-val="elegant" onclick="togglePrefChip(this,'styles',3)">Élégant</div>
-        <div class="pref-chip" data-val="streetwear" onclick="togglePrefChip(this,'styles',3)">Streetwear</div>
-        <div class="pref-chip" data-val="boheme" onclick="togglePrefChip(this,'styles',3)">Bohème</div>
-        <div class="pref-chip" data-val="classique" onclick="togglePrefChip(this,'styles',3)">Classique</div>
+        <div data-i18n="style_minimalist" class="pref-chip" data-val="minimaliste" onclick="togglePrefChip(this,'styles',3)">Minimaliste</div>
+        <div data-i18n="style_vintage" class="pref-chip" data-val="vintage" onclick="togglePrefChip(this,'styles',3)">Vintage</div>
+        <div data-i18n="style_sport" class="pref-chip" data-val="sport" onclick="togglePrefChip(this,'styles',3)">Sport</div>
+        <div data-i18n="style_elegant" class="pref-chip" data-val="elegant" onclick="togglePrefChip(this,'styles',3)">Élégant</div>
+        <div data-i18n="style_streetwear" class="pref-chip" data-val="streetwear" onclick="togglePrefChip(this,'styles',3)">Streetwear</div>
+        <div data-i18n="style_boheme" class="pref-chip" data-val="boheme" onclick="togglePrefChip(this,'styles',3)">Bohème</div>
+        <div data-i18n="style_classic" class="pref-chip" data-val="classique" onclick="togglePrefChip(this,'styles',3)">Classique</div>
       </div>
     </div>
   </div>
 
   <div style="padding:14px 24px 0;flex-shrink:0">
-    <button onclick="savePreferences()" class="btn" style="letter-spacing:2px">Continuer →</button>
+    <button data-i18n="prefs_continue" onclick="savePreferences()" class="btn" style="letter-spacing:2px">Continuer →</button>
     <div onclick="skipPreferences()" style="text-align:center;margin-top:10px;font-size:11px;color:var(--wd);cursor:pointer;letter-spacing:.5px;opacity:.7">
-      Passer cette étape
-      <div style="font-size:10px;color:var(--wd);opacity:.5;margin-top:3px;letter-spacing:.2px">⚠️ Tes suggestions seront moins pertinentes</div>
+      <span data-i18n="prefs_skip">Passer cette étape</span>
+      <div data-i18n="prefs_skip_warn" style="font-size:10px;color:var(--wd);opacity:.5;margin-top:3px;letter-spacing:.2px">⚠️ Tes suggestions seront moins pertinentes</div>
     </div>
   </div>
 </div>
