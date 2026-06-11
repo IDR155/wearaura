@@ -819,9 +819,9 @@ function _vapidB64ToU8(b64){
 }
 async function _initPushSubscription(){
   try{
-    if(!me||!dbOk)return;
-    if(typeof WA_VAPID_PUBLIC_KEY==='undefined'||!WA_VAPID_PUBLIC_KEY)return;
-    if(!('serviceWorker' in navigator)||!('PushManager' in window))return;
+    if(!me||!dbOk)return false;
+    if(typeof WA_VAPID_PUBLIC_KEY==='undefined'||!WA_VAPID_PUBLIC_KEY)return false;
+    if(!('serviceWorker' in navigator)||!('PushManager' in window))return false;
     const reg=await navigator.serviceWorker.ready;
     let sub=await reg.pushManager.getSubscription();
     if(!sub){
@@ -831,12 +831,74 @@ async function _initPushSubscription(){
       });
     }
     const j=sub.toJSON();
-    if(!j?.keys?.p256dh)return;
-    await sb.from('push_subscriptions').upsert(
+    if(!j?.keys?.p256dh)return false;
+    const {error}=await sb.from('push_subscriptions').upsert(
       {user_id:me.id,endpoint:sub.endpoint,p256dh:j.keys.p256dh,auth:j.keys.auth},
       {onConflict:'endpoint'}
     );
-  }catch(e){_DBG.log('push subscribe: '+(e?.message||e));}
+    if(error){_DBG.log('push upsert: '+error.message);return false;}
+    return true;
+  }catch(e){_DBG.log('push subscribe: '+(e?.message||e));return false;}
+}
+
+// ── Toggle Notifications push (Paramètres) ────────────────────────
+// Déclenché par un TAP utilisateur — indispensable sur iOS qui refuse
+// toute demande de permission hors geste. Sur iPhone, l'app doit être
+// installée sur l'écran d'accueil (sinon PushManager est absent).
+function _pushSupported(){
+  return ('serviceWorker' in navigator)&&('PushManager' in window)&&('Notification' in window);
+}
+function refreshPushToggleUI(){
+  const isOn=_pushSupported()&&Notification.permission==='granted';
+  if(typeof applyToggleUI==='function')applyToggleUI('toggle-notif-push',isOn);
+}
+async function togglePushNotif(){
+  if(!me){toast(t('login_required'));return;}
+  // iOS Safari hors PWA installée : pas de PushManager
+  if(!_pushSupported()){
+    toast(t('push_need_install'),4500,{type:'info'});
+    return;
+  }
+  const perm=Notification.permission;
+  // Déjà actives → on désactive (suppression de la souscription serveur)
+  if(perm==='granted'){
+    try{
+      const reg=await navigator.serviceWorker.ready;
+      const sub=await reg.pushManager.getSubscription();
+      if(sub){
+        await sb.from('push_subscriptions').delete().eq('endpoint',sub.endpoint);
+        await sub.unsubscribe();
+      }
+    }catch(e){_DBG.log('push off: '+(e?.message||e));}
+    applyToggleUI('toggle-notif-push',false);
+    toast(t('push_disabled'),2200,{type:'success'});
+    return;
+  }
+  // Refusées au niveau OS → impossible de redemander, passer par les réglages
+  if(perm==='denied'){
+    toast(t('push_blocked_settings'),4500,{type:'info'});
+    return;
+  }
+  // perm === 'default' : on demande (geste utilisateur ✓)
+  try{
+    const p=await Notification.requestPermission();
+    if(p!=='granted'){
+      applyToggleUI('toggle-notif-push',false);
+      toast(t('push_refused'),3200,{type:'info'});
+      return;
+    }
+    const ok=await _initPushSubscription();
+    if(ok){
+      applyToggleUI('toggle-notif-push',true);
+      toast(t('push_enabled'),2400,{type:'success'});
+    }else{
+      applyToggleUI('toggle-notif-push',false);
+      toast(t('push_error'),3200,{type:'error'});
+    }
+  }catch(e){
+    _DBG.log('push request: '+(e?.message||e));
+    toast(t('push_error'),3200,{type:'error'});
+  }
 }
 
 function _showBrowserNotif(title, body){

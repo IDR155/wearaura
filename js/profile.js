@@ -1441,6 +1441,7 @@ async function loadSettingsPrefs(){
     applyToggleUI('toggle-private',settPrefs.isPrivate);
     applyToggleUI('toggle-notif-likes',settPrefs.notifLikes);
     applyToggleUI('toggle-notif-follows',settPrefs.notifFollows);
+    if(typeof refreshPushToggleUI==='function')refreshPushToggleUI();
   }catch(e){console.warn('loadSettingsPrefs:',e.message);}
 }
 
