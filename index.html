@@ -15,8 +15,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="WearAura">
-<link rel="icon" type="image/png" href="icon-192.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png?v=2">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
 <!-- Splash screens iOS : sans elles, écran blanc au lancement depuis l'écran d'accueil -->
 <link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" href="splash/apple-splash-640x1136.png">
 <link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="splash/apple-splash-750x1334.png">
@@ -42,7 +42,7 @@
 <!-- SPLASH -->
 <div id="sc-splash" class="screen active" style="justify-content:center;align-items:center;background:radial-gradient(ellipse at center,#0F2040,#07101E 70%)">
   <div style="text-align:center;animation:fadeUp 1s ease forwards;padding:0 32px">
-    <img src="image.png" width="220" style="max-width:220px;display:block;margin:0 auto 32px" alt="WearAura">
+    <img src="image.png" style="width:min(340px,80vw);display:block;margin:0 auto 32px" alt="WearAura">
     <div style="width:36px;height:36px;border:2px solid rgba(240,234,216,0.3);border-top-color:#F0EAD8;border-radius:50%;animation:spin 0.9s linear infinite;margin:0 auto"></div>
   </div>
 </div>
@@ -62,22 +62,22 @@
       <div class="auth-tab" role="tab" aria-selected="false" tabindex="-1" data-i18n="sign_up" onclick="switchAuthTab('signup')" onkeydown="if(event.key==='Enter'||event.key===' ')switchAuthTab('signup')">S'inscrire</div>
     </div>
     <div id="auth-err" class="auth-err" aria-live="assertive" aria-atomic="true" style="background:rgba(255,80,80,.1);border:1px solid rgba(255,80,80,.3);border-radius:var(--rs);padding:10px 14px;font-size:12px;color:#ff8080;margin-bottom:12px;display:none"></div>
-    <div id="auth-login">
-      <div class="fg"><label class="fl" for="l-email" data-i18n="email">Email</label><input class="fi" type="email" id="l-email" placeholder="votre@email.com" autocomplete="email"></div>
-      <div class="fg"><label class="fl" for="l-pw" data-i18n="password">Mot de passe</label><input class="fi" type="password" id="l-pw" placeholder="••••••••" autocomplete="current-password"></div>
+    <form id="auth-login" onsubmit="doLogin();return false" action="#">
+      <div class="fg"><label class="fl" for="l-email" data-i18n="email">Email</label><input class="fi" type="email" id="l-email" name="email" placeholder="votre@email.com" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="email"></div>
+      <div class="fg"><label class="fl" for="l-pw" data-i18n="password">Mot de passe</label><input class="fi" type="password" id="l-pw" name="password" placeholder="••••••••" autocomplete="current-password"></div>
       <div class="forgot" role="button" tabindex="0" data-i18n="forgot_pw" onclick="goS('sc-forgot')" onkeydown="if(event.key==='Enter'||event.key===' ')goS('sc-forgot')">Mot de passe oublié ?</div>
-      <button class="btn" id="btn-login" data-i18n="sign_in" onclick="doLogin()">Se connecter</button>
-    </div>
-    <div id="auth-signup" style="display:none">
+      <button class="btn" id="btn-login" type="submit" data-i18n="sign_in">Se connecter</button>
+    </form>
+    <form id="auth-signup" style="display:none" onsubmit="doSignup();return false" action="#">
       <div class="fr">
-        <div class="fg"><label class="fl" for="s-fn" data-i18n="first_name">Prénom</label><input class="fi" type="text" id="s-fn" placeholder="Jane" autocomplete="given-name"></div>
-        <div class="fg"><label class="fl" for="s-ln" data-i18n="last_name">Nom</label><input class="fi" type="text" id="s-ln" placeholder="Doe" autocomplete="family-name"></div>
+        <div class="fg"><label class="fl" for="s-fn" data-i18n="first_name">Prénom</label><input class="fi" type="text" id="s-fn" name="given-name" placeholder="Jane" autocomplete="given-name"></div>
+        <div class="fg"><label class="fl" for="s-ln" data-i18n="last_name">Nom</label><input class="fi" type="text" id="s-ln" name="family-name" placeholder="Doe" autocomplete="family-name"></div>
       </div>
-      <div class="fg"><label class="fl" for="s-un" data-i18n="username">Nom d'utilisateur</label><input class="fi" type="text" id="s-un" placeholder="jane.looks" autocomplete="username"></div>
-      <div class="fg"><label class="fl" for="s-em" data-i18n="email">Email</label><input class="fi" type="email" id="s-em" placeholder="votre@email.com" autocomplete="email"></div>
-      <div class="fg"><label class="fl" for="s-pw" data-i18n="password">Mot de passe</label><input class="fi" type="password" id="s-pw" placeholder="min. 6 caractères" autocomplete="new-password"></div>
-      <button class="btn" id="btn-signup" data-i18n="create_account" onclick="doSignup()">Créer mon compte</button>
-    </div>
+      <div class="fg"><label class="fl" for="s-un" data-i18n="username">Nom d'utilisateur</label><input class="fi" type="text" id="s-un" name="username" placeholder="jane.looks" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false"></div>
+      <div class="fg"><label class="fl" for="s-em" data-i18n="email">Email</label><input class="fi" type="email" id="s-em" name="email" placeholder="votre@email.com" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="email"></div>
+      <div class="fg"><label class="fl" for="s-pw" data-i18n="password">Mot de passe</label><input class="fi" type="password" id="s-pw" name="new-password" placeholder="min. 6 caractères" autocomplete="new-password"></div>
+      <button class="btn" id="btn-signup" type="submit" data-i18n="create_account">Créer mon compte</button>
+    </form>
   </div><!-- fin bloc logo+form -->
   <div class="auth-foot">
      <span data-i18n="terms_agree">En continuant, vous acceptez nos</span>
