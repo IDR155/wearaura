@@ -98,7 +98,7 @@ async function _startScanCamStream() {
   if (_scanCamStream) { _scanCamStream.getTracks().forEach(t => t.stop()); _scanCamStream = null; }
 
   if (!navigator.mediaDevices?.getUserMedia) {
-    if (errMsg) errMsg.textContent = 'Ton navigateur ne supporte pas l\'accès caméra. Utilise Safari ou Chrome récent.';
+    if (errMsg) errMsg.textContent = t('cam_unsupported');
     if (errEl)  errEl.style.display = 'flex';
     return;
   }
@@ -116,11 +116,11 @@ async function _startScanCamStream() {
   }
 
   if (!stream) {
-    let msg = 'Accès caméra impossible.';
+    let msg = t('cam_unavailable');
     if (lastErr?.name === 'NotAllowedError' || lastErr?.name === 'PermissionDeniedError')
-      msg = 'Permission refusée — autorise la caméra dans les paramètres de ton navigateur.';
+      msg = t('cam_permission');
     else if (lastErr?.name === 'NotFoundError')
-      msg = 'Aucune caméra détectée sur cet appareil.';
+      msg = t('cam_notfound');
     if (errMsg) errMsg.textContent = msg;
     if (errEl)  errEl.style.display = 'flex';
     return;
@@ -264,7 +264,7 @@ async function _processScan(dataUrl) {
     try {
       if (attempt === 1) {
         const loadTxt = document.querySelector('#scan-loading span, #scan-loading p');
-        if (loadTxt) loadTxt.textContent = 'Réessai en cours…';
+        if (loadTxt) loadTxt.textContent = t('scan_retrying');
         await new Promise(r => setTimeout(r, 1800));
       }
       pieces = await _callPixtral(dataUrl);
@@ -801,7 +801,7 @@ async function autoDetectHspots(dataUrl) {
 
   const indicator = document.getElementById('auto-hspot-hint');
   const indicatorText = indicator?.querySelector('span, .scan-hint-text') || indicator;
-  if (indicatorText) indicatorText.textContent = 'Détection IA en cours…';
+  if (indicatorText) indicatorText.textContent = t('scan_detecting');
   if (indicator) indicator.style.display = 'flex';
   _setDetectRunning(true);
 
@@ -824,7 +824,7 @@ async function autoDetectHspots(dataUrl) {
   for (let attempt = 0; attempt < 5; attempt++) {
     try {
       if (attempt >= 1) {
-        if (indicatorText) indicatorText.textContent = 'Réessai en cours…';
+        if (indicatorText) indicatorText.textContent = t('scan_retrying');
         // Pause longue seulement si on attend le cold start (pas encore de résultat).
         // Si on a déjà un résultat et qu'on cherche mieux, la fonction est chaude → pause courte.
         await new Promise(r => setTimeout(r, best ? 800 : (attempt === 1 ? 6000 : 4000)));

@@ -173,7 +173,7 @@ function _renderMusicList(tracks) {
   const list = document.getElementById('music-track-list');
   if (!list) return;
   if (!tracks.length) {
-    list.innerHTML = `<div class="empty-state"><img src="mascote_ivory/the_musician.png" alt=""><div>Aucun résultat<div class="es-hint">Essaie un autre mot-clé.</div></div></div>`;
+    list.innerHTML = `<div class="empty-state"><img src="mascote_ivory/the_musician.png" alt=""><div>${t('empty_no_results')}<div class="es-hint">${t('empty_search_other_kw')}</div></div></div>`;
     _updateMusicConfirmBtn();
     return;
   }
@@ -1033,7 +1033,7 @@ async function openStoryViewsPanel() {
     if (panelCount) panelCount.textContent = total + ' vue' + (total !== 1 ? 's' : '');
 
     if (!total) {
-      list.innerHTML = '<div style="text-align:center;padding:32px 20px;color:var(--wd);font-size:13px">Aucune vue pour l\'instant</div>';
+      list.innerHTML = `<div style="text-align:center;padding:32px 20px;color:var(--wd);font-size:13px">${t('empty_no_views')}</div>`;
       return;
     }
 
@@ -1511,7 +1511,7 @@ function _onRecordingStop() {
   const useBtn  = document.getElementById('mrec-use-btn');
   if (preview) preview.src = url;
   if (acts)    acts.style.display = 'flex';
-  if (status)  status.textContent = 'Écoute et valide ton vocal';
+  if (status)  status.textContent = t('voice_validate');
   if (useBtn)  { useBtn.textContent = 'UTILISER CE VOCAL'; useBtn.disabled = false; }
 }
 

@@ -441,7 +441,7 @@ function _showCamError(msg, fallback, msgEl) {
 }
 
 function _showCamPermissionScreen(fallback, msgEl, msg) {
-  if(msgEl) msgEl.textContent = msg || 'WearAura a besoin de ta caméra pour créer un post.';
+  if(msgEl) msgEl.textContent = msg || t('cam_fallback_msg');
   const sub = document.getElementById('cam-fallback-sub');
   if(sub){ sub.style.display='none'; }
   if(fallback) fallback.style.display = 'flex';
@@ -459,8 +459,8 @@ async function requestCamPermission() {
     || navigator.mozGetUserMedia?.bind(navigator);
 
   if(!gUM){
-    if(msgEl) msgEl.textContent = 'Ton navigateur ne supporte pas l\'accès caméra. Utilise Chrome ou Safari récent.';
-    if(sub){ sub.textContent='Ou choisis une photo depuis ta galerie ci-dessous.'; sub.style.display=''; }
+    if(msgEl) msgEl.textContent = t('cam_unsupported');
+    if(sub){ sub.textContent=t('cam_pick_gallery'); sub.style.display=''; }
     return;
   }
 
@@ -477,13 +477,13 @@ async function requestCamPermission() {
     startCamera();
   } catch(err) {
     if(err.name==='NotAllowedError'||err.name==='PermissionDeniedError'){
-      if(msgEl) msgEl.textContent = 'Permission refusée';
-      if(sub){ sub.textContent='Dans Chrome : Paramètres du site → Caméra → Autoriser, puis recharge.'; sub.style.display=''; }
+      if(msgEl) msgEl.textContent = t('cam_permission_denied');
+      if(sub){ sub.textContent=t('cam_enable_hint'); sub.style.display=''; }
     } else if(err.name==='NotFoundError'){
-      if(msgEl) msgEl.textContent = 'Aucune caméra détectée sur cet appareil.';
+      if(msgEl) msgEl.textContent = t('cam_notfound');
       if(sub){ sub.style.display='none'; }
     } else {
-      if(msgEl) msgEl.textContent = 'Impossible d\'accéder à la caméra — ' + err.message;
+      if(msgEl) msgEl.textContent = t('cam_access_error') + err.message;
       if(sub){ sub.style.display='none'; }
     }
   }

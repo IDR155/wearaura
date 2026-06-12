@@ -94,7 +94,7 @@ async function openEditPreferences(){
 async function saveEditedPreferences(){
   if(!_epData.budget){toast(t('toast_pick_budget'));return;}
   if(me){
-    const{error}=await safeRun(sb.from('profiles').update({preferences:_epData}).eq('id',me.id),{friendly:"Impossible de sauvegarder tes préférences.",context:'savePrefs'});
+    const{error}=await safeRun(sb.from('profiles').update({preferences:_epData}).eq('id',me.id),{friendly:t('err_save_prefs'),context:'savePrefs'});
     if(error)return;
     invalidateUserPrefsCache();
     toast(t('toast_prefs_updated'));

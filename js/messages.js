@@ -1023,7 +1023,7 @@ async function confirmEditMsg(msgId){
     if(error){console.error('[editMsg]',error);toast(friendlyError?friendlyError(error):'Erreur de modification');return;}
     if(!data||!data.length){console.warn('[editMsg] no rows updated — RLS or id mismatch',{msgId});toast(t('toast_edit_denied'));return;}
     const bubble=document.getElementById('bubble-'+msgId);
-    if(bubble) bubble.innerHTML=escapeHtml(newContent)+'<span style="font-size:10px;color:rgba(12,21,34,0.5);margin-left:6px">modifié</span>';
+    if(bubble) bubble.innerHTML=escapeHtml(newContent)+'<span style="font-size:10px;color:rgba(12,21,34,0.5);margin-left:6px">'+escapeHtml(t('msg_edited_label'))+'</span>';
     toast(t('toast_msg_edited'));
   }catch(e){console.error('[editMsg]',e);toast('❌ '+t('toast_error'));}
 }
@@ -1132,7 +1132,7 @@ function doMsgSearch(q){
         .or(`username.ilike.%${q}%,full_name.ilike.%${q}%`)
         .neq('id',me?.id||'').limit(20);
       if(!data||data.length===0){
-        res.innerHTML=`<div class="empty-state"><img src="mascote_ivory/the_seeker.png" alt=""><div>Aucun utilisateur trouvé<div class="es-hint">Essaie un autre nom ou username.</div></div></div>`;
+        res.innerHTML=`<div class="empty-state"><img src="mascote_ivory/the_seeker.png" alt=""><div>${t('empty_no_user_found')}<div class="es-hint">${t('empty_search_other_name')}</div></div></div>`;
         return;
       }
       // Vérifier qui on suit

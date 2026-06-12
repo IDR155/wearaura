@@ -243,7 +243,7 @@ async function loadWishlistGrid(){
   const merged=[...(votes||[]),...bqLocalVotes.filter(v=>!dbKeys.has(v.alt_key))];
 
   if(!merged.length){
-    grid.innerHTML=`<div class="empty-state"><img src="mascote_ivory/the_gatherer.png" alt=""><div class="title-cor-sm">Aucune envie pour l'instant</div><div class="es-desc">Explore la boutique et appuie longtemps sur un produit pour l'enregistrer ici.</div></div>`;
+    grid.innerHTML=`<div class="empty-state"><img src="mascote_ivory/the_gatherer.png" alt=""><div class="title-cor-sm">${t('empty_no_wishlist')}</div><div class="es-desc">${t('empty_no_wishlist_desc')}</div></div>`;
     return;
   }
   grid.innerHTML=merged.map(v=>{
@@ -300,7 +300,7 @@ async function loadLikedGrid(){
   if(likesErr)console.warn('[loadLikedGrid]',likesErr);
   if(!likes||!likes.length){
     grid.style.display='block';
-    grid.innerHTML=`<div style="padding:48px 20px;text-align:center"><img src="mascote_ivory/le_menestrel.png" alt="" style="display:block;width:60%;max-width:200px;height:auto;margin:0 auto 14px;opacity:.95"><div style="font-size:13px;color:var(--wd);line-height:1.6">Aucun post aimé</div></div>`;
+    grid.innerHTML=`<div style="padding:48px 20px;text-align:center"><img src="mascote_ivory/le_menestrel.png" alt="" style="display:block;width:60%;max-width:200px;height:auto;margin:0 auto 14px;opacity:.95"><div style="font-size:13px;color:var(--wd);line-height:1.6">${t('empty_no_liked')}</div></div>`;
     return;
   }
   const postIds=likes.map(l=>l.post_id);
@@ -1603,12 +1603,12 @@ function aiTestSwitchMode(mode){
     rectTab.classList.add('active');cloudTab.classList.remove('active');
     rectTab.style.cssText='flex:1;text-align:center;padding:8px;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--black);background:var(--gold);border-radius:var(--r-pill);cursor:pointer;font-weight:600';
     cloudTab.style.cssText='flex:1;text-align:center;padding:8px;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--wd);cursor:pointer';
-    document.getElementById('ai-test-hint').textContent='Tape sur le vêtement pour délimiter automatiquement la zone. Tu peux ajuster les coins.';
+    document.getElementById('ai-test-hint').textContent=t('hotspot_hint_zone');
   }else{
     cloudTab.classList.add('active');rectTab.classList.remove('active');
     cloudTab.style.cssText='flex:1;text-align:center;padding:8px;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--black);background:var(--gold);border-radius:var(--r-pill);cursor:pointer;font-weight:600';
     rectTab.style.cssText='flex:1;text-align:center;padding:8px;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--wd);cursor:pointer';
-    document.getElementById('ai-test-hint').textContent='Tape plusieurs fois sur les parties visibles du vêtement (utile si layered). Min 3 points recommandés.';
+    document.getElementById('ai-test-hint').textContent=t('hotspot_hint_points');
   }
 }
 
@@ -1728,7 +1728,7 @@ async function aiTestDetectCloud(){
     await new Promise((r,e)=>{img.onload=r;img.onerror=e;img.src=URL.createObjectURL(_aiTestFile);});
     const w=img.naturalWidth,h=img.naturalHeight;
     const classifier=await window.loadFashionClassifier();
-    if(!classifier){result.textContent='❌ Modèle non chargé';return;}
+    if(!classifier){result.textContent=t('hotspot_model_unloaded');return;}
     const FASHION_LABELS=['coat','jacket','blazer','cardigan','sweater','hoodie','sweatshirt','t-shirt','shirt','polo','dress','skirt','jeans','pants','shorts','sneakers','boots','heels','sandals','handbag','backpack','tote bag','sunglasses','hat','scarf','belt'];
     const t0=performance.now();
     const scoreMap={};
@@ -1778,7 +1778,7 @@ function _aiTestPlaceRegion(cx,cy){
   };
   _aiTestRenderRegion();
   document.getElementById('ai-test-btn-row').style.display='flex';
-  document.getElementById('ai-test-result').textContent='✏️ Ajuste les coins si besoin, puis tape "Détecter".';
+  document.getElementById('ai-test-result').textContent=t('hotspot_adjust_corners');
 }
 
 function _aiTestRenderRegion(){
@@ -1834,7 +1834,7 @@ function _aiTestSetupDragHandlers(){
 
 async function aiTestDetectRegion(){
   const result=document.getElementById('ai-test-result');
-  result.textContent='🌱 Analyse de la zone délimitée...';
+  result.textContent=t('hotspot_analyzing');
   try{
     // Crop la zone exacte via canvas, puis classifier
     const img=new Image();
@@ -1941,7 +1941,7 @@ function renderFollowTab(){
   if(!profs.length){
     const isFollowers=_flwCurrentTab==='followers';
     const img=isFollowers?'the_dreamer.png':'the_explorer.png';
-    const msg=isFollowers?'Personne ne suit encore ce compte':'Ce compte ne suit personne pour l\'instant';
+    const msg=isFollowers?t('empty_no_followers'):t('empty_follows_nobody');
     const hint=isFollowers?'Partage ton profil pour gagner des abonnés.':'Explore et suis des créateurs inspirants.';
     list.innerHTML=`<div class="empty-state"><img src="mascote_ivory/${img}" alt=""><div>${msg}<div class="es-hint">${hint}</div></div></div>`;
     return;
@@ -1949,7 +1949,7 @@ function renderFollowTab(){
   const isOwnProfile=me&&_flwTargetUid===me.id;
   const query=(document.getElementById('flw-search').value||'').toLowerCase().trim();
   const filtered=query?profs.filter(p=>(p.username||'').toLowerCase().includes(query)||(p.full_name||'').toLowerCase().includes(query)):profs;
-  if(!filtered.length){list.innerHTML='<div class="empty-state-sm">Aucun résultat</div>';return;}
+  if(!filtered.length){list.innerHTML=`<div class="empty-state-sm">${t('empty_no_results')}</div>`;return;}
   list.innerHTML=filtered.map(p=>{
     const av=p.avatar_url?`<img src="${p.avatar_url}" alt="" loading="lazy" class="img-cover">`:`<span class="txt-lg-gold-caps">${(p.username||p.full_name||'?').charAt(0)}</span>`;
     const isSelf=me&&p.id===me.id;
@@ -2007,7 +2007,7 @@ async function toggleFollowFromList(uid,btn){
 
 async function removeFollower(uid,btn){
   if(!me)return;
-  if(!confirm('Retirer cet abonné ? Il ne te suivra plus mais pourra te re-suivre.'))return;
+  if(!confirm(t('confirm_remove_follower')))return;
   await sb.from('follows').delete().eq('follower_id',uid).eq('following_id',me.id);
   _flwMyFollowers=_flwMyFollowers.filter(id=>id!==uid);
   _flwData.followers=_flwData.followers.filter(p=>p.id!==uid);
@@ -2233,7 +2233,7 @@ function epCheckUsername(val){
   msgEl.textContent='…';msgEl.style.color='var(--wd)';msgEl.style.opacity='0.5';
   _epUsernameTimer=setTimeout(async()=>{
     const{data}=await sb.from('profiles').select('id').eq('username',clean).neq('id',me.id).maybeSingle();
-    if(data){msgEl.textContent='✕ Déjà pris';msgEl.style.color='rgba(255,110,110,0.85)';}
+    if(data){msgEl.textContent=t('username_taken_short');msgEl.style.color='rgba(255,110,110,0.85)';}
     else{msgEl.textContent='✓ Disponible';msgEl.style.color='rgba(100,210,140,0.9)';}
     msgEl.style.opacity='1';
   },600);
@@ -2368,7 +2368,7 @@ function closePostOptions(){
 }
 async function reportPost(){
   if(!_poTarget||!me)return closePostOptions();
-  const reason=prompt('Pourquoi signales-tu ce post ?\n(Spam, contenu inapproprié, harcèlement, etc.)');
+  const reason=prompt(t('prompt_report_post'));
   if(!reason||reason.length<3){closePostOptions();return;}
   try{
     await sb.from('reports').insert({reporter_id:me.id,post_id:_poTarget.postId,reported_user_id:_poTarget.uid,reason:reason.slice(0,500)});
@@ -2386,7 +2386,7 @@ async function openBlockedUsers(){
   try{
     const{data:blocks}=await sb.from('blocked_users').select('blocked_id,created_at').eq('blocker_id',me.id).order('created_at',{ascending:false});
     if(!blocks||!blocks.length){
-      list.innerHTML=`<div class="empty-state-sm"><img src="mascote_ivory/the_protector.png" alt=""><div>Aucun utilisateur bloqué</div></div>`;
+      list.innerHTML=`<div class="empty-state-sm"><img src="mascote_ivory/the_protector.png" alt=""><div>${t('empty_no_blocked')}</div></div>`;
       return;
     }
     const ids=blocks.map(b=>b.blocked_id);
@@ -2408,7 +2408,7 @@ async function openBlockedUsers(){
 }
 async function unblockUser(uid){
   if(!me)return;
-  const{error}=await safeRun(sb.from('blocked_users').delete().eq('blocker_id',me.id).eq('blocked_id',uid),{friendly:"Impossible de débloquer.",context:'unblock'});
+  const{error}=await safeRun(sb.from('blocked_users').delete().eq('blocker_id',me.id).eq('blocked_id',uid),{friendly:t('err_unblock'),context:'unblock'});
   if(error)return;
   toast(t('toast_user_unblocked'));
   openBlockedUsers();openBlockedUsers();
@@ -2490,7 +2490,7 @@ async function sharePost(postId){
     const followerIds=(mfwr.data||[]).map(f=>f.follower_id);
     const allIds=[...new Set([...followingIds,...followerIds])];
     if(!allIds.length){
-      list.innerHTML=`<div class="empty-state"><img src="mascote_ivory/the_knot_weaver.png" alt=""><div>Personne à qui partager<div class="es-hint">Suis des créateurs pour les retrouver ici.</div></div></div>`;
+      list.innerHTML=`<div class="empty-state"><img src="mascote_ivory/the_knot_weaver.png" alt=""><div>${t('empty_nobody_share')}<div class="es-hint">${t('empty_nobody_share_hint')}</div></div></div>`;
       return;
     }
     _shareUsers=await getProfiles(allIds);
@@ -2503,7 +2503,7 @@ async function sharePost(postId){
 function renderShareList(users){
   const list=document.getElementById('share-list');
   if(!users.length){
-    list.innerHTML='<div class="empty-state-sm">Aucun résultat</div>';
+    list.innerHTML=`<div class="empty-state-sm">${t('empty_no_results')}</div>`;
     return;
   }
   list.innerHTML=users.map(p=>{
@@ -2548,7 +2548,7 @@ async function sendPostAsDM(recipientUid,recipientName,btnEl){
     if(msgErr)throw msgErr;
     // Notif au destinataire
     try{await sb.from('notifications').insert({user_id:recipientUid,from_user_id:me.id,type:'message',post_id:_sharePostId});}catch(e){}
-    if(btnEl){btnEl.textContent='Envoyé ✓';btnEl.style.background='rgba(125,201,125,0.18)';btnEl.style.color='#7dc97d';btnEl.style.borderColor='rgba(125,201,125,0.4)';}
+    if(btnEl){btnEl.textContent=t('sent_check');btnEl.style.background='rgba(125,201,125,0.18)';btnEl.style.color='#7dc97d';btnEl.style.borderColor='rgba(125,201,125,0.4)';}
     toast(`Envoyé à ${recipientName}`);
     setTimeout(()=>closeShareSheet(),700);
   }catch(e){
