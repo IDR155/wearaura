@@ -8,6 +8,12 @@ const _DBG = {
   err(msg, e) { console.error('[WA ERR]', msg, e || ''); }
 };
 
+// ── Échappement HTML (sécurité XSS) ──
+// Défini ici (1er script chargé) pour être disponible dans tous les modules,
+// quel que soit l'ordre de chargement. Toujours utiliser pour injecter du
+// contenu utilisateur (pseudos, légendes, commentaires, messages) en innerHTML.
+function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
+
 // ── Wrapper d'erreurs Supabase / friendly messages ──
 const SB_FRIENDLY_ERROR_KEYS = {
   '23505': 'err_already_done',

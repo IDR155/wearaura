@@ -164,7 +164,7 @@ function onFileSelect(e) {
     // Evite de décoder 12 MP (48 MB) en mémoire deux fois de suite → crash Safari mobile.
     _createPreviewUrl(rawUrl, 1080, (url) => {
       const thumb = document.getElementById('gallery-thumb');
-      if(thumb) thumb.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:10px">`;
+      if(thumb) thumb.innerHTML = `<img src="${url}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:10px">`;
       const previewImg = document.getElementById('prev-img');
       previewImg.src = url;
       previewImg.onload = () => {
@@ -711,7 +711,7 @@ function startColorCapture(editIndex=null){
   try{
     ctx.drawImage(img,0,0,canvas.width,canvas.height);
     ccSourceCtx=ctx;ccImgW=canvas.width;ccImgH=canvas.height;
-  }catch(e){toast('Impossible de lire les pixels');return;}
+  }catch(e){toast(t('toast_pixels_error'));return;}
   const overlay=document.getElementById('color-capture-overlay');
   overlay.style.display='block';
   document.getElementById('color-capture-hint').style.display='block';

@@ -429,9 +429,9 @@ function closeBqCtx(){
 async function bqCtxSave(){
   const p=_bqCtxProduct;if(!p)return;
   const isSaved=_bqSavedKeys.has(p.url);
-  if(isSaved){_bqSavedKeys.delete(p.url);toast('Retiré de tes envies');}
+  if(isSaved){_bqSavedKeys.delete(p.url);toast(t('toast_wishlist_removed'));}
   else{
-    _bqSavedKeys.add(p.url);toast('Ajouté à tes envies');
+    _bqSavedKeys.add(p.url);toast(t('toast_wishlist_added'));
     if(me&&dbOk){
       const key='bq::'+p.url;
       sb.from('alternative_feedback').upsert({
@@ -452,13 +452,13 @@ function bqCtxSendDm(){
   if(navigator.share){
     navigator.share({title:pNom(p),text:`${p.marque} — ${p.prix}€`,url:p.url}).catch(()=>{});
   }else{
-    goTab('notif');toast('Partage via les Messages');
+    goTab('notif');toast(t('toast_share_via_messages'));
   }
 }
 
 function bqCtxCopy(){
   const p=_bqCtxProduct;if(!p)return;
-  navigator.clipboard?.writeText(p.url).then(()=>toast(t('link_copied')||'Lien copié !')).catch(()=>toast('Lien : '+p.url));
+  navigator.clipboard?.writeText(p.url).then(()=>toast(t('link_copied')||t('toast_link_copied'))).catch(()=>toast(t('toast_link_label')+' : '+p.url));
   closeBqCtx();
 }
 

@@ -621,7 +621,7 @@ function toggleSound(el) {
       });
       const amb = document.getElementById('feed-ambient');
       if (amb && !amb.paused) { amb.pause(); isMuted = true; }
-      el._audio.play().catch(() => toast('Autorise le son dans le navigateur'));
+      el._audio.play().catch(() => toast(t('toast_allow_sound')));
       el._audioPlaying = true;
       el.classList.remove('vinyl-paused');
     }
@@ -631,7 +631,7 @@ function toggleSound(el) {
     if (!audio) return;
     if (isMuted) {
       if (!audio.src) { toast(typeof currentLang!=='undefined'&&currentLang==='en'?'Music unavailable offline':'Musique indisponible hors ligne'); return; }
-      audio.play().catch(() => toast('Autorise le son dans le navigateur'));
+      audio.play().catch(() => toast(t('toast_allow_sound')));
       isMuted = false;
       el.classList.remove('vinyl-paused');
     } else {
@@ -803,7 +803,7 @@ async function sharePost(pid){
       await navigator.share(shareData);
     }catch(e){
       // AbortError = l'utilisateur a fermé la feuille → silencieux
-      if(e.name!=='AbortError') toast('Partage indisponible');
+      if(e.name!=='AbortError') toast(t('toast_share_unavailable'));
     }
     return;
   }
@@ -811,9 +811,9 @@ async function sharePost(pid){
   // Desktop — copie du lien
   try{
     await navigator.clipboard.writeText(url);
-    toast('🔗 Lien copié !');
+    toast(t('toast_link_copied'));
   }catch(e){
-    toast('Impossible de copier le lien');
+    toast(t('toast_link_copy_fail'));
   }
 }
 
@@ -826,7 +826,7 @@ function savePostFromOptions(){
 async function downloadPostImage(pid){
   const look=window.__looks?.[pid];
   const imageUrl=look?.imageUrl;
-  if(!imageUrl){ toast('Image indisponible'); return; }
+  if(!imageUrl){ toast(t('toast_image_unavailable')); return; }
 
   const icon=document.getElementById('dl-icon-'+pid);
   if(icon) icon.style.opacity='0.4';
@@ -851,7 +851,7 @@ async function downloadPostImage(pid){
   }catch(e){
     if(e.name!=='AbortError'){
       console.warn('[downloadPostImage]',e);
-      toast('Erreur — réessaie');
+      toast(t('toast_error_retry'));
     }
   }finally{
     if(icon) icon.style.opacity='1';
@@ -904,7 +904,7 @@ async function doComment(){
       }
       if(!data||!data.length){
         console.warn('[doComment edit] no rows updated — RLS or id mismatch',{cid,me:me.id});
-        toast('Modification refusée (permissions)');
+        toast(t('toast_edit_denied'));
         return;
       }
       await loadComments(curPostId);
@@ -917,7 +917,7 @@ async function doComment(){
     if(insertErr){
       console.error('[doComment insert]',insertErr);
       input.value=text;
-      toast('Impossible d\'envoyer le commentaire.');
+      toast(t('toast_comment_failed'));
       return;
     }
     const {count}=await sb.from('comments').select('*',{count:'exact',head:true}).eq('post_id',curPostId);

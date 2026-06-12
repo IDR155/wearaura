@@ -602,7 +602,7 @@ function doCapture() {
 
       selFile = new File([blob], 'wearaura_' + Date.now() + '.jpg', { type: 'image/jpeg' });
       const thumb = document.getElementById('gallery-thumb');
-      if(thumb) thumb.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:10px">`;
+      if(thumb) thumb.innerHTML = `<img src="${url}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:10px">`;
       document.getElementById('prev-img').src = url;
       stopCamera();
       goStepCreate(2);

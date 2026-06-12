@@ -783,7 +783,7 @@ function _setDetectRunning(running) {
 // Le resize est refait de zéro (image désormais bien décodée) → qualité du "2e essai manuel".
 function redetectHspots() {
   if (_detectInProgress) return;
-  if (!_lastDetectSrc) { toast('Aucune photo à analyser', 2500); return; }
+  if (!_lastDetectSrc) { toast(t('toast_no_photo'), 2500); return; }
   if (typeof clearHspots === 'function') clearHspots();
   else if (hspots) hspots.length = 0;
   if (typeof renderHspotsEditor === 'function') renderHspotsEditor();
@@ -849,7 +849,7 @@ async function autoDetectHspots(dataUrl) {
       if (attempt === 4 && !best) {
         if (indicator) indicator.style.display = 'none';
         _setDetectRunning(false);
-        toast('Détection impossible — ajoute les pièces manuellement', 3500);
+        toast(t('toast_detection_failed'), 3500);
         return;
       }
     }

@@ -281,7 +281,7 @@ async function removeFromWishlist(key){
     const saved=JSON.parse(localStorage.getItem('bq_saved')||'[]').filter(u=>u!==url);
     localStorage.setItem('bq_saved',JSON.stringify(saved));
     if(typeof _bqSavedKeys!=='undefined') _bqSavedKeys.delete(url);
-    toast('Retiré de tes envies');
+    toast(t('toast_wishlist_removed'));
     loadWishlistGrid();
     return;
   }
@@ -289,7 +289,7 @@ async function removeFromWishlist(key){
   const{error}=await safeRun(sb.from('alternative_feedback').delete().eq('user_id',me.id).eq('alt_key',key),{friendly:"Impossible de retirer.",context:'removeWishlist'});
   if(error)return;
   delete _altVotesCache[key];
-  toast('Retiré de tes envies');
+  toast(t('toast_wishlist_removed'));
   loadWishlistGrid();
 }
 async function loadLikedGrid(){
@@ -518,7 +518,7 @@ async function confirmCrop(){
   cP.getContext('2d').drawImage(drawImg,px,py,pw,ph,0,0,600,800);
   // Blobs AVANT closeCrop
   const[bC,bP]=await Promise.all([toBlob(cC,0.92),toBlob(cP,0.92)]);
-  if(!bC||!bP){toast('Erreur recadrage');return;}
+  if(!bC||!bP){toast(t('toast_crop_error'));return;}
   closeCrop();
   const path=`avatars/${me.id}.jpg`;
   const pathP=`avatars/${me.id}_p.jpg`;
@@ -548,12 +548,12 @@ async function deleteProfilePhoto(){
   if(!me) return;
   if(!confirm('Supprimer ta photo de profil ?')) return;
   const {error}=await sb.from('profiles').update({avatar_url:null,avatar_portrait_url:null}).eq('id',me.id);
-  if(error){ toast('Erreur lors de la suppression'); return; }
+  if(error){ toast(t('toast_delete_error')); return; }
   await sb.storage.from('posts').remove([`avatars/${me.id}.jpg`,`avatars/${me.id}_p.jpg`]).catch(()=>{});
   document.getElementById('my-avatar').innerHTML=`<svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="rgba(240,234,216,0.25)" stroke-width="1.2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
   const delBtn=document.getElementById('av-delete-btn');
   if(delBtn) delBtn.style.display='none';
-  toast('Photo supprimée');
+  toast(t('toast_photo_deleted'));
   if(typeof invalidateProfileCache==='function') invalidateProfileCache(me.id);
   document.querySelectorAll(`.slide-avatar[data-uid="${me.id}"]`).forEach(el=>{
     el.innerHTML=`<span style="font-size:15px;font-weight:700;color:var(--gold);text-transform:uppercase">${(me.email||'?').charAt(0)}</span>`;
@@ -1951,7 +1951,7 @@ function renderFollowTab(){
   const filtered=query?profs.filter(p=>(p.username||'').toLowerCase().includes(query)||(p.full_name||'').toLowerCase().includes(query)):profs;
   if(!filtered.length){list.innerHTML='<div class="empty-state-sm">Aucun résultat</div>';return;}
   list.innerHTML=filtered.map(p=>{
-    const av=p.avatar_url?`<img src="${p.avatar_url}" class="img-cover">`:`<span class="txt-lg-gold-caps">${(p.username||p.full_name||'?').charAt(0)}</span>`;
+    const av=p.avatar_url?`<img src="${p.avatar_url}" alt="" loading="lazy" class="img-cover">`:`<span class="txt-lg-gold-caps">${(p.username||p.full_name||'?').charAt(0)}</span>`;
     const isSelf=me&&p.id===me.id;
     const iFollowThem=_flwMyFollowing.includes(p.id);
     const theyFollowMe=_flwMyFollowers.includes(p.id);
@@ -2013,7 +2013,7 @@ async function removeFollower(uid,btn){
   _flwData.followers=_flwData.followers.filter(p=>p.id!==uid);
   document.getElementById('flw-count-followers').textContent=_flwData.followers.length;
   renderFollowTab();
-  toast('Abonné retiré');
+  toast(t('toast_follower_removed'));
 }
 
 async function openBlockedUsers(){
@@ -2265,7 +2265,7 @@ async function saveProfile2(){
   const bio=document.getElementById('ep-bio2').value.trim().slice(0,150);
 
   if(!username||username.length<3||!/^[a-z0-9._]+$/.test(username)){
-    return toast('Username invalide — min. 3 car., lettres/chiffres/./_ uniquement');
+    return toast(t('toast_username_invalid'));
   }
 
   const btn=document.getElementById('ep-save-btn');
@@ -2276,7 +2276,7 @@ async function saveProfile2(){
     const{data:ex}=await sb.from('profiles').select('id').eq('username',username).neq('id',me.id).maybeSingle();
     if(ex){
       btn.disabled=false;btn.textContent='Enregistrer';
-      return toast('Ce username est déjà pris');
+      return toast(t('toast_username_taken'));
     }
   }
 
@@ -2348,7 +2348,7 @@ async function deletePostFromFeed(){
   // Supprimer aussi du profil grid si visible
   const pgridItem=document.querySelector(`.pgrid-item[data-post-id="${postId}"]`);
   if(pgridItem)pgridItem.remove();
-  toast('Post supprimé');
+  toast(t('toast_post_deleted'));
 }
 function hidePost(){
   if(!_poTarget?.postId)return closePostOptions();
@@ -2358,7 +2358,7 @@ function hidePost(){
   // Supprimer la slide du DOM immédiatement
   const slide=document.querySelector(`.feed-slide[data-pid="${_poTarget.postId}"]`);
   if(slide)slide.remove();
-  toast('Post masqué');
+  toast(t('toast_post_hidden'));
   closePostOptions();
 }
 function closePostOptions(){
@@ -2394,7 +2394,7 @@ async function openBlockedUsers(){
     const profMap={};profs.forEach(p=>profMap[p.id]=p);
     list.innerHTML=blocks.map(b=>{
       const p=profMap[b.blocked_id]||{username:'inconnu',full_name:'Utilisateur inconnu'};
-      const av=p.avatar_url?`<img src="${p.avatar_url}" class="img-cover">`:`<span style="font-size:14px;color:var(--gold);text-transform:uppercase">${(p.username||'?').charAt(0)}</span>`;
+      const av=p.avatar_url?`<img src="${p.avatar_url}" alt="" loading="lazy" class="img-cover">`:`<span style="font-size:14px;color:var(--gold);text-transform:uppercase">${(p.username||'?').charAt(0)}</span>`;
       return `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(240,234,216,0.08)">
         <div style="width:40px;height:40px;border-radius:var(--r-md);background:var(--black-3);overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0">${av}</div>
         <div class="flex-min">
@@ -2410,7 +2410,7 @@ async function unblockUser(uid){
   if(!me)return;
   const{error}=await safeRun(sb.from('blocked_users').delete().eq('blocker_id',me.id).eq('blocked_id',uid),{friendly:"Impossible de débloquer.",context:'unblock'});
   if(error)return;
-  toast('Utilisateur débloqué');
+  toast(t('toast_user_unblocked'));
   openBlockedUsers();openBlockedUsers();
 }
 
@@ -2507,7 +2507,7 @@ function renderShareList(users){
     return;
   }
   list.innerHTML=users.map(p=>{
-    const av=p.avatar_url?`<img src="${p.avatar_url}" class="img-cover">`:`<span class="txt-lg-gold-caps">${(p.username||p.full_name||'?').charAt(0)}</span>`;
+    const av=p.avatar_url?`<img src="${p.avatar_url}" alt="" loading="lazy" class="img-cover">`:`<span class="txt-lg-gold-caps">${(p.username||p.full_name||'?').charAt(0)}</span>`;
     return `<div onclick="sendPostAsDM('${p.id}','${escapeHtml(p.full_name||p.username||'').replace(/'/g,'')}',this)" class="list-row">
       <div style="width:42px;height:42px;border-radius:50%;background:var(--black-3);overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(240,234,216,0.15)">${av}</div>
       <div class="flex-min">
@@ -2553,7 +2553,7 @@ async function sendPostAsDM(recipientUid,recipientName,btnEl){
     setTimeout(()=>closeShareSheet(),700);
   }catch(e){
     console.error('[sendPostAsDM]',e);
-    toast('Erreur d\'envoi');
+    toast(t('toast_send_error'));
     if(btnEl){btnEl.disabled=false;btnEl.textContent='Envoyer';btnEl.style.opacity='1';}
   }
 }
@@ -2568,7 +2568,7 @@ async function sharePostExternalUrl(postId){
     try{await navigator.share({title:t('share_title'),text:t('share_text'),url});}
     catch(e){/* user cancelled */}
   } else {
-    try{await navigator.clipboard.writeText(url);toast(t('link_copied'));}catch(e){toast('Lien : '+url);}
+    try{await navigator.clipboard.writeText(url);toast(t('link_copied'));}catch(e){toast(t('toast_link_label')+' : '+url);}
   }
 }
 function shareAction(platform){

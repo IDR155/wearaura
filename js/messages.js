@@ -959,7 +959,7 @@ function deleteConvForMe(convId){
   localStorage.setItem(key,JSON.stringify(deleted));
   // Retirer visuellement
   document.querySelector(`.conv-item[data-convid="${convId}"]`)?.remove();
-  toast('Conversation supprimée');
+  toast(t('toast_conv_deleted'));
 }
 function getDeletedConvs(){
   const key='_deletedConvs_'+(me?.id||'');
@@ -1021,10 +1021,10 @@ async function confirmEditMsg(msgId){
   try{
     const{data,error}=await sb.from('messages').update({content:newContent}).eq('id',msgId).select();
     if(error){console.error('[editMsg]',error);toast(friendlyError?friendlyError(error):'Erreur de modification');return;}
-    if(!data||!data.length){console.warn('[editMsg] no rows updated — RLS or id mismatch',{msgId});toast('Modification refusée (permissions)');return;}
+    if(!data||!data.length){console.warn('[editMsg] no rows updated — RLS or id mismatch',{msgId});toast(t('toast_edit_denied'));return;}
     const bubble=document.getElementById('bubble-'+msgId);
     if(bubble) bubble.innerHTML=escapeHtml(newContent)+'<span style="font-size:10px;color:rgba(12,21,34,0.5);margin-left:6px">modifié</span>';
-    toast('✓ Message modifié');
+    toast(t('toast_msg_edited'));
   }catch(e){console.error('[editMsg]',e);toast('❌ '+t('toast_error'));}
 }
 async function triggerDeleteMsg(){
@@ -1037,14 +1037,14 @@ async function triggerDeleteMsg(){
       const{error}=await sb.from('messages').delete().eq('id',_ctxMsgId);
       if(error){console.error('[delMsg]',error);toast(friendlyError?friendlyError(error):'Suppression refusée');return;}
       _ctxMsgEl?.remove();
-      toast('Message supprimé pour tous');
+      toast(t('toast_msg_deleted_all'));
     }else{
       // Après 5min : marquer comme "supprimé pour moi" (reste pour le destinataire)
       const{data,error}=await sb.from('messages').update({deleted_for_sender:true}).eq('id',_ctxMsgId).select();
       if(error){console.error('[delMsg me]',error);toast(friendlyError?friendlyError(error):'Suppression refusée');return;}
-      if(!data||!data.length){console.warn('[delMsg me] no rows updated');toast('Suppression refusée (permissions)');return;}
+      if(!data||!data.length){console.warn('[delMsg me] no rows updated');toast(t('toast_delete_denied'));return;}
       _ctxMsgEl?.remove();
-      toast('Message supprimé pour toi');
+      toast(t('toast_msg_deleted_me'));
     }
   }catch(e){console.error('[delMsg]',e);toast('❌ '+t('toast_error'));}
 }
@@ -1059,7 +1059,7 @@ async function acceptMsgConv(){
     document.getElementById('conv-input-bar').style.display='flex';
     document.getElementById('conv-pending-banner').style.display='none';
     document.getElementById('msg-input').focus();
-    toast('✓ Conversation acceptée');
+    toast(t('toast_conv_accepted'));
   }catch(e){toast('❌ '+t('toast_error'));}
 }
 async function deleteMsgConv(){
@@ -1069,7 +1069,7 @@ async function deleteMsgConv(){
     if(currentConvId)
       await sb.from('conversations').delete().eq('id',currentConvId);
     closeConversationScreen();
-    toast('Conversation supprimée');
+    toast(t('toast_conv_deleted'));
   }catch(e){toast('❌ '+t('toast_error'));}
 }
 async function blockMsgRequest(){
@@ -1080,7 +1080,7 @@ async function blockMsgRequest(){
       if(currentConvId) await sb.from('conversations').delete().eq('id',currentConvId);
     }
     closeConversationScreen();
-    toast('Utilisateur bloqué');
+    toast(t('toast_user_blocked'));
   }catch(e){closeConversationScreen();}
 }
 
@@ -1094,7 +1094,7 @@ async function acceptMsgRequest(fromUid,notifId){
   }catch(e){toast('❌ '+t('toast_error'));}
 }
 async function dismissMsgRequest(notifId){
-  try{await sb.from('notifications').delete().eq('id',notifId);toast('Demande refusée');loadActivityNotifications();}catch(e){toast('❌ '+t('toast_error'));}
+  try{await sb.from('notifications').delete().eq('id',notifId);toast(t('toast_request_declined'));loadActivityNotifications();}catch(e){toast('❌ '+t('toast_error'));}
 }
 
 // ── Compatibilité ──
@@ -1141,7 +1141,7 @@ function doMsgSearch(q){
       const followingSet=new Set((followData||[]).map(f=>f.following_id));
       res.innerHTML=data.map(p=>{
         const isFollowing=followingSet.has(p.id);
-        const av=p.avatar_url?`<img src="${p.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="rgba(240,234,216,0.4)" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+        const av=p.avatar_url?`<img src="${p.avatar_url}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="rgba(240,234,216,0.4)" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
         const badge=isFollowing?'':`<span style="font-size:10px;padding:3px 8px;border-radius:50px;background:rgba(240,234,216,0.1);border:1px solid rgba(240,234,216,0.2);color:var(--wd);margin-left:auto;flex-shrink:0">Demande</span>`;
         return `<div onclick="startMsgFromSearch('${p.id}','${(p.full_name||p.username||'').replace(/'/g,"&#39;")}','${(p.avatar_url||'').replace(/'/g,'%27')}','${(p.username||'').replace(/'/g,"&#39;")}',${isFollowing})"
           style="display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;transition:background .15s;border-radius:12px;margin:0 8px"
@@ -1202,7 +1202,8 @@ function msgFilter(el,type){msgChipSelect(el,type);}
 function openConversation(){toast(t('login_msg_view'));}
 function closeConversation(){closeConversationScreen();}
 function sendMsg(){sendMessage();}
-function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
+// escapeHtml est défini dans config.js (chargé en premier) — fonction de sécurité
+// partagée, ne doit pas dépendre de l'ordre de chargement des modules.
 
 
 // ═══════════════════════════════════════════

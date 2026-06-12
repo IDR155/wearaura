@@ -729,11 +729,11 @@ async function deleteStory() {
   const story = data.items[_storyViewerIdx];
   if (!story || story.user_id !== me.id) return;
   const { error } = await sb.from('stories').delete().eq('id', story.id).eq('user_id', me.id);
-  if (error) return toast('Erreur suppression');
+  if (error) return toast(t('toast_delete_error'));
   data.items.splice(_storyViewerIdx, 1);
   if (!data.items.length) { delete _storiesData[_storyViewerUid]; closeStoryViewer(); }
   else { _storyViewerIdx = Math.min(_storyViewerIdx, data.items.length - 1); _renderStoryViewer(); }
-  loadStories(); toast('Story supprimée');
+  loadStories(); toast(t('toast_story_deleted'));
 }
 
 // ── STORY CAMERA ──────────────────────────────
@@ -776,7 +776,7 @@ async function _scStart() {
   for (const c of tries) {
     try { stream = await navigator.mediaDevices.getUserMedia(c); if (stream) break; } catch(_) {}
   }
-  if (!stream) { toast('Caméra non disponible'); closeStoryCam(); return; }
+  if (!stream) { toast(t('toast_camera_unavailable')); closeStoryCam(); return; }
   _scStream = stream;
   video.srcObject = stream;
   video.style.opacity = '0';
@@ -857,7 +857,7 @@ function _scStartRecord() {
     _scSetRecordingUI(true);
     _scRecordTimer = setTimeout(_scStopRecord, SC_MAX_DUR);
   } catch(e) {
-    toast('Enregistrement non supporté sur cet appareil');
+    toast(t('toast_recording_unsupported'));
   }
 }
 
@@ -917,7 +917,7 @@ function storyFileSelected(input) {
   const file = input.files[0];
   if (!file) return;
   const isVid = file.type.startsWith('video/');
-  if (!file.type.startsWith('image/') && !isVid) return toast('Sélectionne une image ou vidéo');
+  if (!file.type.startsWith('image/') && !isVid) return toast(t('toast_select_media'));
   _scBlob = file; _scMediaType = isVid ? 'video' : 'image';
   const reader = new FileReader();
   reader.onload = e => {
@@ -950,7 +950,7 @@ async function saveStoryImage() {
   // iOS Safari / Android Chrome : feuille native → "Enregistrer dans Photos"
   if (navigator.canShare && navigator.canShare({ files: [file] })) {
     try { await navigator.share({ files: [file], title: 'Story WearAura' }); }
-    catch (e) { if (e.name !== 'AbortError') toast('Erreur — réessaie'); }
+    catch (e) { if (e.name !== 'AbortError') toast(t('toast_error_retry')); }
     return;
   }
 
@@ -1050,7 +1050,7 @@ async function openStoryViewsPanel() {
       const name = p.full_name || p.username || 'Utilisateur';
       const handle = p.username ? '@' + p.username : '';
       const av = p.avatar_url
-        ? `<img src="${p.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
+        ? `<img src="${p.avatar_url}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
         : `<span style="font-size:14px;font-weight:700;color:var(--gold);text-transform:uppercase">${(p.username||'?')[0]}</span>`;
       const emoji = reactionMap[v.viewer_id] || '';
       return `<div style="display:flex;align-items:center;gap:12px;padding:10px 20px">
@@ -1130,10 +1130,10 @@ async function sendStoryReply() {
   input.blur();
   try {
     await _sendStoryDM(toUid, text);
-    toast('💬 Message envoyé !', 1800);
+    toast(t('toast_message_sent'), 1800);
   } catch(e) {
     console.warn('[story reply]', e);
-    toast('Erreur — réessaie');
+    toast(t('toast_error_retry'));
   }
 }
 
@@ -1200,11 +1200,11 @@ async function publishStory() {
     const { error: insErr } = await sb.from('stories').insert({ user_id: me.id, image_url: urlData.publicUrl, caption, visibility: _scVisibility, music_url: _scMusicUrl || null, music_title: _scMusicTitle || null, music_start: _scMusicStart || 0 });
     if (insErr) throw insErr;
     if (_scMusicUrl) _addMusicRecent(_scMusicUrl, _scMusicTitle);
-    toast('Story publiée ✓');
+    toast(t('toast_story_published'));
     closeStoryCreate();
     loadStories();
   } catch(e) {
-    toast('Erreur : ' + (e.message || 'inconnue'));
+    toast(t('toast_error_generic') + ' : ' + (e.message || ''));
     btn.disabled = false; btn.textContent = 'Publier';
   }
 }
@@ -1544,10 +1544,10 @@ async function _useRecording() {
     const { data: { publicUrl } } = sb.storage.from('posts').getPublicUrl(path);
     _saveCustomSound(publicUrl, 'Mon vocal', 'record');
     _useCustomAudio(publicUrl, 'Mon vocal 🎙');
-    toast('Vocal ajouté ✓', 2000, { type: 'success' });
+    toast(t('toast_voice_added'), 2000, { type: 'success' });
     _resetRecording();
   } catch(e) {
-    toast('Erreur upload — réessaie', 2600, { type: 'error' });
+    toast(t('toast_upload_error'), 2600, { type: 'error' });
     if (useBtn) { useBtn.textContent = 'UTILISER CE VOCAL'; useBtn.disabled = false; }
   }
 }
@@ -1635,7 +1635,7 @@ async function _confirmAudioUpload() {
     const title = _uploadedAudioFile.name.replace(/\.[^.]+$/, '');
     _saveCustomSound(publicUrl, title, 'upload');
     _useCustomAudio(publicUrl, title);
-    toast('Son ajouté ✓', 2000, { type: 'success' });
+    toast(t('toast_sound_added'), 2000, { type: 'success' });
     // Reset
     _uploadedAudioFile = null;
     const wrap = document.getElementById('music-upload-preview-wrap');
@@ -1643,7 +1643,7 @@ async function _confirmAudioUpload() {
     const inp = document.getElementById('music-file-input');
     if (inp) inp.value = '';
   } catch(e) {
-    toast('Erreur upload — réessaie', 2600, { type: 'error' });
+    toast(t('toast_upload_error'), 2600, { type: 'error' });
     if (btn) { btn.textContent = 'UTILISER CE SON'; btn.disabled = false; }
   }
 }

@@ -92,12 +92,12 @@ async function openEditPreferences(){
   form.style.display='block';
 }
 async function saveEditedPreferences(){
-  if(!_epData.budget){toast('Choisis au moins un budget');return;}
+  if(!_epData.budget){toast(t('toast_pick_budget'));return;}
   if(me){
     const{error}=await safeRun(sb.from('profiles').update({preferences:_epData}).eq('id',me.id),{friendly:"Impossible de sauvegarder tes préférences.",context:'savePrefs'});
     if(error)return;
     invalidateUserPrefsCache();
-    toast('Préférences mises à jour');
+    toast(t('toast_prefs_updated'));
     document.getElementById('edit-prefs-form').style.display='none';
   }
 }
@@ -108,7 +108,7 @@ function showPreferencesScreen(){
   document.getElementById('sc-preferences').style.display='flex';
 }
 async function savePreferences(){
-  if(!_prefData.budget){toast('Choisis au moins un budget');return;}
+  if(!_prefData.budget){toast(t('toast_pick_budget'));return;}
   if(me){
     try{await sb.from('profiles').update({preferences:_prefData}).eq('id',me.id);}catch(e){console.warn('Save prefs failed',e);}
   }
