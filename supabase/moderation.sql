@@ -46,7 +46,7 @@ begin
                jsonb_agg(distinct r.reason)                 reasons
         from reports r
         left join profiles pr on pr.id = r.reported_user_id
-        left join posts    po on po.id = r.post_id
+        left join posts    po on po.id::text = r.post_id
         where r.created_at > now() - interval '24 hours'
           and r.post_id is not null
         group by r.post_id
