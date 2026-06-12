@@ -625,8 +625,8 @@ async function loadScanHistory() {
     if (localItems.length === 0) {
       grid.innerHTML = `<div class="scan-hist-empty">
         <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--wd)" stroke-width="1.5" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <p>Aucun scan pour l'instant</p>
-        <span>Analyse ta première tenue</span>
+        <p>${t('scan_empty_title')}</p>
+        <span>${t('scan_empty_cta')}</span>
       </div>`;
     }
     return;
@@ -655,8 +655,8 @@ function _renderScanHistory(items) {
     _syncHistEditBtn();
     grid.innerHTML = `<div class="scan-hist-empty">
       <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--wd)" stroke-width="1.5" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-      <p>Aucun scan pour l'instant</p>
-      <span>Analyse ta première tenue</span>
+      <p>${t('scan_empty_title')}</p>
+      <span>${t('scan_empty_cta')}</span>
     </div>`;
     return;
   }

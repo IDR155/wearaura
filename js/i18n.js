@@ -441,6 +441,15 @@ const I18N = {
     empty_search_other_name:'Essaie un autre nom ou username.',
     empty_search_other_kw:'Essaie un autre mot-clé.',
     empty_no_views:"Aucune vue pour l'instant",
+    post_maybe_deleted:'Il a peut-être été supprimé.',
+    confirm_delete_look:'Supprimer ce look ?',
+    confirm_irreversible:'Cette action est irréversible.',
+    notif_wants_message:"veut t'envoyer un message",
+    notif_story_reaction:'a réagi à ta story',
+    scan_empty_title:"Aucun scan pour l'instant",
+    scan_empty_cta:'Analyse ta première tenue',
+    unblock_btn:'Débloquer',
+    demo_badge:'Démo',
   },
   en: {
     sign_in:'Sign In',sign_up:'Sign Up',
@@ -882,6 +891,15 @@ const I18N = {
     empty_search_other_name:'Try another name or username.',
     empty_search_other_kw:'Try another keyword.',
     empty_no_views:'No views yet',
+    post_maybe_deleted:'It may have been deleted.',
+    confirm_delete_look:'Delete this look?',
+    confirm_irreversible:'This action is irreversible.',
+    notif_wants_message:'wants to message you',
+    notif_story_reaction:'reacted to your story',
+    scan_empty_title:'No scans yet',
+    scan_empty_cta:'Analyze your first outfit',
+    unblock_btn:'Unblock',
+    demo_badge:'Demo',
   }
 };
 

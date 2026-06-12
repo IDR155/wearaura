@@ -131,8 +131,8 @@ function _showDeletePostConfirm(postId){
   const toastEl=document.getElementById('toast-el');
   toastEl.innerHTML=`
     <div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:4px 0">
-      <div style="font-size:12px;color:var(--white)">Supprimer ce look ?</div>
-      <div class="txt-xs-dim">Cette action est irréversible.</div>
+      <div style="font-size:12px;color:var(--white)">${t('confirm_delete_look')}</div>
+      <div class="txt-xs-dim">${t('confirm_irreversible')}</div>
       <div style="display:flex;gap:8px;margin-top:2px">
         <div onclick="cancelBackConfirm()" style="padding:6px 16px;border:1px solid var(--gold-b);border-radius:50px;font-size:11px;color:var(--wd);cursor:pointer">Annuler</div>
         <div onclick="cancelBackConfirm();doDeletePost('${postId}')" style="padding:6px 16px;background:rgba(255,80,80,.85);border-radius:50px;font-size:11px;color:var(--gold-l);font-weight:600;cursor:pointer">Supprimer</div>
@@ -1315,7 +1315,7 @@ function renderAltTabLive(type = 'ethique') {
     const productUrl = safeUrl(a.url) !== '#'
       ? safeUrl(a.url)
       : `https://www.google.com/search?q=${encodeURIComponent((a.nom+' '+a.marque).trim())}`;
-    const demoBadge=a._isDemo?'<div class="demo-badge demo-badge--sm">Démo</div>':'';
+    const demoBadge=a._isDemo?`<div class="demo-badge demo-badge--sm">${t('demo_badge')}</div>`:'';
     const altCredit=a.image_photographer?`<div class="pexels-credit" style="font-size:7px;bottom:2px;right:2px;padding:1px 4px" title="Photo: ${escapeHtml(a.image_photographer)}"></div>`:'';
     return `
     <div class="alt-result-card" onclick="window.open('${productUrl}','_blank')">
@@ -2401,7 +2401,7 @@ async function openBlockedUsers(){
           <div style="font-size:13px;color:var(--white);overflow:hidden;text-overflow:ellipsis">${escapeHtml(p.full_name||p.username||'Utilisateur')}</div>
           <div class="txt-xs-dim">${escapeHtml(p.username||'')}</div>
         </div>
-        <button onclick="unblockUser('${b.blocked_id}')" style="background:transparent;border:1px solid var(--gold-b);border-radius:var(--r-pill);padding:5px 12px;color:var(--gold);font-size:10px;letter-spacing:.5px;cursor:pointer">Débloquer</button>
+        <button onclick="unblockUser('${b.blocked_id}')" style="background:transparent;border:1px solid var(--gold-b);border-radius:var(--r-pill);padding:5px 12px;color:var(--gold);font-size:10px;letter-spacing:.5px;cursor:pointer">${t('unblock_btn')}</button>
       </div>`;
     }).join('');
   }catch(e){list.innerHTML='<div style="font-size:12px;color:var(--wd);padding:14px 0;text-align:center">Erreur de chargement</div>';}

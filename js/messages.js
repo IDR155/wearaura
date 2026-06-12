@@ -744,8 +744,8 @@ function renderActivityItem(n){
     follow:`<strong style="color:var(--white)">${name}</strong> <span style="color:var(--wd)">${t('started_following')}</span>`,
     follow_request:`<strong style="color:var(--white)">${name}</strong> <span style="color:var(--wd)">${t('wants_follow')}</span>`,
     follow_accepted:`<strong style="color:var(--white)">${name}</strong> <span style="color:var(--wd)">${t('accepted_request')}</span>`,
-    message_request:`<strong style="color:var(--white)">${name}</strong> <span style="color:var(--wd)">veut t'envoyer un message</span>`,
-    story_reaction:`<strong style="color:var(--white)">${name}</strong> <span style="color:var(--wd)">a réagi à ta story</span>${n.comment_text?` <span style="font-size:16px">${escapeHtml(n.comment_text)}</span>`:''}`,
+    message_request:`<strong style="color:var(--white)">${name}</strong> <span style="color:var(--wd)">${t('notif_wants_message')}</span>`,
+    story_reaction:`<strong style="color:var(--white)">${name}</strong> <span style="color:var(--wd)">${t('notif_story_reaction')}</span>${n.comment_text?` <span style="font-size:16px">${escapeHtml(n.comment_text)}</span>`:''}`,
   };
   const icon=icons[n.type]||_defaultIcon;const text=texts[n.type]||`<span style="color:var(--wd)">${t('notif_generic')}</span>`;
   const isUnread=!n.read;

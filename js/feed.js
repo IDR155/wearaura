@@ -328,7 +328,7 @@ async function openPostView(id){
   }
   const{data:p,error}=await sb.from('posts').select('*').eq('id',id).maybeSingle();
   if(error||!p){
-    pvScroll.innerHTML=`<div class="empty-state empty-state--full"><img src="mascote_ivory/the_observer.png" alt=""><div>${t('post_not_found')||'Post introuvable'}<div class="es-hint">Il a peut-être été supprimé.</div></div></div>`;
+    pvScroll.innerHTML=`<div class="empty-state empty-state--full"><img src="mascote_ivory/the_observer.png" alt=""><div>${t('post_not_found')||'Post introuvable'}<div class="es-hint">${t('post_maybe_deleted')}</div></div></div>`;
     return;
   }
   const prof=await getProfile(p.user_id);
