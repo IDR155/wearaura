@@ -106,7 +106,7 @@ const _sbMock = {
   removeChannel: ()=>{}
 };
 // ── Web Push : clé publique VAPID (la clé privée est un secret Supabase, jamais ici) ──
-const WA_VAPID_PUBLIC_KEY = 'BGXt-IqDdApkWNDx_JNLSc5mKFCvm8Y4IJwLLnG1hfwl0e_WKXIVQCNHB0HOMEBC3m68ZPjLBJXFB_mWtS6dDK8';
+const WA_VAPID_PUBLIC_KEY = 'BOp6C69M0cQT5BGMXjk_CQSdMwA2c09H7jF1Fj8q1XO1xP1r98RZwwwoGEAiNoyYZLZ2b0zhFXhS3Qu49raG-tA';
 
 let sb;
 try {
