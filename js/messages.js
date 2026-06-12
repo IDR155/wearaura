@@ -34,14 +34,14 @@ function startGlobalRealtime(){
           const n=payload?.new;
           if(n){
             const bodies={
-              like:'❤️ Quelqu\'un a aimé ton post',
-              comment:'💬 Nouveau commentaire sur ton post',
-              follow:'👤 Quelqu\'un te suit maintenant',
-              follow_request:'🔒 Nouvelle demande de suivi',
-              follow_accepted:'✅ Ta demande de suivi a été acceptée',
-              message_request:'✉️ Nouvelle demande de message',
+              like:t('notif_body_like'),
+              comment:t('notif_body_comment'),
+              follow:t('notif_body_follow'),
+              follow_request:t('notif_body_follow_request'),
+              follow_accepted:t('notif_body_follow_accepted'),
+              message_request:t('notif_body_message_request'),
             };
-            _showBrowserNotif('WearAura', bodies[n.type]||'Tu as une nouvelle notification');
+            _showBrowserNotif('WearAura', bodies[n.type]||t('notif_body_default'));
           }
         })
       .subscribe();

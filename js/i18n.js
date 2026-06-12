@@ -450,6 +450,14 @@ const I18N = {
     scan_empty_cta:'Analyse ta première tenue',
     unblock_btn:'Débloquer',
     demo_badge:'Démo',
+    // ── Notifications navigateur (app ouverte) ──
+    notif_body_like:"❤️ Quelqu'un a aimé ton post",
+    notif_body_comment:'💬 Nouveau commentaire sur ton post',
+    notif_body_follow:"👤 Quelqu'un te suit maintenant",
+    notif_body_follow_request:'🔒 Nouvelle demande de suivi',
+    notif_body_follow_accepted:'✅ Ta demande de suivi a été acceptée',
+    notif_body_message_request:'✉️ Nouvelle demande de message',
+    notif_body_default:'Tu as une nouvelle notification',
   },
   en: {
     sign_in:'Sign In',sign_up:'Sign Up',
@@ -900,6 +908,14 @@ const I18N = {
     scan_empty_cta:'Analyze your first outfit',
     unblock_btn:'Unblock',
     demo_badge:'Demo',
+    // ── Browser notifications (app open) ──
+    notif_body_like:'❤️ Someone liked your post',
+    notif_body_comment:'💬 New comment on your post',
+    notif_body_follow:'👤 Someone is now following you',
+    notif_body_follow_request:'🔒 New follow request',
+    notif_body_follow_accepted:'✅ Your follow request was accepted',
+    notif_body_message_request:'✉️ New message request',
+    notif_body_default:'You have a new notification',
   }
 };
 
