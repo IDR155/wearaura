@@ -19,7 +19,7 @@ async function doLogin(){
   const {data,error}=await sb.auth.signInWithPassword({email,password:pw});
   btn.disabled=false;btn.textContent=t('sign_in');
   if(error)return showErr(friendlyError(error));
-  me=data.user;startGlobalRealtime();loadFeed();goS('sc-feed');handleDeepLink();
+  me=data.user;track('login');startGlobalRealtime();loadFeed();goS('sc-feed');handleDeepLink();
 }
 async function doSignup(){
   const fn=document.getElementById('s-fn').value.trim(),ln=document.getElementById('s-ln').value.trim();
@@ -30,7 +30,7 @@ async function doSignup(){
   const {data,error}=await sb.auth.signUp({email,password:pw,options:{data:{first_name:fn,last_name:ln,username:un,full_name:`${fn} ${ln}`}}});
   btn.disabled=false;btn.textContent=t('create_account');
   if(error)return showErr(friendlyError(error));
-  me=data.user;startGlobalRealtime();
+  me=data.user;track('signup');startGlobalRealtime();
   try{await sb.from('profiles').upsert({id:me.id,username:un,full_name:`${fn} ${ln}`,bio:'',aura_points:0});}catch(e){await sb.from('profiles').upsert({id:me.id,username:un,full_name:`${fn} ${ln}`});}
   toast(t('compte_cree'),2600,{type:'success'});setTimeout(()=>{loadFeed();goS('sc-feed');handleDeepLink();},1500);
   // wa_hotspot_onboard_pending posé depuis obSkip() (nav.js) pour éviter

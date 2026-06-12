@@ -393,6 +393,7 @@ const _bqSavedKeys=new Set(JSON.parse(localStorage.getItem('bq_saved')||'[]'));
 
 function bqCtxShow(p){
   if(!p)return;
+  track('product_open',{id:p.id||null,marque:p.marque||null});
   _bqCtxProduct=p;
   const sheet=document.getElementById('bq-ctx-sheet');
   const overlay=document.getElementById('bq-ctx-overlay');
@@ -464,6 +465,7 @@ function bqCtxCopy(){
 
 function bqCtxOpen(){
   const p=_bqCtxProduct;if(!p)return;
+  track('product_outbound',{id:p.id||null,marque:p.marque||null});
   window.open(safeUrl(p.url),'_blank');
   closeBqCtx();
 }

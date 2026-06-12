@@ -233,6 +233,7 @@ function goS(id) {
 function goTab(tab) {
   cancelBackConfirm();
   _armBack();
+  track('tab_view',{tab});
   if (tab !== 'create') { stopCamera(); }
   if (tab !== 'notif') onLeaveMessagesTab();
   if (tab==='explore') { openSearch(); return; }

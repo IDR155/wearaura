@@ -305,6 +305,7 @@ async function doPublish(){
   if(error)return toast(`❌ ${t('toast_error')}: ${error.message}`);
   if(_postMusicUrl&&typeof _addMusicRecent==='function') _addMusicRecent(_postMusicUrl, _postMusicTitle);
   toast(t('toast_published'));
+  track('post_published',{hotspots:hspots.length});
   resetLeanTags();
   if(typeof clearPostMusic==='function')clearPostMusic();
   setTimeout(()=>{resetCreate();loadFeed();goTab('feed');},1200);

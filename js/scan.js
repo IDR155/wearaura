@@ -248,6 +248,7 @@ function _getLocalScans() {
 // ── TRAITEMENT ────────────────────────────
 async function _processScan(dataUrl) {
   _scan.image = dataUrl;
+  track('scan_used');
 
   document.getElementById('scan-empty').style.display        = 'none';
   document.getElementById('scan-result-wrap').style.display  = 'flex';

@@ -938,6 +938,7 @@ function setLang(lang){
   if(!['fr','en'].includes(lang))return;
   currentLang=lang;
   localStorage.setItem('wa_lang',lang);
+  if(typeof track==='function')track('lang_change',{lang});
   applyLang();
   document.getElementById('lang-picker').style.display='none';
   document.getElementById('lang-check-fr').style.display=lang==='fr'?'inline':'none';

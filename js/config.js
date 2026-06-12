@@ -120,6 +120,44 @@ try {
 }
 
 // ═══════════════════════════════════════════
+// ANALYTICS PRODUIT + ERREURS (first-party, Supabase)
+// track('event', {props}) — fire-and-forget, jamais bloquant,
+// silencieux si la table n'existe pas encore ou si offline.
+// ═══════════════════════════════════════════
+function track(event, props){
+  try{
+    sb.from('app_events').insert({
+      user_id:(typeof me!=='undefined'&&me)?me.id:null,
+      event:String(event).slice(0,64),
+      props:props||{},
+      lang:(typeof currentLang!=='undefined')?currentLang:null,
+    }).then(()=>{},()=>{});
+  }catch(e){}
+}
+
+// Remontée d'erreurs JS : dédupe par message, max 10 par session,
+// jamais d'erreur en cascade (tout est avalé).
+const _errSeen=new Set();
+let _errCount=0;
+function _reportError(message, stack, src){
+  try{
+    if(_errCount>=10)return;
+    const key=String(message).slice(0,120);
+    if(_errSeen.has(key))return;
+    _errSeen.add(key);_errCount++;
+    sb.from('client_errors').insert({
+      user_id:(typeof me!=='undefined'&&me)?me.id:null,
+      message:String(message).slice(0,500),
+      stack:String(stack||'').slice(0,2000),
+      url:String(src||location.href).slice(0,300),
+      ua:navigator.userAgent.slice(0,200),
+    }).then(()=>{},()=>{});
+  }catch(e){}
+}
+window.addEventListener('error',e=>{_reportError(e.message,e.error?.stack,e.filename);});
+window.addEventListener('unhandledrejection',e=>{const r=e.reason;_reportError(r?.message||String(r),r?.stack,'unhandledrejection');});
+
+// ═══════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════
 // ── Profiles cache ────────────────────────────────────────────

@@ -1201,6 +1201,7 @@ async function publishStory() {
     if (insErr) throw insErr;
     if (_scMusicUrl) _addMusicRecent(_scMusicUrl, _scMusicTitle);
     toast(t('toast_story_published'));
+    track('story_published');
     closeStoryCreate();
     loadStories();
   } catch(e) {

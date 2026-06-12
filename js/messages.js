@@ -578,7 +578,7 @@ async function sendMessage(){
     try{
       const{data:msg}=await sb.from('messages').insert({conversation_id:currentConvId,sender_id:me.id,receiver_id:receiverId,content}).select().single();
       await sb.from('conversations').update({last_message:content,last_message_at:new Date().toISOString()}).eq('id',currentConvId);
-      if(msg)appendMessage(msg);
+      if(msg){appendMessage(msg);track('message_sent');}
       // 1er message → demande de message si non suivi
       if(_isNewConversation&&receiverId){
         _isNewConversation=false;
@@ -872,6 +872,7 @@ async function togglePushNotif(){
     }catch(e){_DBG.log('push off: '+(e?.message||e));}
     applyToggleUI('toggle-notif-push',false);
     toast(t('push_disabled'),2200,{type:'success'});
+    track('push_disabled');
     return;
   }
   // Refusées au niveau OS → impossible de redemander, passer par les réglages
@@ -891,6 +892,7 @@ async function togglePushNotif(){
     if(ok){
       applyToggleUI('toggle-notif-push',true);
       toast(t('push_enabled'),2400,{type:'success'});
+      track('push_enabled');
     }else{
       applyToggleUI('toggle-notif-push',false);
       toast(t('push_error'),3200,{type:'error'});
