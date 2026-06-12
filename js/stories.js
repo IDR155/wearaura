@@ -1057,7 +1057,7 @@ async function openStoryViewsPanel() {
         <div style="width:42px;height:42px;border-radius:50%;background:var(--black-3);border:1.5px solid var(--gold-b);overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0">${av}</div>
         <div style="flex:1;min-width:0">
           <div style="font-size:13px;font-weight:600;color:var(--white);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(name)}</div>
-          <div style="font-size:11px;color:var(--wd)">${escapeHtml(handle)}</div>
+          <div style="font-size:12px;color:var(--wd)">${escapeHtml(handle)}</div>
         </div>
         ${emoji ? `<div style="font-size:24px">${emoji}</div>` : ''}
       </div>`;

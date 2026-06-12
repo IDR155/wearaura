@@ -339,7 +339,7 @@ function convItemHtml(convId,otherUid,avatarUrl,name,sub,lastMsg,time,unread,isG
     <div style="flex:1;min-width:0">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">
         <div style="font-size:14px;font-weight:${unread>0?600:400};color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px">${escapeHtml(name)}</div>
-        <div style="font-size:10px;color:var(--wd);flex-shrink:0;margin-left:6px">${escapeHtml(time)}</div>
+        <div style="font-size:11px;color:var(--wd);flex-shrink:0;margin-left:6px">${escapeHtml(time)}</div>
       </div>
       <div style="font-size:12px;color:${unread>0?'var(--white)':'var(--wd)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:${unread>0?500:400}">${escapeHtml(lastMsg)}</div>
     </div>
@@ -367,9 +367,9 @@ function demoConversationsList(){
     <div style="flex:1;min-width:0">
       <div style="display:flex;justify-content:space-between;margin-bottom:2px">
         <div style="font-size:14px;font-weight:${d.unread>0?600:400};color:var(--white)">${d.name}</div>
-        <div style="font-size:10px;color:var(--wd)">${d.time}</div>
+        <div style="font-size:11px;color:var(--wd)">${d.time}</div>
       </div>
-      <div style="font-size:11px;color:var(--gold);margin-bottom:2px">${d.sub}</div>
+      <div style="font-size:12px;color:var(--gold);margin-bottom:2px">${d.sub}</div>
       <div style="font-size:12px;color:${d.unread>0?'var(--white)':'var(--wd)'};font-weight:${d.unread>0?500:400}">${d.msg}</div>
     </div>
   </div>`).join('');
@@ -397,7 +397,7 @@ async function openConversationScreen(convId,otherUid,name,avatarUrl,sub,isGroup
       if(!list)return;
       const hint=document.createElement('div');
       hint.id='msg-longpress-hint';
-      hint.style.cssText='align-self:center;background:rgba(240,234,216,0.06);border:1px solid rgba(240,234,216,0.15);border-radius:50px;padding:6px 14px;font-size:10px;color:var(--wd);letter-spacing:.3px;margin:8px 0';
+      hint.style.cssText='align-self:center;background:rgba(240,234,216,0.06);border:1px solid rgba(240,234,216,0.15);border-radius:50px;padding:6px 14px;font-size:11px;color:var(--wd);letter-spacing:.3px;margin:8px 0';
       hint.textContent='Appuie longtemps sur un message pour modifier ou supprimer';
       list.insertBefore(hint,list.firstChild);
       // Auto-dismiss après 5 min (300s)
@@ -513,7 +513,7 @@ function appendMessage(msg,scroll=true){
   div.dataset.sent=isSent?'1':'0';
   const safeContent=msg.content.replace(/'/g,"\\'").replace(/"/g,'&quot;');
   const dotsBtn=isSent?`<button class="msg-dots-btn" aria-label="Options" onclick="event.stopPropagation();showMsgCtx('${msg.id}','${safeContent}','${msg.created_at}',this.closest('.msg-sent-wrap'),event)">⋮</button>`:'';
-  const senderTag=showSender?`<div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">${senderAv?`<img src="${senderAv}" alt="" style="width:20px;height:20px;border-radius:50%;object-fit:cover;flex-shrink:0">`:`<div style="width:20px;height:20px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-b);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;color:var(--gold)">${escapeHtml((senderName||'?').charAt(0).toUpperCase())}</div>`}<span style="font-size:10px;color:var(--gold);font-weight:600">@${escapeHtml(senderName)}</span></div>`:'';
+  const senderTag=showSender?`<div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">${senderAv?`<img src="${senderAv}" alt="" style="width:20px;height:20px;border-radius:50%;object-fit:cover;flex-shrink:0">`:`<div style="width:20px;height:20px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-b);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;color:var(--gold)">${escapeHtml((senderName||'?').charAt(0).toUpperCase())}</div>`}<span style="font-size:11px;color:var(--gold);font-weight:600">@${escapeHtml(senderName)}</span></div>`:'';
 
   // Détecter les posts partagés [POST:id]
   const postMatch=msg.content.match(/^\[POST:([^\]]+)\]$/);
@@ -521,7 +521,7 @@ function appendMessage(msg,scroll=true){
   if(postMatch){
     const sharedPostId=postMatch[1];
     bubbleContent=`<div class="msg-shared-post" id="bubble-${msg.id}" data-postid="${sharedPostId}" onclick="openSharedPost('${sharedPostId}')" style="cursor:pointer;background:transparent;padding:0;border:none">
-      <div id="shared-post-${msg.id}" style="min-height:80px;display:flex;align-items:center;justify-content:center;padding:14px;text-align:center;font-size:11px;color:var(--wd)">Chargement…</div>
+      <div id="shared-post-${msg.id}" style="min-height:80px;display:flex;align-items:center;justify-content:center;padding:14px;text-align:center;font-size:12px;color:var(--wd)">Chargement…</div>
     </div>`;
     setTimeout(()=>renderSharedPostInBubble(msg.id,sharedPostId),50);
   }else{
@@ -740,7 +740,7 @@ function renderActivityItem(n){
   const _defaultIcon='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>';
   const texts={
     like:`<strong style="color:var(--white)">${name}</strong> <span style="color:var(--wd)">${t('liked_post')}</span>`,
-    comment:`<strong style="color:var(--white)">${name}</strong> <span style="color:var(--wd)">${t('commented_post')}</span>${n.comment_text?`<div style="font-size:11px;color:var(--wd);margin-top:2px;font-style:italic">"${escapeHtml(n.comment_text)}"</div>`:''}`,
+    comment:`<strong style="color:var(--white)">${name}</strong> <span style="color:var(--wd)">${t('commented_post')}</span>${n.comment_text?`<div style="font-size:12px;color:var(--wd);margin-top:2px;font-style:italic">"${escapeHtml(n.comment_text)}"</div>`:''}`,
     follow:`<strong style="color:var(--white)">${name}</strong> <span style="color:var(--wd)">${t('started_following')}</span>`,
     follow_request:`<strong style="color:var(--white)">${name}</strong> <span style="color:var(--wd)">${t('wants_follow')}</span>`,
     follow_accepted:`<strong style="color:var(--white)">${name}</strong> <span style="color:var(--wd)">${t('accepted_request')}</span>`,
@@ -752,25 +752,25 @@ function renderActivityItem(n){
   return `<div style="display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid rgba(240,234,216,.06);background:${isUnread?'rgba(240,234,216,.04)':'transparent'}">
     <div style="position:relative;flex-shrink:0">
       <div style="width:46px;height:46px;border-radius:50%;border:2px solid ${isUnread?'var(--gold)':'var(--gold-b)'};background:var(--black-3);display:flex;align-items:center;justify-content:center;font-size:18px;overflow:hidden">${av}</div>
-      <div style="position:absolute;bottom:-2px;right:-2px;width:20px;height:20px;border-radius:50%;background:var(--black-2);border:2px solid var(--black);display:flex;align-items:center;justify-content:center;font-size:11px">${icon}</div>
+      <div style="position:absolute;bottom:-2px;right:-2px;width:20px;height:20px;border-radius:50%;background:var(--black-2);border:2px solid var(--black);display:flex;align-items:center;justify-content:center;font-size:12px">${icon}</div>
     </div>
-    <div style="flex:1;min-width:0"><div style="font-size:13px;line-height:1.5">${text}</div><div style="font-size:10px;color:var(--wd);margin-top:3px">${time}</div></div>
+    <div style="flex:1;min-width:0"><div style="font-size:13px;line-height:1.5">${text}</div><div style="font-size:11px;color:var(--wd);margin-top:3px">${time}</div></div>
     ${n.type==='follow_request'?`<div style="display:flex;gap:6px;flex-shrink:0">
-      <button onclick="acceptFollowRequest('${n.from_user_id}','${n.id}')" style="background:var(--gold);border:none;border-radius:8px;padding:6px 10px;font-family:var(--fb);font-size:10px;font-weight:600;color:var(--black);cursor:pointer">✓</button>
-      <button onclick="rejectFollowRequest('${n.from_user_id}','${n.id}')" style="background:transparent;border:1px solid rgba(255,80,80,.4);border-radius:8px;padding:6px 8px;font-family:var(--fb);font-size:10px;color:rgba(255,80,80,.8);cursor:pointer">✕</button>
+      <button onclick="acceptFollowRequest('${n.from_user_id}','${n.id}')" style="background:var(--gold);border:none;border-radius:8px;padding:6px 10px;font-family:var(--fb);font-size:11px;font-weight:600;color:var(--black);cursor:pointer">✓</button>
+      <button onclick="rejectFollowRequest('${n.from_user_id}','${n.id}')" style="background:transparent;border:1px solid rgba(255,80,80,.4);border-radius:8px;padding:6px 8px;font-family:var(--fb);font-size:11px;color:rgba(255,80,80,.8);cursor:pointer">✕</button>
     </div>`:''}
     ${n.type==='message_request'?`<div style="display:flex;gap:6px;flex-shrink:0">
-      <button onclick="acceptMsgRequest('${n.from_user_id}','${n.id}')" style="background:var(--gold);border:none;border-radius:8px;padding:6px 10px;font-family:var(--fb);font-size:10px;font-weight:600;color:var(--black);cursor:pointer">✓</button>
-      <button onclick="dismissMsgRequest('${n.id}')" style="background:transparent;border:1px solid rgba(255,80,80,.4);border-radius:8px;padding:6px 8px;font-family:var(--fb);font-size:10px;color:rgba(255,80,80,.8);cursor:pointer">✕</button>
+      <button onclick="acceptMsgRequest('${n.from_user_id}','${n.id}')" style="background:var(--gold);border:none;border-radius:8px;padding:6px 10px;font-family:var(--fb);font-size:11px;font-weight:600;color:var(--black);cursor:pointer">✓</button>
+      <button onclick="dismissMsgRequest('${n.id}')" style="background:transparent;border:1px solid rgba(255,80,80,.4);border-radius:8px;padding:6px 8px;font-family:var(--fb);font-size:11px;color:rgba(255,80,80,.8);cursor:pointer">✕</button>
     </div>`:''}
   </div>`;
 }
 
 function demoActivityNotifications(){
-  return `<div style="padding:14px 20px 6px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:.7">${t('today')}</div>
+  return `<div style="padding:14px 20px 6px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:.7">${t('today')}</div>
     <div style="display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid rgba(240,234,216,.06);background:rgba(240,234,216,.04)">
       <div style="position:relative;flex-shrink:0"><div style="width:46px;height:46px;border-radius:50%;border:2px solid var(--gold);background:var(--black-3);display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(240,234,216,0.4)" stroke-width="1.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div style="position:absolute;bottom:-2px;right:-2px;width:20px;height:20px;border-radius:50%;background:var(--black-2);border:2px solid var(--black);display:flex;align-items:center;justify-content:center"><svg width="10" height="10" viewBox="0 0 24 24" fill="#1E4FD8" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div></div>
-      <div style="flex:1"><div style="font-size:13px"><strong style="color:var(--white)">sofia.looks</strong> <span style="color:var(--wd)">${t('liked_post')}</span></div><div style="font-size:10px;color:var(--wd);margin-top:3px">2 min</div></div>
+      <div style="flex:1"><div style="font-size:13px"><strong style="color:var(--white)">sofia.looks</strong> <span style="color:var(--wd)">${t('liked_post')}</span></div><div style="font-size:11px;color:var(--wd);margin-top:3px">2 min</div></div>
     </div>`;
 }
 
@@ -1003,8 +1003,8 @@ function triggerEditMsg(){
   const orig=bubble.innerHTML;
   bubble.innerHTML=`<textarea class="msg-edit-area" id="edit-ta-${_ctxMsgId}" rows="1">${escapeHtml(_ctxMsgContent)}</textarea>
     <div style="display:flex;gap:8px;margin-top:6px;justify-content:flex-end">
-      <span onclick="cancelEditMsg('${_ctxMsgId}','${encodeURIComponent(orig)}')" style="font-size:11px;cursor:pointer;opacity:.7">Annuler</span>
-      <span onclick="confirmEditMsg('${_ctxMsgId}')" style="font-size:11px;font-weight:700;cursor:pointer">✓ Sauvegarder</span>
+      <span onclick="cancelEditMsg('${_ctxMsgId}','${encodeURIComponent(orig)}')" style="font-size:12px;cursor:pointer;opacity:.7">Annuler</span>
+      <span onclick="confirmEditMsg('${_ctxMsgId}')" style="font-size:12px;font-weight:700;cursor:pointer">✓ Sauvegarder</span>
     </div>`;
   const ta=document.getElementById('edit-ta-'+_ctxMsgId);
   if(ta){ta.focus();ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';}
@@ -1023,7 +1023,7 @@ async function confirmEditMsg(msgId){
     if(error){console.error('[editMsg]',error);toast(friendlyError?friendlyError(error):'Erreur de modification');return;}
     if(!data||!data.length){console.warn('[editMsg] no rows updated — RLS or id mismatch',{msgId});toast(t('toast_edit_denied'));return;}
     const bubble=document.getElementById('bubble-'+msgId);
-    if(bubble) bubble.innerHTML=escapeHtml(newContent)+'<span style="font-size:10px;color:rgba(12,21,34,0.5);margin-left:6px">'+escapeHtml(t('msg_edited_label'))+'</span>';
+    if(bubble) bubble.innerHTML=escapeHtml(newContent)+'<span style="font-size:11px;color:rgba(12,21,34,0.5);margin-left:6px">'+escapeHtml(t('msg_edited_label'))+'</span>';
     toast(t('toast_msg_edited'));
   }catch(e){console.error('[editMsg]',e);toast('❌ '+t('toast_error'));}
 }
@@ -1142,7 +1142,7 @@ function doMsgSearch(q){
       res.innerHTML=data.map(p=>{
         const isFollowing=followingSet.has(p.id);
         const av=p.avatar_url?`<img src="${p.avatar_url}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="rgba(240,234,216,0.4)" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
-        const badge=isFollowing?'':`<span style="font-size:10px;padding:3px 8px;border-radius:50px;background:rgba(240,234,216,0.1);border:1px solid rgba(240,234,216,0.2);color:var(--wd);margin-left:auto;flex-shrink:0">Demande</span>`;
+        const badge=isFollowing?'':`<span style="font-size:11px;padding:3px 8px;border-radius:50px;background:rgba(240,234,216,0.1);border:1px solid rgba(240,234,216,0.2);color:var(--wd);margin-left:auto;flex-shrink:0">Demande</span>`;
         return `<div onclick="startMsgFromSearch('${p.id}','${(p.full_name||p.username||'').replace(/'/g,"&#39;")}','${(p.avatar_url||'').replace(/'/g,'%27')}','${(p.username||'').replace(/'/g,"&#39;")}',${isFollowing})"
           style="display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;transition:background .15s;border-radius:12px;margin:0 8px"
           onmouseover="this.style.background='rgba(240,234,216,0.05)'" onmouseout="this.style.background='transparent'">
@@ -1186,8 +1186,8 @@ async function openGroupInfo(){
       return `<div style="display:flex;align-items:center;gap:12px;padding:10px 20px;cursor:${isMe?'default':'pointer'}" ${isMe?'':` onclick="closeGroupInfo();openUserProfile('${p.id}')"`}>
         ${av}
         <div style="flex:1;min-width:0">
-          <div style="font-size:14px;font-weight:500;color:var(--white)">@${escapeHtml(name)}${isMe?' <span style="font-size:10px;color:var(--wd)">(toi)</span>':''}</div>
-          ${isAdmin?`<div style="font-size:10px;color:var(--gold);letter-spacing:.5px">Admin</div>`:''}
+          <div style="font-size:14px;font-weight:500;color:var(--white)">@${escapeHtml(name)}${isMe?' <span style="font-size:11px;color:var(--wd)">(toi)</span>':''}</div>
+          ${isAdmin?`<div style="font-size:11px;color:var(--gold);letter-spacing:.5px">Admin</div>`:''}
         </div>
       </div>`;
     }).join('');

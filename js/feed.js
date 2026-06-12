@@ -421,9 +421,9 @@ function _showNavPlusOnboard(){
   ov.onclick=_dismissNavPlusOnboard;
   ov.innerHTML=`
     <div onclick="event.stopPropagation()" style="background:rgba(7,16,30,0.97);border:1px solid rgba(212,175,111,0.28);border-radius:20px;padding:24px 22px;max-width:300px;width:100%;text-align:center;flex-shrink:0">
-      <div style="font:700 11px var(--fb);letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:10px">${t('hint_post_first')}</div>
+      <div style="font:700 12px var(--fb);letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:10px">${t('hint_post_first')}</div>
       <div style="font:15px/1.65 'Cormorant Garamond',Georgia,serif;color:var(--wd);margin-bottom:20px">${t('ob3_desc')||'Photo · hotspots · style — ton look devient une info utile pour toute la communauté.'}</div>
-      <button onclick="_dismissNavPlusOnboard()" style="background:var(--gold);color:var(--black);border:none;border-radius:50px;padding:11px 0;font:700 10px var(--fb);letter-spacing:2px;text-transform:uppercase;cursor:pointer;width:100%">${t('cest_parti')||'Je me lance'}</button>
+      <button onclick="_dismissNavPlusOnboard()" style="background:var(--gold);color:var(--black);border:none;border-radius:50px;padding:11px 0;font:700 11px var(--fb);letter-spacing:2px;text-transform:uppercase;cursor:pointer;width:100%">${t('cest_parti')||'Je me lance'}</button>
     </div>
     <div style="width:1px;height:32px;border-left:1.5px dashed rgba(212,175,111,0.4);margin-top:10px;flex-shrink:0"></div>
     <div style="color:var(--gold);font-size:14px;line-height:1;flex-shrink:0;margin-bottom:4px">▼</div>`;
@@ -462,7 +462,7 @@ function _showHotspotOnboard(){
   ov.setAttribute('aria-label','Astuce : les hotspots');
   ov.style.cssText='position:fixed;inset:0;z-index:200;background:rgba(5,14,34,0.78);backdrop-filter:blur(2px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .3s';
   ov.onclick=dismissHotspotHint;
-  ov.innerHTML=`<div style="width:48px;height:48px;border-radius:50%;border:2px solid var(--gold);background:rgba(212,175,111,0.2);display:flex;align-items:center;justify-content:center;animation:hotspotHint 1.4s ease-out infinite;box-shadow:0 0 28px rgba(212,175,111,0.55);margin-bottom:14px;flex-shrink:0"><span style="font-size:20px;color:rgba(212,175,111,0.9);font-weight:300;line-height:1">+</span></div><div style="width:1px;height:36px;border-left:1.5px dashed rgba(212,175,111,0.35);margin-bottom:14px;flex-shrink:0"></div><div onclick="event.stopPropagation()" style="background:rgba(7,16,30,0.97);border:1px solid rgba(212,175,111,0.28);border-radius:20px;padding:24px 22px;max-width:300px;width:100%;text-align:center;flex-shrink:0"><div style="font:700 11px var(--fb);letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:10px">${t('hint_onboard_title')}</div><div style="font:15px/1.65 'Cormorant Garamond',Georgia,serif;color:var(--wd);margin-bottom:20px">${t('hint_onboard_body')}</div><button onclick="dismissHotspotHint()" style="background:var(--gold);color:var(--black);border:none;border-radius:50px;padding:11px 0;font:700 10px var(--fb);letter-spacing:2px;text-transform:uppercase;cursor:pointer;width:100%">${t('hint_onboard_cta')}</button></div>`;
+  ov.innerHTML=`<div style="width:48px;height:48px;border-radius:50%;border:2px solid var(--gold);background:rgba(212,175,111,0.2);display:flex;align-items:center;justify-content:center;animation:hotspotHint 1.4s ease-out infinite;box-shadow:0 0 28px rgba(212,175,111,0.55);margin-bottom:14px;flex-shrink:0"><span style="font-size:20px;color:rgba(212,175,111,0.9);font-weight:300;line-height:1">+</span></div><div style="width:1px;height:36px;border-left:1.5px dashed rgba(212,175,111,0.35);margin-bottom:14px;flex-shrink:0"></div><div onclick="event.stopPropagation()" style="background:rgba(7,16,30,0.97);border:1px solid rgba(212,175,111,0.28);border-radius:20px;padding:24px 22px;max-width:300px;width:100%;text-align:center;flex-shrink:0"><div style="font:700 12px var(--fb);letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:10px">${t('hint_onboard_title')}</div><div style="font:15px/1.65 'Cormorant Garamond',Georgia,serif;color:var(--wd);margin-bottom:20px">${t('hint_onboard_body')}</div><button onclick="dismissHotspotHint()" style="background:var(--gold);color:var(--black);border:none;border-radius:50px;padding:11px 0;font:700 11px var(--fb);letter-spacing:2px;text-transform:uppercase;cursor:pointer;width:100%">${t('hint_onboard_cta')}</button></div>`;
   document.body.appendChild(ov);
   requestAnimationFrame(()=>requestAnimationFrame(()=>{ov.style.opacity='1';}));
 }
@@ -875,7 +875,7 @@ function _showSaveOverlay(blobUrl){
 
   const closeBtn=document.createElement('div');
   closeBtn.textContent='Fermer';
-  closeBtn.style.cssText='margin-top:8px;padding:12px 32px;border:1px solid rgba(240,234,216,.25);border-radius:50px;font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:2px;color:rgba(240,234,216,.6);cursor:pointer';
+  closeBtn.style.cssText='margin-top:8px;padding:12px 32px;border:1px solid rgba(240,234,216,.25);border-radius:50px;font-family:Montserrat,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(240,234,216,.6);cursor:pointer';
   closeBtn.onclick=()=>{ ov.remove(); URL.revokeObjectURL(blobUrl); };
 
   ov.appendChild(img);

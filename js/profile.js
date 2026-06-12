@@ -52,7 +52,7 @@ async function loadProfile(){
   const badgeEl=document.getElementById('my-badges');
   if(badgeEl&&auraBadges.length>0){
     badgeEl.style.display='flex';
-    badgeEl.innerHTML=auraBadges.map(b=>`<div style="background:var(--gold-dim);border:1px solid var(--gold-b);border-radius:50px;padding:5px 12px;font-size:11px;color:var(--gold)">${escapeHtml(b.label)}</div>`).join('');
+    badgeEl.innerHTML=auraBadges.map(b=>`<div style="background:var(--gold-dim);border:1px solid var(--gold-b);border-radius:50px;padding:5px 12px;font-size:12px;color:var(--gold)">${escapeHtml(b.label)}</div>`).join('');
   }
   if(!posts||!posts.length){
     const g=document.getElementById('my-grid');
@@ -74,11 +74,11 @@ async function loadProfile(){
       ${p.image_url?`<span class="pgrid-ph" style="display:none">${_camSvgFb}</span>`:`<span class="pgrid-ph">${_camSvgFb}</span>`}
       <div id="pgrid-like-${p.id}" style="display:${likes>0?'flex':'none'};position:absolute;bottom:8px;right:8px;align-items:center;gap:3px;z-index:4;pointer-events:none">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="white" stroke="none" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,0.8))"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-        <span id="pgrid-like-count-${p.id}" style="font-size:10px;font-weight:700;color:var(--white);text-shadow:0 1px 3px rgba(0,0,0,0.9)">${fmtN(likes)}</span>
+        <span id="pgrid-like-count-${p.id}" style="font-size:11px;font-weight:700;color:var(--white);text-shadow:0 1px 3px rgba(0,0,0,0.9)">${fmtN(likes)}</span>
       </div>
       <div id="pgrid-views-${p.id}" style="display:${views>0?'flex':'none'};position:absolute;bottom:8px;left:8px;align-items:center;gap:3px;z-index:4;pointer-events:none">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,0.8))"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        <span id="pgrid-views-count-${p.id}" style="font-size:10px;font-weight:700;color:var(--white);text-shadow:0 1px 3px rgba(0,0,0,0.9)">${fmtN(views)}</span>
+        <span id="pgrid-views-count-${p.id}" style="font-size:11px;font-weight:700;color:var(--white);text-shadow:0 1px 3px rgba(0,0,0,0.9)">${fmtN(views)}</span>
       </div>
     </div>`;
   }).join('');
@@ -134,8 +134,8 @@ function _showDeletePostConfirm(postId){
       <div style="font-size:12px;color:var(--white)">${t('confirm_delete_look')}</div>
       <div class="txt-xs-dim">${t('confirm_irreversible')}</div>
       <div style="display:flex;gap:8px;margin-top:2px">
-        <div onclick="cancelBackConfirm()" style="padding:6px 16px;border:1px solid var(--gold-b);border-radius:50px;font-size:11px;color:var(--wd);cursor:pointer">Annuler</div>
-        <div onclick="cancelBackConfirm();doDeletePost('${postId}')" style="padding:6px 16px;background:rgba(255,80,80,.85);border-radius:50px;font-size:11px;color:var(--gold-l);font-weight:600;cursor:pointer">Supprimer</div>
+        <div onclick="cancelBackConfirm()" style="padding:6px 16px;border:1px solid var(--gold-b);border-radius:50px;font-size:12px;color:var(--wd);cursor:pointer">Annuler</div>
+        <div onclick="cancelBackConfirm();doDeletePost('${postId}')" style="padding:6px 16px;background:rgba(255,80,80,.85);border-radius:50px;font-size:12px;color:var(--gold-l);font-weight:600;cursor:pointer">Supprimer</div>
       </div>
     </div>`;
   const sab=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sab'))||0;
@@ -269,7 +269,7 @@ async function loadWishlistGrid(){
       </div>
       <div style="text-align:right;flex-shrink:0;align-self:flex-start" onclick="event.stopPropagation()">
         ${v.alt_price?`<div style="font-size:14px;font-weight:500;color:var(--gold-l);margin-bottom:6px">${v.alt_price}€</div>`:''}
-        <button onclick="removeFromWishlist('${v.alt_key.replace(/'/g,'\\\'')}')" style="background:transparent;border:1px solid rgba(255,120,120,0.4);border-radius:var(--r-pill);padding:4px 10px;color:rgba(255,120,120,0.85);font-size:10px;cursor:pointer">Retirer</button>
+        <button onclick="removeFromWishlist('${v.alt_key.replace(/'/g,'\\\'')}')" style="background:transparent;border:1px solid rgba(255,120,120,0.4);border-radius:var(--r-pill);padding:4px 10px;color:rgba(255,120,120,0.85);font-size:11px;cursor:pointer">Retirer</button>
       </div>
     </div>`;
   }).join('');
@@ -320,7 +320,7 @@ async function loadSavedGrid(){
   if(savesErr)console.warn('[loadSavedGrid]',savesErr);
   if(!saves||!saves.length){
     grid.style.display='block';
-    grid.innerHTML=`<div style="padding:48px 20px;text-align:center"><img src="mascote_ivory/le_bibliothecaire.png" alt="" style="display:block;width:60%;max-width:200px;height:auto;margin:0 auto 14px;opacity:.95"><div style="font-size:13px;color:var(--wd);line-height:1.6">${t('no_saved')}</div><div style="font-size:11px;color:var(--wd);opacity:.6;margin-top:5px">${t('saved_hint')}</div></div>`;
+    grid.innerHTML=`<div style="padding:48px 20px;text-align:center"><img src="mascote_ivory/le_bibliothecaire.png" alt="" style="display:block;width:60%;max-width:200px;height:auto;margin:0 auto 14px;opacity:.95"><div style="font-size:13px;color:var(--wd);line-height:1.6">${t('no_saved')}</div><div style="font-size:12px;color:var(--wd);opacity:.6;margin-top:5px">${t('saved_hint')}</div></div>`;
     return;
   }
   const postIds=saves.map(s=>s.post_id);
@@ -764,7 +764,7 @@ function openPieceSheet(h){
   const scoreEco=emp.co2===null?3:emp.co2<3?5:emp.co2<7?4:emp.co2<12?3:emp.co2<20?2:1;
   const ecoLeaves=Array.from({length:5},(_,i)=>`<span style="color:var(--gold);opacity:${i<scoreEco?.9:.15}">${_leafSvg}</span>`).join('');
   const chiffre=emp.eau!==null
-    ?`<div style="font-size:22px;font-weight:300;color:var(--gold);font-family:'Cormorant Garamond',serif">~${emp.eau.toLocaleString()}L</div><div style="font-size:10px;color:var(--wd);letter-spacing:1px">${t('eau_label')} · ${emp.co2}kg CO₂</div>`
+    ?`<div style="font-size:22px;font-weight:300;color:var(--gold);font-family:'Cormorant Garamond',serif">~${emp.eau.toLocaleString()}L</div><div style="font-size:11px;color:var(--wd);letter-spacing:1px">${t('eau_label')} · ${emp.co2}kg CO₂</div>`
     :`<div style="font-size:13px;color:var(--wd)">${t('matiere_unknown')}</div>`;
 
   currentLook={emoji:h.emoji||'',name:h.name,brand:h.brand||'',eco:scoreEco,tags:h.tags||{},postId:h.postId||null};
@@ -780,10 +780,10 @@ function openPieceSheet(h){
   // Section aide communautaire si matière inconnue
   const unknownSection=(matiere==='inconnu'&&h.postId&&h.id)?`
     <div style="margin:0 8px 12px;padding:14px 16px;background:rgba(240,234,216,.06);border:1px solid rgba(240,234,216,.2);border-radius:12px">
-      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px">✦ Aide la communauté</div>
+      <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px">✦ Aide la communauté</div>
       <div style="font-size:12px;color:var(--wd);line-height:1.6;margin-bottom:10px">La matière de cette pièce n'est pas encore identifiée. Aide la communauté et gagne des <strong class="c-gold">points Aura</strong> !</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap">
-        ${['Coton','Lin','Laine','Soie','Cuir','Denim','Synthétique','Recyclé'].map(m=>`<div onclick="suggestMaterial('${h.postId}','${h.id}','${m.toLowerCase()}')" style="padding:5px 12px;border:1px solid var(--gold-b);border-radius:50px;font-size:11px;color:var(--wd);cursor:pointer;transition:background .2s" onmouseover="this.style.background='rgba(240,234,216,.15)'" onmouseout="this.style.background='transparent'">${m}</div>`).join('')}
+        ${['Coton','Lin','Laine','Soie','Cuir','Denim','Synthétique','Recyclé'].map(m=>`<div onclick="suggestMaterial('${h.postId}','${h.id}','${m.toLowerCase()}')" style="padding:5px 12px;border:1px solid var(--gold-b);border-radius:50px;font-size:12px;color:var(--wd);cursor:pointer;transition:background .2s" onmouseover="this.style.background='rgba(240,234,216,.15)'" onmouseout="this.style.background='transparent'">${m}</div>`).join('')}
       </div>
     </div>`:'';
 
@@ -791,15 +791,15 @@ function openPieceSheet(h){
     <div style="padding:0 8px 16px">
       <div style="font-size:13px;color:var(--wd);margin-bottom:2px">${escapeHtml(h.brand||'—')}</div>
       ${h.price?`<div style="font-size:16px;color:var(--gold-l);font-weight:500">${escapeHtml(h.price)}</div>`:''}
-      ${matiere!=='inconnu'?`<div style="font-size:11px;color:var(--wd);margin-top:4px;letter-spacing:.5px">${t('matiere_prefix')} : ${escapeHtml(emp.label)}</div>`:''}
+      ${matiere!=='inconnu'?`<div style="font-size:12px;color:var(--wd);margin-top:4px;letter-spacing:.5px">${t('matiere_prefix')} : ${escapeHtml(emp.label)}</div>`:''}
     </div>
     <div style="margin:0 8px 16px;background:var(--black-3);border-radius:12px;padding:14px 16px;border:1px solid var(--gold-b)">
-      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px">${t('empreinte_titre')}</div>
+      <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px">${t('empreinte_titre')}</div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
         <div>${chiffre}</div>
         <div style="text-align:center"><div style="margin-bottom:4px">${ecoLeaves}</div><div style="font-size:9px;color:var(--wd);letter-spacing:1px">${t('score_eco')}</div></div>
       </div>
-      <div style="font-size:11px;color:var(--wd);line-height:1.6;border-top:1px solid rgba(240,234,216,.1);padding-top:8px;font-style:italic">${emp.info}</div>
+      <div style="font-size:12px;color:var(--wd);line-height:1.6;border-top:1px solid rgba(240,234,216,.1);padding-top:8px;font-style:italic">${emp.info}</div>
       <div style="font-size:9px;color:rgba(245,240,232,.3);margin-top:6px;letter-spacing:.5px">${t('donnees_estim')}</div>
     </div>
     ${unknownSection}
@@ -832,9 +832,9 @@ function openLookComplet(look){
 
   document.getElementById('look-products').innerHTML=`
     <div class="p-inner">
-      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px">${pieces.length} ${pieces.length>1?t('pieces_identifiees'):t('piece_identifiee')}</div>
+      <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px">${pieces.length} ${pieces.length>1?t('pieces_identifiees'):t('piece_identifiee')}</div>
       <div style="display:flex;flex-direction:column;gap:8px">${piecesHTML}</div>
-      <div style="margin-top:12px;padding:10px;background:var(--black-3);border-radius:10px;border:1px solid rgba(240,234,216,.1);text-align:center"><div style="font-size:11px;color:var(--wd);letter-spacing:.5px">${t('click_piece')}</div></div>
+      <div style="margin-top:12px;padding:10px;background:var(--black-3);border-radius:10px;border:1px solid rgba(240,234,216,.1);text-align:center"><div style="font-size:12px;color:var(--wd);letter-spacing:.5px">${t('click_piece')}</div></div>
     </div>`;
 
   document.getElementById('overlay').classList.add('show');
@@ -888,7 +888,7 @@ function openSingleProduct(hspotData) {
   let descHtml = '';
   if (item.brand)   descHtml += `<div style="font-size:13px;color:var(--gold);font-weight:500;margin-bottom:4px">${escapeHtml(item.brand)}</div>`;
   if (item.price)   descHtml += `<div style="font-size:18px;color:var(--gold-l);font-weight:600;margin-bottom:8px">${escapeHtml(item.price)}</div>`;
-  if (item.matiere) descHtml += `<div style="font-size:11px;color:var(--wd);margin-bottom:4px">Matière : ${escapeHtml(item.matiere)}</div>`;
+  if (item.matiere) descHtml += `<div style="font-size:12px;color:var(--wd);margin-bottom:4px">Matière : ${escapeHtml(item.matiere)}</div>`;
   if (item.ref)     descHtml += `<div class="txt-xs-dim">${escapeHtml(item.ref)}</div>`;
   desc.innerHTML = descHtml || '';
   document.getElementById('look-products').innerHTML = `
@@ -930,7 +930,7 @@ function openHotspotDetail(postId,idx,isDemo){
       <div class="look-item-price">${escapeHtml(h.price||'')}</div>
     </div>
     <div style="margin-top:12px">
-      <button class="btn" style="font-size:11px;letter-spacing:2px"
+      <button class="btn" style="font-size:12px;letter-spacing:2px"
         onclick="openAlt(currentLook);closeAll()">
         ${t('find_alt')}
       </button>
@@ -1334,14 +1334,14 @@ function renderAltTabLive(type = 'ethique') {
       </div>
       <div style="text-align:right;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:4px">
         <div style="font-size:14px;font-weight:500;color:var(--gold-l)">${a.prix ? a.prix+'€' : '—'}</div>
-        ${typeof a._match==='number'?`<div style="font-size:10px;font-weight:600;color:${a._match>=60?'#7dc97d':a._match>=30?'#D4AF6F':'var(--wd)'};letter-spacing:.3px">${a._match}% match</div>`:''}
+        ${typeof a._match==='number'?`<div style="font-size:11px;font-weight:600;color:${a._match>=60?'#7dc97d':a._match>=30?'#D4AF6F':'var(--wd)'};letter-spacing:.3px">${a._match}% match</div>`:''}
         <div style="font-size:9px;letter-spacing:1px;color:var(--wd);text-transform:uppercase">${t('voir_arrow')}</div>
         <div onclick="event.stopPropagation();voteAlt('${aKey.replace(/'/g,'\\\'')}','${(a.marque||'').replace(/'/g,'\\\'')}', '${a.type||''}', 'up', this)" class="alt-heart ${userVote==='up'?'active':''}" data-key="${aKey.replace(/'/g,'\\\'')}" style="cursor:pointer;padding:4px;margin-top:2px">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="${userVote==='up'?'#1E4FD8':'none'}" stroke="${userVote==='up'?'#1E4FD8':'var(--wd)'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:fill 150ms cubic-bezier(0.23,1,0.32,1),stroke 150ms cubic-bezier(0.23,1,0.32,1)"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </div>
       </div>
     </div>`;
-  }).join('') + `<div style="text-align:center;font-size:10px;color:var(--wd);opacity:.5;margin-top:8px;padding-bottom:8px">${t('donnees_estim')}</div>`;
+  }).join('') + `<div style="text-align:center;font-size:11px;color:var(--wd);opacity:.5;margin-top:8px;padding-bottom:8px">${t('donnees_estim')}</div>`;
 }
 
 // Compatibilité — NE PAS SUPPRIMER (règle absolue WearAura)
@@ -1601,13 +1601,13 @@ function aiTestSwitchMode(mode){
   const cloudTab=document.getElementById('ai-mode-cloud');
   if(mode==='rect'){
     rectTab.classList.add('active');cloudTab.classList.remove('active');
-    rectTab.style.cssText='flex:1;text-align:center;padding:8px;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--black);background:var(--gold);border-radius:var(--r-pill);cursor:pointer;font-weight:600';
-    cloudTab.style.cssText='flex:1;text-align:center;padding:8px;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--wd);cursor:pointer';
+    rectTab.style.cssText='flex:1;text-align:center;padding:8px;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--black);background:var(--gold);border-radius:var(--r-pill);cursor:pointer;font-weight:600';
+    cloudTab.style.cssText='flex:1;text-align:center;padding:8px;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--wd);cursor:pointer';
     document.getElementById('ai-test-hint').textContent=t('hotspot_hint_zone');
   }else{
     cloudTab.classList.add('active');rectTab.classList.remove('active');
-    cloudTab.style.cssText='flex:1;text-align:center;padding:8px;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--black);background:var(--gold);border-radius:var(--r-pill);cursor:pointer;font-weight:600';
-    rectTab.style.cssText='flex:1;text-align:center;padding:8px;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--wd);cursor:pointer';
+    cloudTab.style.cssText='flex:1;text-align:center;padding:8px;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--black);background:var(--gold);border-radius:var(--r-pill);cursor:pointer;font-weight:600';
+    rectTab.style.cssText='flex:1;text-align:center;padding:8px;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--wd);cursor:pointer';
     document.getElementById('ai-test-hint').textContent=t('hotspot_hint_points');
   }
 }
@@ -1971,7 +1971,7 @@ function renderFollowTab(){
     return `<div onclick="closeFollowList();openUserProfile('${p.id}')" class="list-row">
       <div style="width:44px;height:44px;border-radius:50%;background:var(--black-3);overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(240,234,216,0.15)">${av}</div>
       <div class="flex-min">
-        <div style="display:flex;align-items:center;gap:6px"><span class="txt-sm-ellipsis">${escapeHtml(p.username||'utilisateur')}</span>${showFollowBackBadge?'<span style="font-size:10px;color:var(--gold);white-space:nowrap">· Suivre en retour</span>':''}</div>
+        <div style="display:flex;align-items:center;gap:6px"><span class="txt-sm-ellipsis">${escapeHtml(p.username||'utilisateur')}</span>${showFollowBackBadge?'<span style="font-size:11px;color:var(--gold);white-space:nowrap">· Suivre en retour</span>':''}</div>
         <div class="txt-xs-ellipsis">${escapeHtml(p.full_name||'')}</div>
       </div>
       <div style="display:flex;gap:6px;flex-shrink:0">${btns}</div>
@@ -2401,7 +2401,7 @@ async function openBlockedUsers(){
           <div style="font-size:13px;color:var(--white);overflow:hidden;text-overflow:ellipsis">${escapeHtml(p.full_name||p.username||'Utilisateur')}</div>
           <div class="txt-xs-dim">${escapeHtml(p.username||'')}</div>
         </div>
-        <button onclick="unblockUser('${b.blocked_id}')" style="background:transparent;border:1px solid var(--gold-b);border-radius:var(--r-pill);padding:5px 12px;color:var(--gold);font-size:10px;letter-spacing:.5px;cursor:pointer">${t('unblock_btn')}</button>
+        <button onclick="unblockUser('${b.blocked_id}')" style="background:transparent;border:1px solid var(--gold-b);border-radius:var(--r-pill);padding:5px 12px;color:var(--gold);font-size:11px;letter-spacing:.5px;cursor:pointer">${t('unblock_btn')}</button>
       </div>`;
     }).join('');
   }catch(e){list.innerHTML='<div style="font-size:12px;color:var(--wd);padding:14px 0;text-align:center">Erreur de chargement</div>';}
@@ -2452,8 +2452,8 @@ async function renderSharedPostInBubble(msgId,postId){
         ${post.image_url?`<img src="${post.image_url}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;opacity:.5">${_camSvgFb}</div>`}
       </div>
       <div style="padding:7px 9px;background:var(--black-3)">
-        <div style="font-size:11px;font-weight:600;color:var(--white);margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml((post.caption||'Post').slice(0,32))}</div>
-        <div style="font-size:10px;color:var(--gold);margin-bottom:5px">@${escapeHtml(post.username)}</div>
+        <div style="font-size:12px;font-weight:600;color:var(--white);margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml((post.caption||'Post').slice(0,32))}</div>
+        <div style="font-size:11px;color:var(--gold);margin-bottom:5px">@${escapeHtml(post.username)}</div>
         <div style="display:flex;align-items:center;justify-content:space-between;gap:6px">
           <span style="display:inline-block;font-size:8px;letter-spacing:.5px;text-transform:uppercase;background:rgba(240,234,216,0.1);border:1px solid rgba(240,234,216,0.25);color:rgba(240,234,216,0.7);padding:1px 5px;border-radius:3px">Post</span>
           <span style="font-size:8px;letter-spacing:.8px;color:var(--gold);text-transform:uppercase">Voir →</span>

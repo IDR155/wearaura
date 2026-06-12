@@ -124,10 +124,10 @@ function showBackConfirm(){
   toastEl.innerHTML=`
     <div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:4px 0">
       <div style="font-size:12px;color:var(--white)">${t('back_to_cam')}</div>
-      <div style="font-size:11px;color:var(--wd)">${t('photo_lost')}</div>
+      <div style="font-size:12px;color:var(--wd)">${t('photo_lost')}</div>
       <div style="display:flex;gap:8px;margin-top:2px">
-        <div onclick="cancelBackConfirm()" style="padding:6px 16px;border:1px solid var(--gold-b);border-radius:50px;font-size:11px;color:var(--wd);cursor:pointer">${t('annuler')}</div>
-        <div onclick="confirmGoBack()" style="padding:6px 16px;background:var(--gold);border-radius:50px;font-size:11px;color:var(--black);font-weight:600;cursor:pointer">${t('retour')}</div>
+        <div onclick="cancelBackConfirm()" style="padding:6px 16px;border:1px solid var(--gold-b);border-radius:50px;font-size:12px;color:var(--wd);cursor:pointer">${t('annuler')}</div>
+        <div onclick="confirmGoBack()" style="padding:6px 16px;background:var(--gold);border-radius:50px;font-size:12px;color:var(--black);font-weight:600;cursor:pointer">${t('retour')}</div>
       </div>
     </div>`;
   const sab=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sab'))||0;

@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://whaxwmztbkgnfokuqlcc.supabase.co">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-<link rel="stylesheet" href="app.css?v=16">
+<link rel="stylesheet" href="app.css?v=17">
 </head>
 <body>
 <div class="phone" id="phone">
@@ -157,7 +157,7 @@
     </div>
   </div>
   <!-- Grille explorer (par défaut) -->
-  <div id="exp-location-label" style="display:none;padding:4px 16px;font-size:11px;color:var(--gold);letter-spacing:1px"></div>
+  <div id="exp-location-label" style="display:none;padding:4px 16px;font-size:12px;color:var(--gold);letter-spacing:1px"></div>
   <div id="exp-grid" class="exp-grid"></div>
   <!-- Résultats recherche (actif pendant la saisie) -->
   <div id="srch-results" aria-live="polite" aria-atomic="false" style="display:none;flex:1;overflow-y:auto;scrollbar-width:none;padding-bottom:20px">
@@ -316,25 +316,25 @@
           <div style="display:flex;align-items:center;justify-content:center;gap:5px;margin-bottom:8px">
             <div class="zoom-btn" data-zoom="0.5" onclick="setZoomLevel(0.5,this)"
               style="padding:5px 12px;border-radius:50px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:rgba(255,255,255,.6);background:transparent;cursor:pointer;transition:transform 130ms,background-color 130ms,color 130ms;min-width:40px;text-align:center">
-              .5<span style="font-size:10px">x</span>
+              .5<span style="font-size:11px">x</span>
             </div>
             <div class="zoom-btn active-zoom" data-zoom="1" onclick="setZoomLevel(1,this)"
               style="padding:5px 12px;border-radius:50px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#EDE4CF;background:rgba(0,0,0,.5);cursor:pointer;transition:transform 130ms,background-color 130ms,color 130ms;min-width:40px;text-align:center">
-              1<span style="font-size:10px">x</span>
+              1<span style="font-size:11px">x</span>
             </div>
             <div class="zoom-btn" data-zoom="2" onclick="setZoomLevel(2,this)"
               style="padding:5px 12px;border-radius:50px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:rgba(255,255,255,.6);background:transparent;cursor:pointer;transition:transform 130ms,background-color 130ms,color 130ms;min-width:40px;text-align:center">
-              2<span style="font-size:10px">x</span>
+              2<span style="font-size:11px">x</span>
             </div>
             <div class="zoom-btn" data-zoom="3" onclick="setZoomLevel(3,this)"
               style="padding:5px 12px;border-radius:50px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:rgba(255,255,255,.6);background:transparent;cursor:pointer;transition:transform 130ms,background-color 130ms,color 130ms;min-width:40px;text-align:center">
-              3<span style="font-size:10px">x</span>
+              3<span style="font-size:11px">x</span>
             </div>
           </div>
           <!-- Label zoom courant + mm -->
           <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:4px">
             <div id="zoom-dial-label" style="color:var(--gold);font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;letter-spacing:0.3px;line-height:1;text-shadow:0 1px 6px rgba(0,0,0,.5)">1x</div>
-            <div id="zoom-dial-mm" style="color:rgba(255,255,255,0.5);font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:2.5px;margin-top:2px;text-shadow:0 1px 4px rgba(0,0,0,.6)">24MM</div>
+            <div id="zoom-dial-mm" style="color:rgba(255,255,255,0.5);font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2.5px;margin-top:2px;text-shadow:0 1px 4px rgba(0,0,0,.6)">24MM</div>
           </div>
           <!-- Arc dial canvas -->
           <canvas id="zoom-dial-canvas" style="width:100%;height:62px;display:block;touch-action:none;cursor:grab"></canvas>
@@ -387,13 +387,13 @@
           <div style="font-size:13px;color:rgba(245,240,232,.5);text-align:center;line-height:1.7;padding:0 16px;margin-bottom:8px">
             <span id="cam-fallback-msg" data-i18n="cam_fallback_msg">WearAura a besoin de ta caméra pour créer un post.</span>
           </div>
-          <div id="cam-fallback-sub" style="font-size:11px;color:rgba(245,240,232,.3);text-align:center;line-height:1.6;padding:0 24px;margin-bottom:28px" data-i18n="cam_settings">Autorise l'accès dans les paramètres de ton navigateur</div>
+          <div id="cam-fallback-sub" style="font-size:12px;color:rgba(245,240,232,.3);text-align:center;line-height:1.6;padding:0 24px;margin-bottom:28px" data-i18n="cam_settings">Autorise l'accès dans les paramètres de ton navigateur</div>
           <!-- CTA principal : demander permission -->
-          <div onclick="requestCamPermission()" data-i18n="cam_allow_btn" style="width:100%;max-width:280px;background:var(--white);border:none;border-radius:50px;padding:15px 28px;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;font-weight:600;color:#07101E;cursor:pointer;text-align:center;margin-bottom:12px">
+          <div onclick="requestCamPermission()" data-i18n="cam_allow_btn" style="width:100%;max-width:280px;background:var(--white);border:none;border-radius:50px;padding:15px 28px;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:2px;font-weight:600;color:#07101E;cursor:pointer;text-align:center;margin-bottom:12px">
             Autoriser la caméra
           </div>
           <!-- Fallback galerie -->
-          <div onclick="document.getElementById('file-in').click()" style="width:100%;max-width:280px;background:transparent;border:1.5px solid rgba(240,234,216,.2);border-radius:50px;padding:14px 28px;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;font-weight:600;color:rgba(240,234,216,.6);cursor:pointer;text-align:center">
+          <div onclick="document.getElementById('file-in').click()" style="width:100%;max-width:280px;background:transparent;border:1.5px solid rgba(240,234,216,.2);border-radius:50px;padding:14px 28px;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:2px;font-weight:600;color:rgba(240,234,216,.6);cursor:pointer;text-align:center">
             <span data-i18n="cam_gallery">Choisir depuis la galerie</span>
           </div>
         </div>
@@ -436,7 +436,7 @@
         <!-- Overlay capture couleur -->
         <div id="color-capture-overlay"
           style="display:none;position:absolute;inset:0;z-index:25;cursor:crosshair;touch-action:none;border-radius:var(--r)">
-          <div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);border-radius:50px;padding:7px 16px;font-size:11px;color:white;letter-spacing:.5px;white-space:nowrap;backdrop-filter:blur(8px);z-index:2" data-i18n="color_tap">
+          <div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);border-radius:50px;padding:7px 16px;font-size:12px;color:white;letter-spacing:.5px;white-space:nowrap;backdrop-filter:blur(8px);z-index:2" data-i18n="color_tap">
             Tape sur la couleur à capturer
           </div>
           <div id="cc-loupe" style="display:none;position:absolute;width:70px;height:70px;border-radius:50%;border:3px solid white;box-shadow:0 4px 16px rgba(0,0,0,.5);overflow:hidden;pointer-events:none;transform:translate(-50%,-130%)">
@@ -449,12 +449,12 @@
           <div id="cc-bubble" style="display:none;position:absolute;pointer-events:none;transform:translate(-50%,-220%)">
             <div style="background:rgba(0,0,0,.85);border-radius:8px;padding:5px 10px;display:flex;align-items:center;gap:7px;backdrop-filter:blur(8px)">
               <div id="cc-bubble-swatch" style="width:14px;height:14px;border-radius:3px;border:1px solid rgba(255,255,255,.3)"></div>
-              <span id="cc-bubble-name" style="font-size:10px;color:white;font-family:'Montserrat',sans-serif"></span>
+              <span id="cc-bubble-name" style="font-size:11px;color:white;font-family:'Montserrat',sans-serif"></span>
             </div>
             <div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid rgba(0,0,0,.85);margin:0 auto"></div>
           </div>
           <div onclick="cancelColorCapture()" data-i18n="annuler"
-            style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.3);border-radius:50px;padding:8px 20px;font-size:11px;color:white;cursor:pointer;letter-spacing:.5px;backdrop-filter:blur(8px)">
+            style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.3);border-radius:50px;padding:8px 20px;font-size:12px;color:white;cursor:pointer;letter-spacing:.5px;backdrop-filter:blur(8px)">
             Annuler
           </div>
         </div>
@@ -470,7 +470,7 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--wd)" stroke-width="2" stroke-linecap="round" style="opacity:.5"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
       <div style="margin:0 20px 10px;display:flex;gap:10px">
-        <button onclick="addHspot()" data-i18n="add_hotspot" style="flex:1;background:var(--gold-dim);border:1px solid var(--gold);border-radius:50px;padding:10px;font-family:var(--fb);font-size:10px;letter-spacing:2px;color:var(--gold);cursor:pointer">＋ Ajouter hotspot</button>
+        <button onclick="addHspot()" data-i18n="add_hotspot" style="flex:1;background:var(--gold-dim);border:1px solid var(--gold);border-radius:50px;padding:10px;font-family:var(--fb);font-size:11px;letter-spacing:2px;color:var(--gold);cursor:pointer">＋ Ajouter hotspot</button>
         <button id="redetect-btn-2" onclick="redetectHspots()" aria-label="Relancer la détection IA"
           style="width:42px;height:42px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--gold-b);border-radius:50%;cursor:pointer;transition:background .2s">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -483,19 +483,19 @@
             <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
           </svg>
         </button>
-        <button onclick="clearHspots()" data-i18n="clear_all" style="background:transparent;border:1px solid rgba(255,80,80,.3);border-radius:50px;padding:10px 14px;font-family:var(--fb);font-size:10px;letter-spacing:1px;color:rgba(255,80,80,.7);cursor:pointer">Tout effacer</button>
+        <button onclick="clearHspots()" data-i18n="clear_all" style="background:transparent;border:1px solid rgba(255,80,80,.3);border-radius:50px;padding:10px 14px;font-family:var(--fb);font-size:11px;letter-spacing:1px;color:rgba(255,80,80,.7);cursor:pointer">Tout effacer</button>
       </div>
       <div id="hspot-edit" style="display:none;margin:0 20px 10px;background:var(--black-3);border:1px solid var(--gold-b);border-radius:var(--r);padding:16px">
-        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:7px">
+        <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:7px">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           <span data-i18n="hotspot_selected_label">Hotspot sélectionné</span>
         </div>
         <div class="fg"><label class="fl" data-i18n="product_name">Nom du produit</label><input class="fi" type="text" id="hs-name" placeholder="ex: Veste oversize" oninput="updateHspot();scheduleTypeDetect();aiHspotHideSuggestion()"></div>
-        <div id="ai-hspot-suggestion" style="display:none;margin-top:-6px;margin-bottom:10px;padding:8px 12px;background:rgba(240,234,216,0.06);border:1px solid rgba(240,234,216,0.15);border-radius:10px;font-size:11px;color:var(--wd);display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <div id="ai-hspot-suggestion" style="display:none;margin-top:-6px;margin-bottom:10px;padding:8px 12px;background:rgba(240,234,216,0.06);border:1px solid rgba(240,234,216,0.15);border-radius:10px;font-size:12px;color:var(--wd);display:flex;align-items:center;gap:8px;flex-wrap:wrap">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/></svg>
           <span>Suggestion IA :</span>
-          <button type="button" id="ai-hspot-chip" onclick="aiHspotApplySuggestion()" style="background:var(--gold-dim);border:1px solid var(--gold);color:var(--gold);padding:4px 10px;border-radius:50px;font-size:11px;font-family:var(--fb);cursor:pointer">…</button>
-          <span id="ai-hspot-confidence" style="font-size:10px;color:var(--wd);opacity:.6"></span>
+          <button type="button" id="ai-hspot-chip" onclick="aiHspotApplySuggestion()" style="background:var(--gold-dim);border:1px solid var(--gold);color:var(--gold);padding:4px 10px;border-radius:50px;font-size:12px;font-family:var(--fb);cursor:pointer">…</button>
+          <span id="ai-hspot-confidence" style="font-size:11px;color:var(--wd);opacity:.6"></span>
           <button type="button" aria-label="Fermer la suggestion" onclick="aiHspotHideSuggestion(true)" style="background:transparent;border:none;color:var(--wd);cursor:pointer;margin-left:auto;padding:4px;display:flex;align-items:center;justify-content:center;border-radius:4px">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
@@ -518,17 +518,17 @@
           </div>
           <div style="display:flex;justify-content:space-between;margin-top:6px">
             <span class="txt-xxs-label" data-i18n="hs_secondary">Secondaire</span>
-            <span id="hs-size-label" style="font-size:10px;color:var(--gold);letter-spacing:1px;font-weight:600">Normale</span>
+            <span id="hs-size-label" style="font-size:11px;color:var(--gold);letter-spacing:1px;font-weight:600">Normale</span>
             <span class="txt-xxs-label" data-i18n="hs_primary">Principale</span>
           </div>
         </div>
         <!-- ── LEAN VISION PAR PIÈCE ── -->
         <div style="border-top:1px solid rgba(240,234,216,.15);margin-top:10px;padding-top:12px">
-          <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:flex;align-items:center;gap:6px">
+          <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:flex;align-items:center;gap:6px">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/></svg>
-            <span data-i18n="lean_vision_label">Lean Vision</span> <span style="opacity:.5;font-size:10px">(tourne sur ton appareil)</span>
+            <span data-i18n="lean_vision_label">Lean Vision</span> <span style="opacity:.5;font-size:11px">(tourne sur ton appareil)</span>
           </div>
-          <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:5px;display:flex;align-items:center;gap:6px">Type <span id="hs-type-auto" style="display:none;font-size:10px;opacity:.5;text-transform:none;letter-spacing:0"></span></div>
+          <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:5px;display:flex;align-items:center;gap:6px">Type <span id="hs-type-auto" style="display:none;font-size:11px;opacity:.5;text-transform:none;letter-spacing:0"></span></div>
           <div id="hs-chips-type" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">
             <div class="hs-chip" data-i18n="blazer" onclick="selectHsChip(this,'type','blazer')">Blazer</div>
             <div class="hs-chip" data-i18n="veste" onclick="selectHsChip(this,'type','veste')">Veste</div>
@@ -553,7 +553,7 @@
               style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;cursor:pointer;transition:background .2s">
               <div style="display:flex;align-items:center;gap:8px">
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="10" r="1.5" fill="var(--gold)"/><circle cx="16" cy="10" r="1.5" fill="var(--gold)"/><path d="M8.5 15a5 5 0 0 0 7 0"/></svg>
-                <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold)" data-i18n="color_section">Couleur</span>
+                <span style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold)" data-i18n="color_section">Couleur</span>
                 <div id="couleur-pills-summary" style="display:flex;gap:4px"></div>
               </div>
               <svg id="couleur-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--wd)" stroke-width="2" stroke-linecap="round" style="transition:transform .2s;transform:rotate(0deg)">
@@ -572,7 +572,7 @@
                 </div>
                 <span class="label-xs" data-i18n="add_color">Ajouter une couleur</span>
               </div>
-              <div id="color-capture-hint" data-i18n="color_tap2" style="display:none;margin-top:8px;font-size:10px;color:var(--wd);text-align:center;letter-spacing:.5px;opacity:.7">
+              <div id="color-capture-hint" data-i18n="color_tap2" style="display:none;margin-top:8px;font-size:11px;color:var(--wd);text-align:center;letter-spacing:.5px;opacity:.7">
                 Tape sur la zone de la photo à capturer
               </div>
             </div>
@@ -580,7 +580,7 @@
           <!-- Matière — révélée après sélection du type (progressive disclosure) -->
           <div id="hs-section-matiere" class="hs-section-reveal">
             <div style="height:1px;background:rgba(240,234,216,0.1);margin:8px 0 10px"></div>
-            <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:5px" data-i18n="matiere_section">Matière</div>
+            <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:5px" data-i18n="matiere_section">Matière</div>
             <div id="hs-chips-matiere" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:4px">
               <div class="hs-chip" data-i18n="coton" onclick="selectHsChip(this,'matiere','coton')">Coton</div>
               <div class="hs-chip" data-i18n="lin" onclick="selectHsChip(this,'matiere','lin')">Lin</div>
@@ -594,13 +594,13 @@
               <div class="hs-chip" data-i18n="inconnu" onclick="selectHsChipUnknown(this)" style="display:inline-flex;align-items:center;gap:5px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span data-i18n="inconnu">Je sais pas</span></div>
             </div>
             <div id="hs-unknown-hint" style="display:none;margin-top:8px;padding:10px 12px;background:rgba(240,234,216,.08);border:1px solid rgba(240,234,216,.2);border-radius:10px">
-              <div style="font-size:10px;color:var(--gold);margin-bottom:4px" data-i18n="community_help">🌿 La communauté va t'aider !</div>
-              <div style="font-size:11px;color:var(--wd);line-height:1.5">Quand tu publies ce look, les membres de WearAura peuvent identifier la matière et gagner des <strong class="c-gold">points Aura ✦</strong>.</div>
+              <div style="font-size:11px;color:var(--gold);margin-bottom:4px" data-i18n="community_help">🌿 La communauté va t'aider !</div>
+              <div style="font-size:12px;color:var(--wd);line-height:1.5">Quand tu publies ce look, les membres de WearAura peuvent identifier la matière et gagner des <strong class="c-gold">points Aura ✦</strong>.</div>
             </div>
           </div>
         </div>
         <!-- ── FIN LEAN VISION ── -->
-        <button onclick="deleteHspot()" style="margin-top:12px;width:100%;background:transparent;border:1px solid rgba(255,80,80,.3);border-radius:50px;padding:8px;font-family:var(--fb);font-size:10px;letter-spacing:1px;color:rgba(255,80,80,.7);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px">
+        <button onclick="deleteHspot()" style="margin-top:12px;width:100%;background:transparent;border:1px solid rgba(255,80,80,.3);border-radius:50px;padding:8px;font-family:var(--fb);font-size:11px;letter-spacing:1px;color:rgba(255,80,80,.7);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
           <span data-i18n="delete_hotspot">Supprimer</span>
         </button>
@@ -623,7 +623,7 @@
         </div>
         <!-- ── LEAN VISION — Style global du look ── -->
         <div class="mb-14">
-          <label class="fl" style="margin-bottom:8px;display:flex;align-items:center;gap:5px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/></svg><span data-i18n="style_look_label">Style du look</span> <span style="font-size:10px;opacity:.5;letter-spacing:1px">(global)</span></label>
+          <label class="fl" style="margin-bottom:8px;display:flex;align-items:center;gap:5px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/></svg><span data-i18n="style_look_label">Style du look</span> <span style="font-size:11px;opacity:.5;letter-spacing:1px">(global)</span></label>
           <div id="chips-style" class="tags-wrap">
             <div class="tag-chip" data-i18n="casual" onclick="selectChip(this,'style','casual')">Casual</div>
             <div class="tag-chip" data-i18n="chic" onclick="selectChip(this,'style','chic')">Chic</div>
@@ -760,7 +760,7 @@
           </div>
           <!-- Boutons en bas -->
           <div style="display:flex;gap:8px">
-            <button class="prof-btn-edit" style="flex:1;border-radius:10px;padding:10px 0;font-size:11px;border-color:var(--gold-b);color:var(--gold);display:flex;align-items:center;justify-content:center;gap:6px" onclick="openEditProfile()">
+            <button class="prof-btn-edit" style="flex:1;border-radius:10px;padding:10px 0;font-size:12px;border-color:var(--gold-b);color:var(--gold);display:flex;align-items:center;justify-content:center;gap:6px" onclick="openEditProfile()">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
               <span data-i18n="modifier">Modifier</span>
             </button>
@@ -886,7 +886,7 @@
         <div class="pref-chip" data-val="XXL" onclick="toggleEpChip(this,'sizes')">XXL</div>
       </div>
       <div data-i18n="my_styles_label" class="label-gold">Mes styles préférés</div>
-      <div data-i18n="max_three_hint" style="font-size:10px;color:var(--wd);margin-bottom:8px">Jusqu'à 3</div>
+      <div data-i18n="max_three_hint" style="font-size:11px;color:var(--wd);margin-bottom:8px">Jusqu'à 3</div>
       <div class="tags-wrap-mb" id="ep-styles-list">
         <div data-i18n="style_minimalist" class="pref-chip" data-val="minimaliste" onclick="toggleEpChip(this,'styles',3)">Minimaliste</div>
         <div data-i18n="style_vintage" class="pref-chip" data-val="vintage" onclick="toggleEpChip(this,'styles',3)">Vintage</div>
@@ -914,7 +914,7 @@
       </div>
     </div>
     <div id="private-info-box" style="display:none;margin:0 20px 16px;background:rgba(240,234,216,.06);border:1px solid var(--gold-b);border-radius:12px;padding:12px 14px">
-      <div style="font-size:11px;color:var(--gold);font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:5px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Compte privé activé</div>
+      <div style="font-size:12px;color:var(--gold);font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:5px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Compte privé activé</div>
       <div class="txt-xs-body">Seuls tes abonnés approuvés peuvent voir tes posts. Les nouvelles personnes devront envoyer une demande d'abonnement.</div>
     </div>
 
@@ -1013,8 +1013,8 @@
     <div id="ai-test-panel" style="display:none;padding:14px 20px 20px;background:var(--black-3);border-bottom:1px solid var(--gold-b)">
       <!-- Mode switcher -->
       <div style="display:flex;background:rgba(255,255,255,0.04);border:1px solid rgba(240,234,216,0.12);border-radius:var(--r-pill);padding:3px;gap:2px;margin-bottom:12px">
-        <div id="ai-mode-rect" class="ai-mode-tab active" onclick="aiTestSwitchMode('rect')" style="flex:1;text-align:center;padding:8px;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--black);background:var(--gold);border-radius:var(--r-pill);cursor:pointer;font-weight:600">📦 Zone</div>
-        <div id="ai-mode-cloud" class="ai-mode-tab" onclick="aiTestSwitchMode('cloud')" style="flex:1;text-align:center;padding:8px;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--wd);cursor:pointer">✨ Nuage de points</div>
+        <div id="ai-mode-rect" class="ai-mode-tab active" onclick="aiTestSwitchMode('rect')" style="flex:1;text-align:center;padding:8px;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--black);background:var(--gold);border-radius:var(--r-pill);cursor:pointer;font-weight:600">📦 Zone</div>
+        <div id="ai-mode-cloud" class="ai-mode-tab" onclick="aiTestSwitchMode('cloud')" style="flex:1;text-align:center;padding:8px;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--wd);cursor:pointer">✨ Nuage de points</div>
       </div>
       <div id="ai-test-hint" class="txt-xs-dim-mb">Tape sur le vêtement pour délimiter automatiquement la zone. Tu peux ajuster les coins.</div>
       <div id="ai-test-img-wrap" style="position:relative;width:100%;aspect-ratio:3/4;background:#000;border-radius:12px;overflow:hidden;margin-bottom:12px;cursor:crosshair;user-select:none;touch-action:none">
@@ -1029,15 +1029,15 @@
         <div id="ai-test-cloud-overlay" class="overlay-ghost"></div>
       </div>
       <div id="ai-test-btn-row" style="display:none;gap:8px;margin-bottom:12px">
-        <button id="ai-test-detect-btn" onclick="aiTestDetect()" style="flex:1;padding:12px;background:var(--gold);color:var(--black);border:none;border-radius:var(--r-pill);font-family:var(--fb);font-size:11px;font-weight:600;letter-spacing:1px;cursor:pointer">Détecter</button>
-        <button id="ai-test-clear-btn" onclick="aiTestClearPoints()" style="padding:12px 16px;background:transparent;color:rgba(255,120,120,0.85);border:1px solid rgba(255,120,120,0.4);border-radius:var(--r-pill);font-family:var(--fb);font-size:10px;letter-spacing:1px;cursor:pointer">Effacer</button>
+        <button id="ai-test-detect-btn" onclick="aiTestDetect()" style="flex:1;padding:12px;background:var(--gold);color:var(--black);border:none;border-radius:var(--r-pill);font-family:var(--fb);font-size:12px;font-weight:600;letter-spacing:1px;cursor:pointer">Détecter</button>
+        <button id="ai-test-clear-btn" onclick="aiTestClearPoints()" style="padding:12px 16px;background:transparent;color:rgba(255,120,120,0.85);border:1px solid rgba(255,120,120,0.4);border-radius:var(--r-pill);font-family:var(--fb);font-size:11px;letter-spacing:1px;cursor:pointer">Effacer</button>
       </div>
-      <div id="ai-test-result" style="font-family:monospace;font-size:11px;color:var(--gold);white-space:pre-wrap;line-height:1.6;max-height:200px;overflow-y:auto"></div>
+      <div id="ai-test-result" style="font-family:monospace;font-size:12px;color:var(--gold);white-space:pre-wrap;line-height:1.6;max-height:200px;overflow-y:auto"></div>
     </div>
 
     <!-- ══ CENTRE D'AIDE — FAQ ══ -->
     <div id="help-panel" style="display:none;border-bottom:1px solid var(--gold-b)">
-      <div style="padding:16px 20px 6px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:.7">Centre d'aide</div>
+      <div style="padding:16px 20px 6px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:.7">Centre d'aide</div>
 
       <div class="faq-item" onclick="toggleFaq(this)">
         <div class="faq-q">Comment placer un hotspot sur une photo ?<span class="faq-arr">›</span></div>
@@ -1072,7 +1072,7 @@
 
     <!-- ══ SIGNALER UN PROBLÈME ══ -->
     <div id="report-panel" style="display:none;padding:16px 20px;border-bottom:1px solid var(--gold-b);background:var(--black-3)">
-      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:14px">Signaler un problème</div>
+      <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:14px">Signaler un problème</div>
       <div class="fg">
         <label class="fl">Catégorie</label>
         <div id="report-cats" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px">
@@ -1096,11 +1096,11 @@
     <div id="about-panel" style="display:none;border-bottom:1px solid var(--gold-b)">
       <div style="text-align:center;padding:24px 20px 16px">
         <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;letter-spacing:8px;color:var(--gold);margin-bottom:4px">WEARAURA</div>
-        <div style="font-size:11px;color:var(--wd);letter-spacing:2px">Style. Ethics. You.</div>
-        <div style="font-size:10px;color:rgba(245,240,232,.3);margin-top:6px;letter-spacing:1px">Version 2.0 · Beta</div>
+        <div style="font-size:12px;color:var(--wd);letter-spacing:2px">Style. Ethics. You.</div>
+        <div style="font-size:11px;color:rgba(245,240,232,.3);margin-top:6px;letter-spacing:1px">Version 2.0 · Beta</div>
       </div>
       <div style="margin:0 20px 16px;padding:14px 16px;background:var(--black-3);border-radius:12px;border:1px solid var(--gold-b)">
-        <div data-i18n="our_mission" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Notre mission</div>
+        <div data-i18n="our_mission" style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Notre mission</div>
         <div style="font-size:12px;color:var(--wd);line-height:1.7">WearAura connecte l'inspiration mode à la consommation responsable. Un look, une information, un choix — éthique, seconde main, ou simplement plus conscient.</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 20px 16px">
@@ -1114,7 +1114,7 @@
         </div>
       </div>
       <div style="margin:0 20px 20px">
-        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:.6;margin-bottom:10px">Légal</div>
+        <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:.6;margin-bottom:10px">Légal</div>
         <div onclick="window.open('terms.html','_blank')" class="sett-row">
           <span class="txt-sm-w">Conditions Générales d'Utilisation</span>
           <span class="icon-gold-dim">›</span>
@@ -1152,7 +1152,7 @@
       <svg class="sett-arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
 
-    <div id="dev-version-tap" onclick="_devTap()" style="padding:16px 20px 8px;font-size:11px;color:rgba(245,240,232,.25);letter-spacing:.5px;cursor:default;user-select:none">WearAura · Style. Ethics. You. · v2.0</div>
+    <div id="dev-version-tap" onclick="_devTap()" style="padding:16px 20px 8px;font-size:12px;color:rgba(245,240,232,.25);letter-spacing:.5px;cursor:default;user-select:none">WearAura · Style. Ethics. You. · v2.0</div>
     <script>
     (function(){
       var _taps=0,_t;
@@ -1179,7 +1179,7 @@
 
     <!-- Bouton déconnexion -->
     <div style="padding:8px 20px 40px">
-      <button onclick="doLogout()" data-i18n="deconnexion" style="width:100%;background:transparent;border:1px solid rgba(255,80,80,.4);border-radius:var(--r);padding:14px;font-family:var(--fb);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,80,80,.8);cursor:pointer">Se déconnecter</button>
+      <button onclick="doLogout()" data-i18n="deconnexion" style="width:100%;background:transparent;border:1px solid rgba(255,80,80,.4);border-radius:var(--r);padding:14px;font-family:var(--fb);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,80,80,.8);cursor:pointer">Se déconnecter</button>
     </div>
 
   </div>
@@ -1261,7 +1261,7 @@
     <div id="sv-avatar" style="width:38px;height:38px;border-radius:50%;background:var(--black-3);border:2px solid var(--gold);overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0"></div>
     <div>
       <div id="sv-username" style="font-size:13px;font-weight:600;color:var(--white);line-height:1.2"></div>
-      <div id="sv-time" style="font-size:10px;color:rgba(255,255,255,.5)"></div>
+      <div id="sv-time" style="font-size:11px;color:rgba(255,255,255,.5)"></div>
     </div>
     <div class="flex-1"></div>
     <div id="sv-delete" onclick="event.stopPropagation();deleteStory()" style="display:none;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.55);align-items:center;justify-content:center;cursor:pointer;border:1px solid rgba(255,80,80,.3)">
@@ -1278,7 +1278,7 @@
     <!-- Musique en cours -->
     <div id="sv-music-label" style="display:none;margin-top:8px;align-items:center;justify-content:center;gap:6px;overflow:hidden">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="2" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-      <span id="sv-music-text" style="font-size:11px;color:rgba(255,255,255,.6);letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px"></span>
+      <span id="sv-music-text" style="font-size:12px;color:rgba(255,255,255,.6);letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px"></span>
     </div>
     <!-- Réactions rapides (stories des autres uniquement) -->
     <div id="sv-reactions-bar" onclick="event.stopPropagation()" style="display:none;margin-top:14px">
@@ -1371,7 +1371,7 @@
         <div class="story-aud-chip" data-v="close_friends" onclick="setStoryVisibility('close_friends',this)">Amis proches</div>
       </div>
     </div>
-    <button id="story-publish-btn" onclick="publishStory()" disabled style="width:100%;height:50px;background:var(--gold);color:var(--black);border:none;border-radius:50px;font-family:var(--fb);font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-weight:700;transition:opacity .2s">Publier</button>
+    <button id="story-publish-btn" onclick="publishStory()" disabled style="width:100%;height:50px;background:var(--gold);color:var(--black);border:none;border-radius:50px;font-family:var(--fb);font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-weight:700;transition:opacity .2s">Publier</button>
   </div>
 </div>
 
@@ -1434,7 +1434,7 @@
   <div id="music-confirm-bar" style="display:none;flex-shrink:0;padding:14px 20px 10px;background:rgba(7,16,30,0.97);border-top:1px solid rgba(240,234,216,0.07)">
     <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:10px">
       <div><div style="font-size:9px;color:var(--wd);letter-spacing:.8px;margin-bottom:3px">DÉBUT</div><div id="music-lbl-start" class="txt-gold-brand">0:00</div></div>
-      <div style="text-align:center;padding-bottom:2px"><div id="music-lbl-dur" style="font-size:11px;color:rgba(240,234,216,0.4);letter-spacing:.5px">30s</div></div>
+      <div style="text-align:center;padding-bottom:2px"><div id="music-lbl-dur" style="font-size:12px;color:rgba(240,234,216,0.4);letter-spacing:.5px">30s</div></div>
       <div style="text-align:right"><div style="font-size:9px;color:var(--wd);letter-spacing:.8px;margin-bottom:3px">FIN</div><div id="music-lbl-end" class="txt-gold-brand">0:30</div></div>
     </div>
     <div id="music-range-track" style="position:relative;height:52px;display:flex;align-items:center;touch-action:none;margin-bottom:12px;cursor:pointer" onpointerdown="_trackDown(event)">
@@ -1444,7 +1444,7 @@
       <div id="music-handle-start" style="position:absolute;left:0%;width:16px;height:32px;background:var(--gold);border-radius:4px 2px 2px 4px;transform:translateX(-50%);cursor:grab;touch-action:none;z-index:3;display:flex;align-items:center;justify-content:center;gap:2px;box-shadow:0 2px 14px rgba(0,0,0,.7)" onpointerdown="_rangeHandleDown(event,'start')"><div class="divider-v"></div><div class="divider-v"></div></div>
       <div id="music-handle-end" style="position:absolute;left:30%;width:16px;height:32px;background:var(--gold);border-radius:2px 4px 4px 2px;transform:translateX(-50%);cursor:grab;touch-action:none;z-index:3;display:flex;align-items:center;justify-content:center;gap:2px;box-shadow:0 2px 14px rgba(0,0,0,.7)" onpointerdown="_rangeHandleDown(event,'end')"><div class="divider-v"></div><div class="divider-v"></div></div>
     </div>
-    <button onclick="_confirmMusicSelection()" style="width:100%;height:48px;background:var(--gold);color:var(--black);border:none;border-radius:50px;font-family:var(--fb);font-size:11px;letter-spacing:2px;font-weight:700;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 20px">
+    <button onclick="_confirmMusicSelection()" style="width:100%;height:48px;background:var(--gold);color:var(--black);border:none;border-radius:50px;font-family:var(--fb);font-size:12px;letter-spacing:2px;font-weight:700;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 20px">
       <span id="music-confirm-label">Ajouter cette musique</span>
     </button>
   </div>
@@ -1465,13 +1465,13 @@
       <div style="width:34px;height:34px;border-radius:50%;background:rgba(255,80,80,.15);border:1px solid rgba(255,80,80,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,110,110,.9)" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10v2a7 7 0 0014 0v-2M12 19v3M8 22h8"/></svg>
       </div>
-      <div><div style="font-size:13px;color:var(--white);font-weight:500">Enregistrer un vocal</div><div style="font-size:10px;color:var(--wd);margin-top:1px">Micro · max 2 min</div></div>
+      <div><div style="font-size:13px;color:var(--white);font-weight:500">Enregistrer un vocal</div><div style="font-size:11px;color:var(--wd);margin-top:1px">Micro · max 2 min</div></div>
     </div>
     <div onclick="_openMusicOverlay('upload')" style="display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;transition:background .15s">
       <div style="width:34px;height:34px;border-radius:50%;background:rgba(240,234,216,.06);border:1px solid rgba(240,234,216,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       </div>
-      <div><div style="font-size:13px;color:var(--white);font-weight:500">Importer un fichier</div><div style="font-size:10px;color:var(--wd);margin-top:1px">MP3, WAV, M4A · max 15 Mo</div></div>
+      <div><div style="font-size:13px;color:var(--white);font-weight:500">Importer un fichier</div><div style="font-size:11px;color:var(--wd);margin-top:1px">MP3, WAV, M4A · max 15 Mo</div></div>
     </div>
   </div>
 
@@ -1492,7 +1492,7 @@
     <canvas id="mrec-wave" width="280" height="44" style="border-radius:8px;background:rgba(240,234,216,0.04);margin-bottom:20px"></canvas>
     <div id="mrec-actions" style="display:none;flex-direction:column;gap:10px;width:100%">
       <audio id="mrec-preview" controls style="width:100%;border-radius:8px;margin-bottom:4px"></audio>
-      <button onclick="_useRecording()" id="mrec-use-btn" data-i18n="use_audio_btn" style="width:100%;height:48px;background:var(--gold);color:var(--black);border:none;border-radius:50px;font-family:var(--fb);font-size:11px;letter-spacing:2px;font-weight:700;cursor:pointer">UTILISER CE VOCAL</button>
+      <button onclick="_useRecording()" id="mrec-use-btn" data-i18n="use_audio_btn" style="width:100%;height:48px;background:var(--gold);color:var(--black);border:none;border-radius:50px;font-family:var(--fb);font-size:12px;letter-spacing:2px;font-weight:700;cursor:pointer">UTILISER CE VOCAL</button>
       <div onclick="_resetRecording()" data-i18n="retouche_reset" style="text-align:center;font-size:12px;color:var(--wd);cursor:pointer;padding:8px 0;opacity:.7">Recommencer</div>
     </div>
   </div>
@@ -1510,12 +1510,12 @@
     <div onclick="document.getElementById('music-file-input').click()" class="music-upload-zone">
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" style="opacity:.7;margin-bottom:12px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       <div style="font-size:14px;color:var(--white);margin-bottom:4px">Choisir un fichier audio</div>
-      <div style="font-size:11px;color:var(--wd)">MP3, WAV, M4A, OGG · max 15 Mo</div>
+      <div style="font-size:12px;color:var(--wd)">MP3, WAV, M4A, OGG · max 15 Mo</div>
     </div>
     <div id="music-upload-preview-wrap" style="display:none;flex-direction:column;gap:12px;width:100%;margin-top:20px">
       <div style="font-size:12px;color:var(--gold);text-align:center" id="music-upload-filename"></div>
       <audio id="music-upload-audio" controls style="width:100%;border-radius:8px"></audio>
-      <button onclick="_confirmAudioUpload()" id="music-upload-btn" style="width:100%;height:48px;background:var(--gold);color:var(--black);border:none;border-radius:50px;font-family:var(--fb);font-size:11px;letter-spacing:2px;font-weight:700;cursor:pointer">UTILISER CE SON</button>
+      <button onclick="_confirmAudioUpload()" id="music-upload-btn" style="width:100%;height:48px;background:var(--gold);color:var(--black);border:none;border-radius:50px;font-family:var(--fb);font-size:12px;letter-spacing:2px;font-weight:700;cursor:pointer">UTILISER CE SON</button>
       <div onclick="document.getElementById('music-file-input').click()" style="text-align:center;font-size:12px;color:var(--wd);cursor:pointer;padding:4px 0;opacity:.7">Changer de fichier</div>
     </div>
   </div>
@@ -1604,8 +1604,8 @@
   <div style="padding:0 20px 14px;border-bottom:1px solid var(--gold-b);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
     <div style="font-family:var(--fd);font-size:22px;font-weight:300;letter-spacing:1px" data-i18n="retouche_title">Retouche</div>
     <div style="display:flex;gap:10px;align-items:center">
-      <div onclick="resetRetouche()" data-i18n="retouche_reset" style="font-size:11px;color:var(--wd);cursor:pointer;letter-spacing:1px;padding:6px 12px;border:1px solid var(--gold-b);border-radius:50px">Réinitialiser</div>
-      <div onclick="confirmRetouche()" data-i18n="retouche_apply" style="font-size:11px;color:var(--black);background:var(--gold);cursor:pointer;letter-spacing:1px;padding:6px 14px;border-radius:50px;font-weight:600">Appliquer</div>
+      <div onclick="resetRetouche()" data-i18n="retouche_reset" style="font-size:12px;color:var(--wd);cursor:pointer;letter-spacing:1px;padding:6px 12px;border:1px solid var(--gold-b);border-radius:50px">Réinitialiser</div>
+      <div onclick="confirmRetouche()" data-i18n="retouche_apply" style="font-size:12px;color:var(--black);background:var(--gold);cursor:pointer;letter-spacing:1px;padding:6px 14px;border-radius:50px;font-weight:600">Appliquer</div>
     </div>
   </div>
   <!-- Tabs -->
@@ -1618,10 +1618,10 @@
     <!-- Preview mini -->
     <div style="margin:14px 20px;border-radius:12px;overflow:hidden;height:160px;position:relative">
       <img id="retouche-preview" src="" alt="" style="width:100%;height:100%;object-fit:cover;transition:filter .15s">
-      <div id="retouche-filter-label" style="display:none;position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);border-radius:20px;padding:3px 12px;font-size:10px;color:var(--gold);letter-spacing:1px"></div>
+      <div id="retouche-filter-label" style="display:none;position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);border-radius:20px;padding:3px 12px;font-size:11px;color:var(--gold);letter-spacing:1px"></div>
     </div>
     <!-- Filtres preset -->
-    <div style="padding:0 20px 8px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:.7" data-i18n="filters_label">Filtres</div>
+    <div style="padding:0 20px 8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:.7" data-i18n="filters_label">Filtres</div>
     <div id="retouche-filters-scroll" style="display:flex;gap:10px;overflow-x:auto;padding:0 20px 16px;scrollbar-width:none"></div>
     <!-- Sliders -->
     <div style="padding:0 20px 24px;display:flex;flex-direction:column;gap:16px">
@@ -1674,9 +1674,9 @@
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(240,234,216,0.5)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input type="range" id="rt-crop-zoom" min="30" max="300" value="100" step="1" oninput="onCropZoomChange(this.value)" class="edit-slider flex-1">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(240,234,216,0.5)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-      <span id="rt-val-zoom" style="font-size:10px;color:var(--gold);font-weight:600;min-width:30px;text-align:right">100%</span>
+      <span id="rt-val-zoom" style="font-size:11px;color:var(--gold);font-weight:600;min-width:30px;text-align:right">100%</span>
     </div>
-    <div style="margin-top:10px;text-align:center;font-size:10px;color:var(--wd);letter-spacing:.5px" data-i18n="crop_hint">Glisse pour recadrer • Zoom avec le curseur</div>
+    <div style="margin-top:10px;text-align:center;font-size:11px;color:var(--wd);letter-spacing:.5px" data-i18n="crop_hint">Glisse pour recadrer • Zoom avec le curseur</div>
   </div>
 </div>
 
@@ -1710,7 +1710,7 @@
     <div id="bq-ctx-img" style="width:52px;height:52px;border-radius:10px;background:var(--black-3);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center"></div>
     <div style="flex:1;min-width:0">
       <div id="bq-ctx-name" style="font-size:14px;font-weight:500;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
-      <div id="bq-ctx-brand" style="font-size:11px;color:var(--gold);margin-top:2px"></div>
+      <div id="bq-ctx-brand" style="font-size:12px;color:var(--gold);margin-top:2px"></div>
       <div id="bq-ctx-price" style="font-size:13px;font-weight:600;color:var(--gold-l);margin-top:2px"></div>
     </div>
   </div>
@@ -1799,7 +1799,7 @@
     <div style="padding:14px 20px 10px;border-bottom:1px solid var(--gold-b);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
       <div>
         <div id="gi-title" style="font-family:var(--fd);font-size:18px;font-weight:300;color:var(--white)"></div>
-        <div style="font-size:11px;color:var(--wd);margin-top:1px">Membres</div>
+        <div style="font-size:12px;color:var(--wd);margin-top:1px">Membres</div>
       </div>
       <div onclick="closeGroupInfo()" style="cursor:pointer;color:var(--wd);font-size:22px;line-height:1;padding:4px">✕</div>
     </div>
@@ -1817,7 +1817,7 @@
     <div id="conv-screen-av" onclick="gotoConvUserProfile()" style="width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(240,234,216,0.25);background:var(--black-3);display:flex;align-items:center;justify-content:center;font-size:16px;overflow:hidden;flex-shrink:0;cursor:pointer"></div>
     <div style="flex:1;min-width:0;cursor:pointer" onclick="gotoConvUserProfile()">
       <div id="conv-screen-name" style="font-size:15px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3"></div>
-      <div id="conv-screen-sub" style="font-size:11px;color:var(--gold);opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;margin-top:1px"></div>
+      <div id="conv-screen-sub" style="font-size:12px;color:var(--gold);opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;margin-top:1px"></div>
     </div>
     <div id="conv-group-info-btn" style="display:none;cursor:pointer;opacity:.7;padding:4px" onclick="openGroupInfo()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -1828,7 +1828,7 @@
   <!-- Bandeau "en attente" côté expéditeur -->
   <div id="conv-pending-banner" style="display:none;align-items:center;justify-content:center;gap:8px;padding:8px 20px;flex-shrink:0">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(237,228,207,0.4)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-    <span style="font-size:11px;color:rgba(237,228,207,0.45);letter-spacing:.3px" data-i18n="pending_acceptance">En attente d'acceptation</span>
+    <span style="font-size:12px;color:rgba(237,228,207,0.45);letter-spacing:.3px" data-i18n="pending_acceptance">En attente d'acceptation</span>
   </div>
   <!-- Input normal -->
   <div id="conv-input-bar" style="padding:10px 14px calc(26px + var(--sab,0px));display:flex;gap:8px;align-items:flex-end;flex-shrink:0;background:var(--black);border-top:1px solid rgba(240,234,216,0.07)">
@@ -1932,9 +1932,9 @@
 
   <div style="padding:14px 24px 0;flex-shrink:0">
     <button data-i18n="prefs_continue" onclick="savePreferences()" class="btn" style="letter-spacing:2px">Continuer →</button>
-    <div onclick="skipPreferences()" style="text-align:center;margin-top:10px;font-size:11px;color:var(--wd);cursor:pointer;letter-spacing:.5px;opacity:.7">
+    <div onclick="skipPreferences()" style="text-align:center;margin-top:10px;font-size:12px;color:var(--wd);cursor:pointer;letter-spacing:.5px;opacity:.7">
       <span data-i18n="prefs_skip">Passer cette étape</span>
-      <div data-i18n="prefs_skip_warn" style="font-size:10px;color:var(--wd);opacity:.5;margin-top:3px;letter-spacing:.2px">⚠️ Tes suggestions seront moins pertinentes</div>
+      <div data-i18n="prefs_skip_warn" style="font-size:11px;color:var(--wd);opacity:.5;margin-top:3px;letter-spacing:.2px">⚠️ Tes suggestions seront moins pertinentes</div>
     </div>
   </div>
 </div>
@@ -1971,7 +1971,7 @@
 
   <div style="width:100%">
     <button id="ob-btn" data-i18n="suivant" onclick="obNext()" class="btn" style="letter-spacing:3px">Suivant →</button>
-    <div onclick="obSkip()" data-i18n="passer" style="text-align:center;margin-top:14px;font-size:11px;color:var(--wd);cursor:pointer;letter-spacing:1px;opacity:.6">Passer</div>
+    <div onclick="obSkip()" data-i18n="passer" style="text-align:center;margin-top:14px;font-size:12px;color:var(--wd);cursor:pointer;letter-spacing:1px;opacity:.6">Passer</div>
   </div>
 </div>
 
@@ -1988,7 +1988,7 @@
   </div>
   <div id="share-list" style="flex:1;overflow-y:auto;scrollbar-width:none;padding:0 16px"></div>
   <div style="padding:12px 16px calc(20px + var(--sab,0px));flex-shrink:0;border-top:1px solid rgba(240,234,216,0.08)">
-    <button onclick="sharePostExternal()" style="width:100%;padding:14px;background:transparent;border:1px solid var(--gold-b);border-radius:50px;color:var(--gold);font-family:var(--fb);font-size:11px;letter-spacing:1px;cursor:pointer" data-i18n="share_external">Partager hors de l'app</button>
+    <button onclick="sharePostExternal()" style="width:100%;padding:14px;background:transparent;border:1px solid var(--gold-b);border-radius:50px;color:var(--gold);font-family:var(--fb);font-size:12px;letter-spacing:1px;cursor:pointer" data-i18n="share_external">Partager hors de l'app</button>
   </div>
 </div>
 
@@ -2070,7 +2070,7 @@
         </div>
       </div>
       <input type="file" id="ep-avatar-input" accept="image/*" style="display:none" onchange="onEditProfileAvatarSelect(event)">
-      <div data-i18n="change_photo" style="margin-top:10px;font-size:11px;color:var(--gold);letter-spacing:.8px;opacity:.6;font-family:var(--fb);text-transform:uppercase">Changer la photo</div>
+      <div data-i18n="change_photo" style="margin-top:10px;font-size:12px;color:var(--gold);letter-spacing:.8px;opacity:.6;font-family:var(--fb);text-transform:uppercase">Changer la photo</div>
     </div>
 
     <!-- Fields -->
@@ -2087,13 +2087,13 @@
           <span style="color:var(--wd);font-size:15px;opacity:.4;font-family:var(--fb)">@</span>
           <input id="ep-username2" type="text" placeholder="ton.username" autocomplete="username" spellcheck="false" style="flex:1;background:none;border:none;outline:none;color:var(--white);font-family:var(--fb);font-size:15px;padding:0;caret-color:var(--gold)" oninput="epCheckUsername(this.value)">
         </div>
-        <div id="ep-username-msg" style="font-size:10px;margin-top:6px;min-height:14px;font-family:var(--fb);letter-spacing:.3px;transition:opacity .2s;opacity:0"></div>
+        <div id="ep-username-msg" style="font-size:11px;margin-top:6px;min-height:14px;font-family:var(--fb);letter-spacing:.3px;transition:opacity .2s;opacity:0"></div>
       </div>
 
       <div class="sep-row">
         <div class="label-gold-b">Bio</div>
         <textarea id="ep-bio2" rows="3" data-i18n="bio_ph" data-i18n-attr="placeholder" placeholder="Parle-nous de ton style…" maxlength="80" style="width:100%;background:none;border:none;outline:none;color:var(--white);font-family:var(--fb);font-size:15px;padding:0;resize:none;caret-color:var(--gold);line-height:1.7" oninput="epBioCount(this)"></textarea>
-        <div id="ep-bio-count" style="font-size:10px;color:var(--wd);opacity:.4;text-align:right;font-family:var(--fb);margin-top:2px">0 / 80</div>
+        <div id="ep-bio-count" style="font-size:11px;color:var(--wd);opacity:.4;text-align:right;font-family:var(--fb);margin-top:2px">0 / 80</div>
       </div>
 
     </div>
@@ -2207,7 +2207,7 @@
   <!-- HISTORIQUE BODY -->
   <div id="scan-hist-body" style="flex:1;display:none;flex-direction:column;overflow-y:auto;padding-bottom:calc(60px + var(--sab,0px))">
     <div style="display:flex;justify-content:flex-end;padding:12px 16px 4px;flex-shrink:0">
-      <button id="scan-hist-edit-btn" onclick="toggleHistoryEdit()" data-i18n="hist_edit" style="background:none;border:1px solid rgba(240,234,216,0.2);color:var(--wd);font-family:var(--fb);font-size:11px;letter-spacing:.8px;padding:6px 14px;border-radius:50px;cursor:pointer;transition:border-color .2s,color .2s">Modifier</button>
+      <button id="scan-hist-edit-btn" onclick="toggleHistoryEdit()" data-i18n="hist_edit" style="background:none;border:1px solid rgba(240,234,216,0.2);color:var(--wd);font-family:var(--fb);font-size:12px;letter-spacing:.8px;padding:6px 14px;border-radius:50px;cursor:pointer;transition:border-color .2s,color .2s">Modifier</button>
     </div>
     <div id="scan-hist-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:4px 16px"></div>
   </div>
@@ -2245,7 +2245,7 @@
     <div id="scan-cam-error" style="display:none;position:absolute;inset:0;z-index:9;background:#07101E;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px;text-align:center">
       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(240,234,216,.6)" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
       <div id="scan-cam-error-msg" style="font-size:14px;color:rgba(240,234,216,.75);line-height:1.6"></div>
-      <div onclick="closeScanCam();scanFromGallery()" style="padding:12px 28px;border-radius:50px;background:rgba(240,234,216,.12);border:1px solid rgba(240,234,216,.25);font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;font-weight:600;color:rgba(240,234,216,.8);cursor:pointer">
+      <div onclick="closeScanCam();scanFromGallery()" style="padding:12px 28px;border-radius:50px;background:rgba(240,234,216,.12);border:1px solid rgba(240,234,216,.25);font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:2px;font-weight:600;color:rgba(240,234,216,.8);cursor:pointer">
         Depuis la galerie
       </div>
       <div onclick="closeScanCam()" style="font-size:12px;color:rgba(240,234,216,.35);cursor:pointer;padding:4px">Annuler</div>
@@ -2283,7 +2283,7 @@
       </div>
     </div>
     <div style="font-family:var(--fd);font-size:20px;font-weight:300;color:var(--white);margin-bottom:6px" data-i18n="recherche">Recherche en cours…</div>
-    <div style="font-size:11px;color:var(--wd);letter-spacing:1px" data-i18n="proposition">Proposition d'alternatives éthiques</div>
+    <div style="font-size:12px;color:var(--wd);letter-spacing:1px" data-i18n="proposition">Proposition d'alternatives éthiques</div>
     <div style="margin:16px auto 0;width:60%;height:2px;background:var(--gold-b);border-radius:2px;overflow:hidden">
       <div id="scan-bar" style="height:100%;width:0%;background:var(--gold);transition:width .1s;border-radius:2px"></div>
     </div>
@@ -2293,7 +2293,7 @@
       <div id="res-emoji" style="width:52px;height:52px;background:var(--black-3);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0"></div>
       <div class="flex-1">
         <div id="res-name" style="font-size:14px;font-weight:500;color:var(--white);margin-bottom:2px"></div>
-        <div id="res-brand" style="font-size:11px;color:var(--gold);margin-bottom:4px"></div>
+        <div id="res-brand" style="font-size:12px;color:var(--gold);margin-bottom:4px"></div>
         <span id="res-eco" style="font-size:12px"></span>
       </div>
       <div onclick="closeAll()" style="cursor:pointer;opacity:.5;font-size:18px;color:var(--white)">✕</div>
@@ -2315,12 +2315,12 @@
 <script src="js/search.js" defer></script>
 <script src="js/auth.js" defer></script>
 <script src="js/camera.js?v=6" defer></script>
-<script src="js/feed.js?v=11" defer></script>
-<script src="js/boutique.js?v=5" defer></script>
-<script src="js/create.js?v=17" defer></script>
-<script src="js/messages.js?v=9" defer></script>
-<script src="js/profile.js?v=11" defer></script>
-<script src="js/stories.js?v=7" defer></script>
+<script src="js/feed.js?v=12" defer></script>
+<script src="js/boutique.js?v=6" defer></script>
+<script src="js/create.js?v=18" defer></script>
+<script src="js/messages.js?v=10" defer></script>
+<script src="js/profile.js?v=12" defer></script>
+<script src="js/stories.js?v=8" defer></script>
 <script src="js/scan.js?v=55" defer></script>
 <script src="js/coach.js?v=3" defer></script>
 <script src="js/app.js?v=4" defer></script>

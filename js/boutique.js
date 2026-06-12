@@ -52,7 +52,7 @@ function bqOpenSortMenu(triggerEl){
   menu.style.top=(rect.bottom-parentRect.top+6)+'px';
   menu.innerHTML=Object.entries(BQ_SORT_LABELS).map(([k,label])=>`
     <div onclick="bqSortBy('${k}')" style="padding:10px 16px;cursor:pointer;font-size:12px;color:${bqCurrentSort===k?'var(--gold)':'var(--white)'};display:flex;align-items:center;gap:8px">
-      ${bqCurrentSort===k?'<span style="font-size:10px">✓</span>':'<span style="width:10px"></span>'}
+      ${bqCurrentSort===k?'<span style="font-size:11px">✓</span>':'<span style="width:10px"></span>'}
       ${label}
     </div>`).join('');
   menu.style.display='block';
@@ -194,7 +194,7 @@ function renderBoutiqueContent(products,filter=''){
         <div style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;background:rgba(240,234,216,0.06);border:1px solid rgba(240,234,216,0.12);flex-shrink:0">${_bagSvg}</div>
         <div style="flex:1;min-width:0">
           <div style="font-family:var(--fd);font-size:24px;font-weight:300;color:var(--white);line-height:1.1">${escapeHtml(bqCurrentBrand)}</div>
-          <div style="font-size:11px;color:var(--wd);letter-spacing:.3px;margin-top:2px;display:flex;align-items:center;gap:4px">${sorted.length} pièce${sorted.length>1?'s':''} <span style="display:inline-flex;gap:1px">${_ecoLeaves(avgEco)}</span></div>
+          <div style="font-size:12px;color:var(--wd);letter-spacing:.3px;margin-top:2px;display:flex;align-items:center;gap:4px">${sorted.length} pièce${sorted.length>1?'s':''} <span style="display:inline-flex;gap:1px">${_ecoLeaves(avgEco)}</span></div>
         </div>
       </div>
       ${certifs.length?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${certifs.map(c=>`<span class="certif-badge">${escapeHtml(c)}</span>`).join('')}</div>`:''}
@@ -222,7 +222,7 @@ function renderBoutiqueContent(products,filter=''){
         <div style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;background:rgba(240,234,216,0.06);border:1px solid rgba(240,234,216,0.12);margin:0 auto 6px">${_bagSvg}</div>
         <div style="font-size:13px;font-weight:600;color:var(--white);line-height:1.3">${escapeHtml(b.name)}</div>
         <div style="display:inline-flex;gap:1px;margin-top:3px">${_ecoLeaves(b.avgEco)}</div>
-        <div style="font-size:10px;color:var(--wd)">${b.count} pièce${b.count>1?'s':''}</div>
+        <div style="font-size:11px;color:var(--wd)">${b.count} pièce${b.count>1?'s':''}</div>
       </div>`).join('')}</div>`;
     return;
   }
@@ -314,7 +314,7 @@ function bqCarouselCard(p){
       <div class="bq-carousel-brand">${escapeHtml(p.marque)}</div>
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div class="bq-carousel-price">${escapeHtml(String(p.prix))}€</div>
-        <div style="font-size:10px;color:var(--wd)">${t('bq_voir')}</div>
+        <div style="font-size:11px;color:var(--wd)">${t('bq_voir')}</div>
       </div>
       <div class="aff-badge">${t('aff_badge')}</div>
     </div>
@@ -343,7 +343,7 @@ function bqProductCard(p){
     <div class="bq-product-info">
       <div class="bq-product-name">${escapeHtml(pNom(p))}</div>
       <div class="bq-product-brand">${escapeHtml(p.marque)}</div>
-      ${p.matiere?`<div style="font-size:10px;color:var(--wd);margin-bottom:4px">${escapeHtml(p.matiere)}</div>`:''}
+      ${p.matiere?`<div style="font-size:11px;color:var(--wd);margin-bottom:4px">${escapeHtml(p.matiere)}</div>`:''}
       <div class="bq-product-footer">
         <div class="bq-product-price">${escapeHtml(String(p.prix))}€</div>
         <div class="bq-product-voir">${t('bq_voir')}</div>
@@ -361,7 +361,7 @@ function bqSecondhandCard(p){
     <div class="bq-sm-img">${imgContent}</div>
     <div style="flex:1;min-width:0">
       <div style="font-size:12px;font-weight:500;color:var(--white);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(pNom(p))}</div>
-      <div style="font-size:10px;color:var(--gold);margin-bottom:4px">${escapeHtml(p.marque)}</div>
+      <div style="font-size:11px;color:var(--gold);margin-bottom:4px">${escapeHtml(p.marque)}</div>
       <div style="font-size:13px;color:var(--gold-l);font-weight:600;margin-bottom:4px">${escapeHtml(String(p.prix))}€</div>
       <div class="aff-badge">${t('aff_badge')}</div>
     </div>

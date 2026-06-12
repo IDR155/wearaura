@@ -279,7 +279,7 @@ function personItem(p) {
     <div style="flex:1;min-width:0">
       <div style="font-size:14px;font-weight:500;color:var(--white);margin-bottom:2px">${escapeHtml(p.full_name||p.username||'User')}</div>
       <div style="font-size:12px;color:var(--gold)">${escapeHtml(p.username||'user')}</div>
-      ${p.bio?`<div style="font-size:11px;color:var(--wd);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(p.bio)}</div>`:''}
+      ${p.bio?`<div style="font-size:12px;color:var(--wd);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(p.bio)}</div>`:''}
     </div>
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(245,240,232,.3)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
   </div>`;
