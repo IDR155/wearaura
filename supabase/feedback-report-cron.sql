@@ -24,7 +24,8 @@ select cron.schedule(
     headers := jsonb_build_object(
                  'Content-Type', 'application/json',
                  'Authorization', 'Bearer SERVICE_ROLE_KEY_ICI'),
-    body    := '{}'::jsonb
+    body    := '{}'::jsonb,
+    timeout_milliseconds := 20000
   );
   $$
 );
