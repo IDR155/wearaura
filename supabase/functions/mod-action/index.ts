@@ -40,7 +40,9 @@ function page(title: string, body: string, status = 200): Response {
       ${body}
     </div>
   </body></html>`;
-  return new Response(html, { status, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+  const headers = new Headers();
+  headers.set('content-type', 'text/html; charset=utf-8');
+  return new Response(html, { status, headers });
 }
 
 Deno.serve(async (req) => {
