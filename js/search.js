@@ -225,7 +225,7 @@ async function loadDefaultPosts() {
   el.innerHTML = `<div class="srch-section-title">${t('trending')}</div><div class="srch-post-grid" id="srch-post-grid-inner"></div>`;
   const grid = document.getElementById('srch-post-grid-inner');
   if (!dbOk) { grid.innerHTML = demoPostGrid(); return; }
-  const {data} = await sb.from('posts').select('id,image_url,likes_count,user_id').order('likes_count',{ascending:false}).limit(12);
+  const {data} = await sb.from('posts').select('id,image_url,likes_count,user_id').eq('hidden',false).order('likes_count',{ascending:false}).limit(12);
   if (!data?.length) { grid.innerHTML = demoPostGrid(); return; }
   grid.innerHTML = data.map(p => postGridItem(p)).join('');
 }
@@ -234,7 +234,7 @@ async function searchPosts(q) {
   const el = document.getElementById('srch-results-posts');
   el.innerHTML = `<div class="srch-section-title">${t('results_for')} "${escapeHtml(q)}"</div><div class="loader" style="margin:40px auto"></div>`;
   if (!dbOk) { setTimeout(()=>{ el.innerHTML=`<div class="srch-section-title">${t('results_for')} "${escapeHtml(q)}"</div><div class="srch-post-grid">${demoPostGrid()}</div>`; },500); return; }
-  const {data} = await sb.from('posts').select('id,image_url,likes_count,caption,tags,user_id').or(`caption.ilike.%${q}%`).order('likes_count',{ascending:false}).limit(18);
+  const {data} = await sb.from('posts').select('id,image_url,likes_count,caption,tags,user_id').eq('hidden',false).or(`caption.ilike.%${q}%`).order('likes_count',{ascending:false}).limit(18);
   if (!data?.length) { el.innerHTML=`<div class="srch-empty">${t('no_styles_found')}<br><strong class="c-gold">"${escapeHtml(q)}"</strong></div>`; return; }
   el.innerHTML = `<div class="srch-section-title">${data.length} ${data.length>1?t('srch_results'):t('srch_result')}</div><div class="srch-post-grid">${data.map(p=>postGridItem(p)).join('')}</div>`;
 }
@@ -407,7 +407,7 @@ async function loadFeedExplorerGrid(tag='',country=''){
   const grid=document.getElementById('feed-exp-grid');
   grid.innerHTML='<div class="loader" style="grid-column:1/-1;margin:40px auto"></div>';
   if(!dbOk){grid.innerHTML=demoExpGrid();return;}
-  let q=sb.from('posts').select('id,image_url,caption,likes_count,city,country,profiles:user_id(username)').order('created_at',{ascending:false}).limit(20);
+  let q=sb.from('posts').select('id,image_url,caption,likes_count,city,country,profiles:user_id(username)').eq('hidden',false).order('created_at',{ascending:false}).limit(20);
   if(country)q=q.ilike('country','%'+country+'%');
   else if(tag)q=q.ilike('caption','%'+tag+'%');
   const{data}=await q;

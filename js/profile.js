@@ -599,7 +599,7 @@ async function openUserProfile(uid){
     const portraitSrc=prof.avatar_portrait_url||prof.avatar_url;
     if(portraitSrc)document.getElementById('vp-av').innerHTML=`<img src="${portraitSrc}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">`;
   }
-  const {data:posts}=await sb.from('posts').select('id,image_url,likes_count').eq('user_id',uid).order('created_at',{ascending:false});
+  const {data:posts}=await sb.from('posts').select('id,image_url,likes_count').eq('user_id',uid).eq('hidden',false).order('created_at',{ascending:false});
   const {count}=await sb.from('follows').select('*',{count:'exact',head:true}).eq('following_id',uid);
   document.getElementById('vp-followers').textContent=count||0;
   const {count:vpFollowing}=await sb.from('follows').select('*',{count:'exact',head:true}).eq('follower_id',uid);

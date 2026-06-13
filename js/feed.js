@@ -30,7 +30,7 @@ async function loadFeed() {
   // Timeout de sécurité : si rien ne s'affiche après 6s → démos
   const safeTimer=setTimeout(()=>{ if(c.querySelector('.loader')){console.warn('[WA] 6s timeout → démos');renderSlides(DEMOS,true);} },6000);
   try{
-    const {data,error}=await sb.from('posts').select('*').order('created_at',{ascending:false}).limit(30);
+    const {data,error}=await sb.from('posts').select('*').eq('hidden',false).order('created_at',{ascending:false}).limit(30);
     console.log('[WA] posts query → data='+(data?.length??'null')+' error='+JSON.stringify(error));
     if(!data||!data.length){clearTimeout(safeTimer);console.warn('[WA] 0 posts → démos (RLS? table vide?)');renderSlides(DEMOS,true);return;}
     const uids=[...new Set(data.map(p=>p.user_id))];
@@ -132,7 +132,7 @@ async function loadFeedSuivis() {
       c.innerHTML=`<div class="empty-state empty-state--full"><img src="mascote_ivory/the_sentinel.png" alt=""><div>${t('suivis_empty')}<div class="es-hint">${t('suivis_empty_hint')}</div></div></div>`;
       return;
     }
-    const{data}=await sb.from('posts').select('*').in('user_id',followed).order('created_at',{ascending:false}).limit(50);
+    const{data}=await sb.from('posts').select('*').eq('hidden',false).in('user_id',followed).order('created_at',{ascending:false}).limit(50);
     if(!data||!data.length){
       c.innerHTML=`<div class="empty-state empty-state--full"><img src="mascote_ivory/the_sentinel.png" alt=""><div>${t('suivis_no_post')}<div class="es-hint">${t('suivis_no_post_hint')}</div></div></div>`;
       return;
@@ -326,7 +326,7 @@ async function openPostView(id){
     renderSlides([DEMOS[0]],true,'pv-scroll');
     return;
   }
-  const{data:p,error}=await sb.from('posts').select('*').eq('id',id).maybeSingle();
+  const{data:p,error}=await sb.from('posts').select('*').eq('id',id).eq('hidden',false).maybeSingle();
   if(error||!p){
     pvScroll.innerHTML=`<div class="empty-state empty-state--full"><img src="mascote_ivory/the_observer.png" alt=""><div>${t('post_not_found')||'Post introuvable'}<div class="es-hint">${t('post_maybe_deleted')}</div></div></div>`;
     return;
@@ -667,7 +667,7 @@ async function openComments(postId,isDemo){
 async function loadComments(postId){
   const list=document.getElementById('comments-list');
   list.innerHTML=skComments();
-  const {data,error}=await sb.from('comments').select('*').eq('post_id',postId).order('created_at',{ascending:true});
+  const {data,error}=await sb.from('comments').select('*').eq('post_id',postId).eq('hidden',false).order('created_at',{ascending:true});
   if(error){
     console.error('[loadComments]',error);
     list.innerHTML=`<div class="empty-state"><img src="mascote_ivory/le_gardien.png" alt=""><div>${t('error_loading')||'Impossible de charger les commentaires.'}</div></div>`;
@@ -948,7 +948,7 @@ async function loadExplore(tag='',country=''){
   else if(tag){lbl.style.display='block';lbl.innerHTML=`<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="icon-inline"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>"${tag}"`;}
   else{lbl.style.display='none';}
   if(!dbOk){grid.innerHTML=demoExpGrid();return;}
-  let q=sb.from('posts').select('id,image_url,caption,likes_count,city,country,user_id').order('created_at',{ascending:false}).limit(20);
+  let q=sb.from('posts').select('id,image_url,caption,likes_count,city,country,user_id').eq('hidden',false).order('created_at',{ascending:false}).limit(20);
   if(country)q=q.ilike('country',country);
   else if(tag)q=q.or(`caption.ilike.%${tag}%,city.ilike.%${tag}%`);
   const {data}=await q;
