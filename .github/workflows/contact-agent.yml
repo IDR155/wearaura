@@ -1,0 +1,34 @@
+name: Agent contact@ (brouillons de réponse)
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'   # toutes les 15 min (GitHub peut décaler un peu)
+  workflow_dispatch: {}        # permet de le lancer à la main depuis l'onglet Actions
+
+# Évite que deux exécutions se chevauchent
+concurrency:
+  group: contact-agent
+  cancel-in-progress: false
+
+jobs:
+  draft-replies:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Installer les dépendances
+        working-directory: agents/contact-agent
+        run: npm install --no-audit --no-fund
+      - name: Lire la boîte et préparer les brouillons
+        working-directory: agents/contact-agent
+        env:
+          IMAP_HOST: ${{ secrets.IMAP_HOST }}
+          IMAP_USER: ${{ secrets.IMAP_USER }}
+          IMAP_PASS: ${{ secrets.IMAP_PASS }}
+          MISTRAL_KEY: ${{ secrets.MISTRAL_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          REPORT_EMAIL: ${{ secrets.REPORT_EMAIL }}
+          REPORT_FROM: ${{ secrets.REPORT_FROM }}
+        run: node index.mjs

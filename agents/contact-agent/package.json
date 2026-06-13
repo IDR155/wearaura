@@ -1,0 +1,11 @@
+{
+  "name": "wearaura-contact-agent",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Lit contact@wearaura.fr (IMAP), classe les mails et prépare des brouillons de réponse (Mistral), envoyés au fondateur via Resend.",
+  "dependencies": {
+    "imapflow": "^1.0.164",
+    "mailparser": "^3.7.1"
+  }
+}
