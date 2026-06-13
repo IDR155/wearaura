@@ -38,7 +38,7 @@ async function loadProfile(){
   const {count:fc}=await sb.from('follows').select('*',{count:'exact',head:true}).eq('following_id',me.id);
   animateCounter(document.getElementById('my-followers'),fc||0);
   if(!dbOk){demoGrid('my-grid');document.getElementById('my-grid').style.display='grid';return;}
-  const {data:posts}=await sb.from('posts').select('id,image_url,likes_count,views_count').eq('user_id',me.id).order('created_at',{ascending:false});
+  const {data:posts}=await sb.from('posts').select('id,image_url,likes_count,views_count').eq('user_id',me.id).eq('hidden',false).order('created_at',{ascending:false});
   animateCounter(document.getElementById('my-posts'),posts?.length||0);
   // Nombre de suivis (following)
   const {count:followingCount}=await sb.from('follows').select('*',{count:'exact',head:true}).eq('follower_id',me.id);
@@ -304,7 +304,7 @@ async function loadLikedGrid(){
     return;
   }
   const postIds=likes.map(l=>l.post_id);
-  const{data:posts}=await sb.from('posts').select('id,image_url').in('id',postIds);
+  const{data:posts}=await sb.from('posts').select('id,image_url').eq('hidden',false).in('id',postIds);
   if(!posts||!posts.length){grid.innerHTML='';return;}
   const ordered=postIds.map(id=>posts.find(p=>p.id===id)).filter(Boolean);
   grid.innerHTML=ordered.map(p=>`<div class="pgrid-item">${p.image_url?`<img data-src="${p.image_url}" alt="">`:`<span class="pgrid-ph">${_heartSvgFb}</span>`}</div>`).join('');
@@ -324,7 +324,7 @@ async function loadSavedGrid(){
     return;
   }
   const postIds=saves.map(s=>s.post_id);
-  const{data:posts}=await sb.from('posts').select('id,image_url').in('id',postIds);
+  const{data:posts}=await sb.from('posts').select('id,image_url').eq('hidden',false).in('id',postIds);
   if(!posts||!posts.length){grid.innerHTML='';return;}
   // Conserver l'ordre d'enregistrement
   const ordered=postIds.map(id=>posts.find(p=>p.id===id)).filter(Boolean);
