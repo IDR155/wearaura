@@ -688,12 +688,20 @@ async function loadComments(postId){
   list.innerHTML=data.map(c=>{
     const av=pm[c.user_id]?.avatar_url?`<img src="${pm[c.user_id].avatar_url}" alt="" class="img-cover">`:wolfAv('32px');
     const isOwn=me&&c.user_id===me.id;
-    const menuBtn=isOwn?`<button class="comment-menu-btn" onclick="event.stopPropagation();toggleCommentMenu('${c.id}')" title="Modifier ou supprimer">⋮</button>`:'';
-    const actions=isOwn?`<div id="cmenu-${c.id}" class="comment-actions" style="display:none">
+    let menuBtn='',actions='';
+    if(isOwn){
+      menuBtn=`<button class="comment-menu-btn" onclick="event.stopPropagation();toggleCommentMenu('${c.id}')" title="Modifier ou supprimer">⋮</button>`;
+      actions=`<div id="cmenu-${c.id}" class="comment-actions" style="display:none">
       <button class="comment-act" onclick="startEditComment('${c.id}',this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="icon-inline"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Modifier</button>
       <button class="comment-act del" onclick="deleteComment('${c.id}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="icon-inline"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>Supprimer</button>
-    </div>`:'';
-    const longPressAttr=isOwn?` ontouchstart="_commentTouchStart(event,'${c.id}')" ontouchend="_commentTouchEnd()" ontouchcancel="_commentTouchEnd()" oncontextmenu="event.preventDefault();toggleCommentMenu('${c.id}');return false"`:'';
+    </div>`;
+    }else if(me){
+      menuBtn=`<button class="comment-menu-btn" onclick="event.stopPropagation();toggleCommentMenu('${c.id}')" title="Signaler">⋮</button>`;
+      actions=`<div id="cmenu-${c.id}" class="comment-actions" style="display:none">
+      <button class="comment-act del" onclick="reportComment('${c.id}','${c.user_id}')">🚩 ${t('report_btn')}</button>
+    </div>`;
+    }
+    const longPressAttr=me?` ontouchstart="_commentTouchStart(event,'${c.id}')" ontouchend="_commentTouchEnd()" ontouchcancel="_commentTouchEnd()" oncontextmenu="event.preventDefault();toggleCommentMenu('${c.id}');return false"`:'';
     return `<div class="comment-item" id="citem-${c.id}" style="align-items:flex-start"${longPressAttr}>
       <div class="comment-av">${av}</div>
       <div class="comment-body" class="flex-1">
@@ -761,6 +769,20 @@ async function deleteComment(cid){
   const countEl=document.getElementById('comment-count-'+curPostId);
   if(countEl)countEl.textContent=count||0;
   await loadComments(curPostId);
+}
+
+async function reportComment(cid,authorId){
+  if(!me)return toast(t('login_report'));
+  toggleCommentMenu(cid); // ferme le menu
+  if(!confirm(t('report_comment_confirm')))return;
+  const txtEl=document.getElementById('ctxt-'+cid);
+  const snapshot=txtEl?txtEl.textContent:null;
+  const{error}=await sb.from('content_reports').insert({
+    content_type:'comment',content_id:cid,content_text:snapshot,
+    reported_user_id:authorId,reporter_id:me.id,reason:'signalé par utilisateur'
+  });
+  if(error)return toast('❌ '+t('toast_error'));
+  toast(t('report_sent'));
 }
 
 // ── Compteur de vues privé (visible uniquement sur le profil du créateur) ──

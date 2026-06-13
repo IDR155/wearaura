@@ -465,7 +465,7 @@ async function loadMessages(convId){
   const list=document.getElementById('conv-messages-list');
   list.innerHTML=skComments(4);
   try{
-    const{data:msgs}=await sb.from('messages').select('*').eq('conversation_id',convId).order('created_at',{ascending:true}).limit(50);
+    const{data:msgs}=await sb.from('messages').select('*').eq('conversation_id',convId).eq('hidden',false).order('created_at',{ascending:true}).limit(50);
     // Filtrer : si c'est mon message et que je l'ai "supprimé pour moi" → ne pas l'afficher
     const filtered=(msgs||[]).filter(m=>!(m.sender_id===me?.id&&m.deleted_for_sender));
     if(!filtered.length){list.innerHTML=`<div class="empty-state empty-state--full"><img src="mascote_ivory/the_friendly_greet.png" alt=""><div>${t('conv_start')}</div></div>`;return;}
@@ -542,9 +542,33 @@ function appendMessage(msg,scroll=true){
     div.addEventListener('mouseup',cancelLP);
     div.addEventListener('mouseleave',cancelLP);
     div.addEventListener('contextmenu',e=>{e.preventDefault();showMsgCtx(msg.id,msg.content,msg.created_at,div,e);});
+  }else if(me&&!postMatch){
+    // Message reçu : long-press → signaler
+    let lpt=null;
+    const startLP=()=>{if(lpt)clearTimeout(lpt);lpt=setTimeout(()=>{reportMessage(msg.id,msg.sender_id,msg.content);if(navigator.vibrate)navigator.vibrate(15);},550);};
+    const cancelLP=()=>{if(lpt){clearTimeout(lpt);lpt=null;}};
+    div.addEventListener('touchstart',startLP,{passive:true});
+    div.addEventListener('touchend',cancelLP);
+    div.addEventListener('touchmove',cancelLP);
+    div.addEventListener('mousedown',e=>{if(e.button===0)startLP();});
+    div.addEventListener('mouseup',cancelLP);
+    div.addEventListener('mouseleave',cancelLP);
+    div.addEventListener('contextmenu',e=>{e.preventDefault();reportMessage(msg.id,msg.sender_id,msg.content);});
   }
   list.appendChild(div);
   if(scroll)list.scrollTop=list.scrollHeight;
+}
+
+async function reportMessage(msgId,senderId,content){
+  if(!me)return toast(t('login_report'));
+  if(senderId===me.id)return; // on ne signale pas ses propres messages
+  if(!confirm(t('report_msg_confirm')))return;
+  const{error}=await sb.from('content_reports').insert({
+    content_type:'message',content_id:msgId,content_text:content,
+    reported_user_id:senderId,reporter_id:me.id,reason:'signalé par utilisateur'
+  });
+  if(error)return toast('❌ '+t('toast_error'));
+  toast(t('report_sent'));
 }
 
 async function sendMessage(){
