@@ -27,8 +27,14 @@ jobs:
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
         run: |
+          set -eo pipefail
           /usr/lib/postgresql/17/bin/pg_dump "$SUPABASE_DB_URL" --no-owner --no-privileges | gzip -9 > backup.sql.gz
           ls -lh backup.sql.gz
+          # Garde-fou : échoue (run rouge) si la sauvegarde est quasi vide (< 1 Ko)
+          if [ "$(stat -c%s backup.sql.gz)" -lt 1024 ]; then
+            echo "❌ Sauvegarde vide ou trop petite — pg_dump a probablement échoué (auth / connexion)."
+            exit 1
+          fi
       - name: Envoyer la sauvegarde par e-mail
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
