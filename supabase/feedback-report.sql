@@ -9,6 +9,9 @@
 -- ⚠️ AVANT D'EXÉCUTER : remplace REPORT_TOKEN_ICI par ton vrai jeton.
 -- ═══════════════════════════════════════════════════════════════
 
+-- Colonne e-mail (Phase 3 : pour préparer un brouillon de réponse)
+alter table public.feedback add column if not exists email text;
+
 create or replace function public.feedback_digest(p_token text)
 returns jsonb
 language plpgsql
@@ -33,6 +36,7 @@ begin
         'category',    f.category,
         'description', f.description,
         'username',    coalesce(pr.username, 'anonyme'),
+        'email',       f.email,
         'created_at',  f.created_at
       ) order by f.created_at desc), '[]'::jsonb)
       from feedback f

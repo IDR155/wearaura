@@ -2059,7 +2059,7 @@ async function submitReport(){
   if(!desc||desc.length<10)return toast('❌ '+t('report_min_chars'));
   const btn=document.querySelector('#report-panel .btn');
   btn.disabled=true;btn.textContent=t('sending');
-  const{error}=await sb.from('feedback').insert({user_id:me.id,category:currentRepCat,description:desc});
+  const{error}=await sb.from('feedback').insert({user_id:me.id,email:me.email||null,category:currentRepCat,description:desc});
   btn.disabled=false;btn.textContent=t('report_send_btn');
   if(error)return toast(`❌ ${t('toast_error')}: ${error.message}`);
   document.getElementById('report-desc').value='';
