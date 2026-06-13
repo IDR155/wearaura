@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WearAura · Modération</title>
+<style>
+  body{margin:0;background:#07101E;font-family:Helvetica,Arial,sans-serif;color:#EDE4CF;display:flex;min-height:100vh;align-items:center;justify-content:center}
+  .card{max-width:440px;margin:24px;background:#0C1828;border:1px solid rgba(240,234,216,.12);border-radius:16px;padding:32px;text-align:center}
+  .brand{font-size:20px;font-weight:300;letter-spacing:2px;color:#F0EAD8}
+  .sub{font-size:13px;color:#9aa;margin-bottom:20px}
+  h1{font-size:17px;font-weight:600;margin:0 0 14px}
+  button{border:none;font-size:15px;font-weight:700;padding:12px 28px;border-radius:10px;cursor:pointer;color:#fff}
+  .hide{background:#E8312A}.other{background:#3a6ea5}
+  .note{font-size:12px;color:#6b7785;margin-top:14px}
+  .muted{color:#9aa;font-size:13px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="brand">WEARAURA</div>
+  <div class="sub">Modération</div>
+  <div id="content"><div class="muted">Chargement…</div></div>
+</div>
+<script>
+const FN='https://whaxwmztbkgnfokuqlcc.supabase.co/functions/v1/mod-action';
+const q=new URLSearchParams(location.search);
+const id=q.get('id'),action=q.get('action'),token=q.get('token');
+const LABEL={hide:'Masquer ce contenu',unhide:'Réafficher ce contenu',keep:'Conserver ce contenu (classer le signalement)'};
+const c=document.getElementById('content');
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
+if(!id||!LABEL[action]||!token){
+  c.innerHTML='<div class="muted">Lien invalide ou incomplet.</div>';
+}else{
+  const cls=action==='hide'?'hide':'other';
+  c.innerHTML='<h1>'+esc(LABEL[action])+'</h1><button class="'+cls+'" id="go">Confirmer</button><div class="note">Action réversible.</div>';
+  document.getElementById('go').onclick=async()=>{
+    c.innerHTML='<div class="muted">Traitement…</div>';
+    try{
+      const r=await fetch(FN,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({id,action,token})});
+      const d=await r.json();
+      if(d&&d.ok){c.innerHTML='<h1>✅ '+esc(d.message||'Fait')+'</h1><div class="muted">Tu peux fermer cette page.</div>';}
+      else{c.innerHTML='<div class="muted">⚠️ '+esc((d&&d.error)||'Erreur')+'</div>';}
+    }catch(e){c.innerHTML='<div class="muted">⚠️ Erreur réseau, réessaie.</div>';}
+  };
+}
+</script>
+</body>
+</html>

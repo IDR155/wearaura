@@ -75,7 +75,7 @@ type Row = { id: string; content_type: string; content_id: string; content_text:
 
 async function buildHtml(autoHidden: Row[], toReview: Row[]): Promise<string> {
   const link = (id: string, action: string, token: string) =>
-    `${SUPABASE_URL}/functions/v1/mod-action?id=${id}&action=${action}&token=${token}`;
+    `https://wearaura.fr/moderation.html?id=${id}&action=${action}&token=${token}`;
 
   const reviewCards = await Promise.all(toReview.map(async r => {
     const tk = await tokenFor(r.id);
