@@ -118,8 +118,6 @@ function goStepFromDot(n){
 }
 
 function showBackConfirm(){
-  // Annule le timer auto-hide de toast() pour que les boutons restent cliquables
-  if(toastTimer){clearTimeout(toastTimer);toastTimer=null;}
   const toastEl=document.getElementById('toast-el');
   toastEl.innerHTML=`
     <div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:4px 0">

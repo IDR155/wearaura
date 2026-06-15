@@ -127,7 +127,6 @@ function _pgridTap(e,postId){
   openPostView(postId);
 }
 function _showDeletePostConfirm(postId){
-  if(toastTimer){clearTimeout(toastTimer);toastTimer=null;}
   const toastEl=document.getElementById('toast-el');
   toastEl.innerHTML=`
     <div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:4px 0">
