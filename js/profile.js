@@ -262,7 +262,7 @@ async function loadWishlistGrid(){
         <div style="font-size:13px;font-weight:500;color:var(--white);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${safeName}</div>
         <div class="txt-xs-gold-mb">${safeBrand}</div>
         <div class="row-tags">
-          ${v.alt_score_eco?`<div class="eco-score">${ecoStars(v.alt_score_eco)}</div>`:''}
+          ${v.alt_score_eco?`<div class="eco-score">${impactGauges({score_eco:v.alt_score_eco})}</div>`:''}
           <span class="txt-xxs-dim">Ajouté ${timeAgo(v.created_at)}</span>
         </div>
       </div>
@@ -761,7 +761,6 @@ function openPieceSheet(h){
   const matiere=h.matiere||h.tags?.matiere||'inconnu';
   const emp=getEmpreinte(matiere);
   const scoreEco=emp.co2===null?3:emp.co2<3?5:emp.co2<7?4:emp.co2<12?3:emp.co2<20?2:1;
-  const ecoLeaves=Array.from({length:5},(_,i)=>`<span style="color:var(--gold);opacity:${i<scoreEco?.9:.15}">${_leafSvg}</span>`).join('');
   const chiffre=emp.eau!==null
     ?`<div style="font-size:22px;font-weight:300;color:var(--gold);font-family:'Cormorant Garamond',serif">~${emp.eau.toLocaleString()}L</div><div style="font-size:11px;color:var(--wd);letter-spacing:1px">${t('eau_label')} · ${emp.co2}kg CO₂</div>`
     :`<div style="font-size:13px;color:var(--wd)">${t('matiere_unknown')}</div>`;
@@ -794,9 +793,9 @@ function openPieceSheet(h){
     </div>
     <div style="margin:0 8px 16px;background:var(--black-3);border-radius:12px;padding:14px 16px;border:1px solid var(--gold-b)">
       <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px">${t('empreinte_titre')}</div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px;flex-wrap:wrap">
         <div>${chiffre}</div>
-        <div style="text-align:center"><div style="margin-bottom:4px">${ecoLeaves}</div><div style="font-size:9px;color:var(--wd);letter-spacing:1px">${t('score_eco')}</div></div>
+        <div style="text-align:right">${impactGauges({score_eco:scoreEco,matiere:matiere})}</div>
       </div>
       <div style="font-size:12px;color:var(--wd);line-height:1.6;border-top:1px solid rgba(240,234,216,.1);padding-top:8px;font-style:italic">${emp.info}</div>
       <div style="font-size:9px;color:rgba(245,240,232,.3);margin-top:6px;letter-spacing:.5px">${t('donnees_estim')}</div>
@@ -1263,7 +1262,7 @@ async function openAlt(item) {
       const methodBadge = detectionMethod === 'clip'
         ? `<span style="font-size:9px;background:rgba(240,234,216,.1);border:1px solid var(--gold-b);color:var(--gold);padding:2px 8px;border-radius:10px;letter-spacing:1px;margin-left:6px">🧠 CLIP Vision</span>`
         : `<span style="font-size:9px;background:rgba(245,240,232,.07);border:1px solid rgba(245,240,232,.15);color:var(--wd);padding:2px 8px;border-radius:10px;letter-spacing:1px;margin-left:6px">${t('detection_keywords')}</span>`;
-      document.getElementById('res-eco').innerHTML = ecoStars(p.eco || 2) + methodBadge;
+      document.getElementById('res-eco').innerHTML = impactGauges({score_eco:p.eco||2,matiere:(p.matiere||(p.tags&&p.tags.matiere))}) + methodBadge;
       document.querySelectorAll('.alt-tab').forEach((tabEl,i) => tabEl.classList.toggle('active', i===0));
       renderAltTabLive('ethique');
     }, 300);
@@ -1282,7 +1281,7 @@ async function openAlt(item) {
       document.getElementById('res-emoji').innerHTML = _itemSvg;
       document.getElementById('res-name').textContent  = p.name  || t('this_item');
       document.getElementById('res-brand').textContent = p.brand || '';
-      document.getElementById('res-eco').innerHTML = ecoStars(p.eco || 2);
+      document.getElementById('res-eco').innerHTML = impactGauges({score_eco:p.eco||2,matiere:(p.matiere||(p.tags&&p.tags.matiere))});
       document.querySelectorAll('.alt-tab').forEach((tabEl,i) => tabEl.classList.toggle('active', i===0));
       renderAltTabLive('ethique');
     }, 300);

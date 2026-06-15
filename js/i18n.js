@@ -1076,8 +1076,11 @@ function impactGauges(p){
   const w=waterSavedPct(p.matiere);
   if(w){
     const fill=Math.max(0,Math.min(100,w.pct));
-    const lbl=w.pct>=0?('−'+w.pct+'%'):('+'+(-w.pct)+'%');
-    drop=`<span style="display:inline-flex;align-items:center;gap:4px" title="Économie d'eau estimée">${_fillIcon(_DROP_D,fill,'#5aa9bd','#6fb7c9')}<b style="font-size:12px;font-weight:600;color:#7cc3d4">${lbl}</b></span>`;
+    let lbl,col;
+    if(w.pct>0){lbl='−'+w.pct+'%';col='#7cc3d4';}
+    else if(w.pct===0){lbl='réf.';col='rgba(237,228,207,0.6)';}
+    else {lbl='+'+(-w.pct)+'%';col='#d4a76a';}
+    drop=`<span style="display:inline-flex;align-items:center;gap:4px" title="Économie d'eau estimée vs coton conventionnel">${_fillIcon(_DROP_D,fill,'#5aa9bd','#6fb7c9')}<b style="font-size:12px;font-weight:600;color:${col}">${lbl}</b></span>`;
   }
   return `<span style="display:inline-flex;align-items:center;gap:12px;flex-wrap:wrap">`
     +`<span style="display:inline-flex;align-items:center;gap:4px" title="Score éco">${leaf}<b style="font-size:12px;font-weight:600;color:var(--gold)">${score}/5</b></span>`

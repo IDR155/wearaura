@@ -194,7 +194,7 @@ function renderBoutiqueContent(products,filter=''){
         <div style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;background:rgba(240,234,216,0.06);border:1px solid rgba(240,234,216,0.12);flex-shrink:0">${_bagSvg}</div>
         <div style="flex:1;min-width:0">
           <div style="font-family:var(--fd);font-size:24px;font-weight:300;color:var(--white);line-height:1.1">${escapeHtml(bqCurrentBrand)}</div>
-          <div style="font-size:12px;color:var(--wd);letter-spacing:.3px;margin-top:2px;display:flex;align-items:center;gap:4px">${sorted.length} pièce${sorted.length>1?'s':''} <span style="display:inline-flex;gap:1px">${_ecoLeaves(avgEco)}</span></div>
+          <div style="font-size:12px;color:var(--wd);letter-spacing:.3px;margin-top:2px;display:flex;align-items:center;gap:6px">${sorted.length} pièce${sorted.length>1?'s':''} ${impactGauges({score_eco:avgEco})}</div>
         </div>
       </div>
       ${certifs.length?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${certifs.map(c=>`<span class="certif-badge">${escapeHtml(c)}</span>`).join('')}</div>`:''}
@@ -221,7 +221,7 @@ function renderBoutiqueContent(products,filter=''){
       <div class="bq-brand-card" onclick="bqFilterByBrand('${b.name.replace(/'/g,'\\\'')}')">
         <div style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;background:rgba(240,234,216,0.06);border:1px solid rgba(240,234,216,0.12);margin:0 auto 6px">${_bagSvg}</div>
         <div style="font-size:13px;font-weight:600;color:var(--white);line-height:1.3">${escapeHtml(b.name)}</div>
-        <div style="display:inline-flex;gap:1px;margin-top:3px">${_ecoLeaves(b.avgEco)}</div>
+        <div style="margin-top:3px">${impactGauges({score_eco:b.avgEco})}</div>
         <div style="font-size:11px;color:var(--wd)">${b.count} pièce${b.count>1?'s':''}</div>
       </div>`).join('')}</div>`;
     return;
