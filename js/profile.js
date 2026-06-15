@@ -1323,7 +1323,7 @@ function renderAltTabLive(type = 'ethique') {
         <div style="font-size:13px;font-weight:500;color:var(--white);margin-bottom:2px">${escapeHtml(a.nom)}</div>
         <div class="txt-xs-gold-mb">${escapeHtml(a.marque)}</div>
         <div class="row-tags">
-          <div class="eco-score">${ecoStars(a.score_eco)}</div>
+          <div class="eco-score">${impactGauges(a)}</div>
           ${a.matiere ? `<span class="txt-xxs-dim">${escapeHtml(a.matiere)}</span>` : ''}
           ${a.label ? `<span style="font-size:9px;background:rgba(80,180,80,.15);color:#7dc97d;border:1px solid rgba(80,180,80,.3);padding:1px 6px;border-radius:10px">${escapeHtml(a.label)}</span>` : ''}
         </div>

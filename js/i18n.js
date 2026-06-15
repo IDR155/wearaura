@@ -1019,9 +1019,70 @@ const EMPREINTE = {
   'denim':      {eau:3500, co2:7.0,  label:'Denim / Jean',            info:"Un jean nécessite ~3500L d'eau, surtout pour la teinture."},
   'recyclé':    {eau:300,  co2:1.5,  label:'Matière recyclée',        info:"Les fibres recyclées réduisent l'empreinte de 70% en moyenne."},
   'synthétique':{eau:200,  co2:9.0,  label:'Synthétique (polyester…)',info:'Peu d\'eau mais émet des microplastiques au lavage.'},
+  'coton bio':  {eau:1350, co2:3.8,  label:'Coton biologique',        info:"Le coton bio consomme ~2 fois moins d'eau et exclut les pesticides de synthèse."},
+  'chanvre':    {eau:300,  co2:1.0,  label:'Chanvre',                 info:'Le chanvre pousse sans irrigation ni pesticides.'},
+  'lyocell':    {eau:600,  co2:1.8,  label:'Lyocell / Tencel',        info:'Fibre de bois produite en circuit fermé, peu gourmande en eau.'},
+  'viscose':    {eau:800,  co2:3.0,  label:'Viscose',                 info:'Fibre de bois ; impact variable selon la production.'},
+  'polyester':  {eau:60,   co2:9.5,  label:'Polyester',               info:"Très peu d'eau, mais issu du pétrole et microplastiques au lavage."},
+  'polyester recyclé':{eau:30,co2:5.5,label:'Polyester recyclé',      info:'~2 fois moins de CO₂ que le polyester vierge.'},
   'inconnu':    {eau:null, co2:null, label:'Matière non renseignée',  info:'Demande au créateur la composition de cette pièce.'},
 };
-function getEmpreinte(matiere){return EMPREINTE[matiere?.toLowerCase()]||EMPREINTE['inconnu'];}
+// Normalise un texte de matière libre ("coton bio", "laine mérinos"…) vers une clé EMPREINTE
+function _matKey(m){
+  if(!m) return 'inconnu';
+  const s=(''+m).toLowerCase().trim();
+  if(/cuir/.test(s)&&/vegan|simili|sky/.test(s)) return 'cuir-vegan';
+  if(/cuir|leather/.test(s)) return 'cuir';
+  if(/(coton|cotton)/.test(s)&&/(bio|organi)/.test(s)) return 'coton bio';
+  if(/chanvre|hemp/.test(s)) return 'chanvre';
+  if(/lin\b|flax/.test(s)) return 'lin';
+  if(/lyocell|tencel/.test(s)) return 'lyocell';
+  if(/viscose|modal|rayonne/.test(s)) return 'viscose';
+  if(/recycl/.test(s)&&/poly|nylon|synth|plast/.test(s)) return 'polyester recyclé';
+  if(/recycl/.test(s)) return 'recyclé';
+  if(/polyester|nylon|acryl|[ée]lasthan|synth/.test(s)) return 'synthétique';
+  if(/laine|wool|m[ée]rinos|cachemire|cashmere|mohair|alpaga/.test(s)) return 'laine';
+  if(/soie|silk/.test(s)) return 'soie';
+  if(/denim|jean/.test(s)) return 'denim';
+  if(/coton|cotton/.test(s)) return 'coton';
+  return s;
+}
+function getEmpreinte(matiere){return EMPREINTE[_matKey(matiere)]||EMPREINTE['inconnu'];}
+// Économie d'eau estimée vs coton conventionnel (réf. 2700 L)
+function waterSavedPct(matiere){
+  const e=getEmpreinte(matiere);
+  if(!e||e.eau==null) return null;
+  return {pct:Math.round((1-e.eau/2700)*100), eau:e.eau, label:e.label};
+}
+// ── Jauges d'impact : feuille (score éco) + goutte (économie d'eau). Plein = mieux. ──
+let _gaugeUid=0;
+const _LEAF_D='M10 54 C10 30 30 10 54 10 C54 34 34 54 10 54 Z';
+const _DROP_D='M32 6 C32 6 14 28 14 42 A18 18 0 1 0 50 42 C50 28 32 6 32 6 Z';
+function _fillIcon(pathD,fillPct,fillColor,strokeColor,extra){
+  const uid='ig'+(_gaugeUid++);
+  const f=Math.max(0,Math.min(100,fillPct));
+  const h=64*f/100, y=64-h;
+  return `<svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="display:block">`
+    +`<defs><clipPath id="${uid}"><path d="${pathD}"/></clipPath></defs>`
+    +`<path d="${pathD}" fill="rgba(240,234,216,0.10)"/>`
+    +`<rect x="0" y="${y.toFixed(1)}" width="64" height="${h.toFixed(1)}" fill="${fillColor}" clip-path="url(#${uid})"/>`
+    +`<path d="${pathD}" fill="none" stroke="${strokeColor}" stroke-width="3"/>${extra||''}</svg>`;
+}
+function impactGauges(p){
+  if(!p) return '';
+  const score=Math.max(0,Math.min(5,Math.round(p.score_eco||0)));
+  const leaf=_fillIcon(_LEAF_D,score/5*100,'#8fcf8a','#8fcf8a','<line x1="18" y1="46" x2="46" y2="18" stroke="#0e1d30" stroke-width="3"/>');
+  let drop='';
+  const w=waterSavedPct(p.matiere);
+  if(w){
+    const fill=Math.max(0,Math.min(100,w.pct));
+    const lbl=w.pct>=0?('−'+w.pct+'%'):('+'+(-w.pct)+'%');
+    drop=`<span style="display:inline-flex;align-items:center;gap:4px" title="Économie d'eau estimée">${_fillIcon(_DROP_D,fill,'#5aa9bd','#6fb7c9')}<b style="font-size:12px;font-weight:600;color:#7cc3d4">${lbl}</b></span>`;
+  }
+  return `<span style="display:inline-flex;align-items:center;gap:12px;flex-wrap:wrap">`
+    +`<span style="display:inline-flex;align-items:center;gap:4px" title="Score éco">${leaf}<b style="font-size:12px;font-weight:600;color:var(--gold)">${score}/5</b></span>`
+    +`${drop}</span>`;
+}
 
 // ════════════════════════════════════════
 // LEAN VISION — Auto-détection TYPE
