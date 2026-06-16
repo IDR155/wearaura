@@ -37,7 +37,7 @@ const I18N = {
     casual:'Casual',chic:'Chic',sport:'Sport',vintage:'Vintage',
     minimal:'Minimal',streetwear:'Streetwear',boheme:'Bohème',luxe:'Luxe',
     empreinte_titre:'Empreinte estimée',
-    eau_label:"d'eau estimés",score_eco:'SCORE ÉCO',
+    eau_label:"d'eau estimés",score_eco:'SCORE ÉCO',ig_eco:'Éco',ig_eau:'Eau',ig_co2:'CO₂',ig_high:'élevé',niv_faible:'Faible',niv_moyenne:'Moyenne',niv_elevee:'Élevée',emp_eau_lbl:'Empreinte eau',emp_co2_lbl:'Empreinte CO₂',
     donnees_estim:'* Données estimatives — moyennes industrie textile',
     voir_alternative:'Voir une alternative responsable',
     look_complet:'Le Look complet',
@@ -497,7 +497,7 @@ const I18N = {
     casual:'Casual',chic:'Chic',sport:'Sport',vintage:'Vintage',
     minimal:'Minimal',streetwear:'Streetwear',boheme:'Boho',luxe:'Luxury',
     empreinte_titre:'Estimated footprint',
-    eau_label:'of water estimated',score_eco:'ECO SCORE',
+    eau_label:'of water estimated',score_eco:'ECO SCORE',ig_eco:'Eco',ig_eau:'Water',ig_co2:'CO₂',ig_high:'high',niv_faible:'Low',niv_moyenne:'Medium',niv_elevee:'High',emp_eau_lbl:'Water footprint',emp_co2_lbl:'Carbon footprint',
     donnees_estim:'* Estimated data — textile industry averages',
     voir_alternative:'Find a responsible alternative',
     look_complet:'Full Look',
@@ -1040,7 +1040,8 @@ function _matKey(m){
   if(/viscose|modal|rayonne/.test(s)) return 'viscose';
   if(/recycl/.test(s)&&/poly|nylon|synth|plast/.test(s)) return 'polyester recyclé';
   if(/recycl/.test(s)) return 'recyclé';
-  if(/polyester|nylon|acryl|[ée]lasthan|synth/.test(s)) return 'synthétique';
+  if(/polyester/.test(s)) return 'polyester';
+  if(/nylon|acryl|[ée]lasthan|synth/.test(s)) return 'synthétique';
   if(/laine|wool|m[ée]rinos|cachemire|cashmere|mohair|alpaga/.test(s)) return 'laine';
   if(/soie|silk/.test(s)) return 'soie';
   if(/denim|jean/.test(s)) return 'denim';
@@ -1049,10 +1050,11 @@ function _matKey(m){
 }
 function getEmpreinte(matiere){return EMPREINTE[_matKey(matiere)]||EMPREINTE['inconnu'];}
 // Économie d'eau estimée vs coton conventionnel (réf. 2700 L)
-function waterSavedPct(matiere){
+function waterSavedPct(matiere,refEau){
   const e=getEmpreinte(matiere);
   if(!e||e.eau==null) return null;
-  return {pct:Math.round((1-e.eau/2700)*100), eau:e.eau, label:e.label};
+  const ref=refEau||2700;
+  return {pct:Math.round((1-e.eau/ref)*100), eau:e.eau, label:e.label};
 }
 // ── Jauges d'impact : feuille (score éco) + goutte (économie d'eau). Plein = mieux. ──
 let _gaugeUid=0;
@@ -1068,23 +1070,53 @@ function _fillIcon(pathD,fillPct,fillColor,strokeColor,extra){
     +`<rect x="0" y="${y.toFixed(1)}" width="64" height="${h.toFixed(1)}" fill="${fillColor}" clip-path="url(#${uid})"/>`
     +`<path d="${pathD}" fill="none" stroke="${strokeColor}" stroke-width="3"/>${extra||''}</svg>`;
 }
-function impactGauges(p){
+function _gaugeItem(ic,label,val,valCol,title){
+  return `<span style="display:inline-flex;align-items:center;gap:5px" title="${title}">${ic}`
+    +`<span style="display:inline-flex;flex-direction:column;line-height:1.15">`
+    +`<span style="font-size:8.5px;letter-spacing:.5px;text-transform:uppercase;color:rgba(237,228,207,0.45)">${label}</span>`
+    +`<b style="font-size:12px;font-weight:600;color:${valCol}">${val}</b></span></span>`;
+}
+const _CLOUD_D='M16 46 C8 46 6 36 13 33 C11 23 24 18 29 26 C33 16 49 18 48 28 C56 29 56 46 47 46 Z';
+// CO₂ économisé estimé vs coton conventionnel (réf. 5,5 kg)
+function co2SavedPct(matiere,refCo2){
+  const e=getEmpreinte(matiere);
+  if(!e||e.co2==null) return null;
+  const ref=refCo2||5.5;
+  return {pct:Math.round((1-e.co2/ref)*100), co2:e.co2};
+}
+function _savedLabel(pct,posCol){
+  if(pct>0) return {lbl:'−'+pct+'%',col:posCol};
+  if(pct===0) return {lbl:'réf.',col:'rgba(237,228,207,0.6)'};
+  return {lbl:'+'+(-pct)+'%',col:'#d4a76a'};
+}
+function _co2Gauge(pct){
+  if(pct==null) return '';
+  const s=_savedLabel(pct,'#c3b3e6');
+  return _gaugeItem(_fillIcon(_CLOUD_D,Math.max(0,Math.min(100,pct)),'#8f7fc0','#b9a7d9'),t('ig_co2'),s.lbl,s.col,'Émissions de CO₂ estimées vs coton conventionnel');
+}
+function _waterGauge(pct){
+  if(pct==null) return '';
+  const s=_savedLabel(pct,'#7cc3d4');
+  return _gaugeItem(_fillIcon(_DROP_D,Math.max(0,Math.min(100,pct)),'#5aa9bd','#6fb7c9'),t('ig_eau'),s.lbl,s.col,"Économie d'eau estimée vs coton conventionnel");
+}
+function impactGaugesV(waterPct,co2Pct){
+  const html=_co2Gauge(co2Pct)+_waterGauge(waterPct);
+  if(!html) return '';
+  return `<span style="display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap">${html}</span>`;
+}
+function impactGauges(p,ref){
   if(!p) return '';
-  const score=Math.max(0,Math.min(5,Math.round(p.score_eco||0)));
-  const leaf=_fillIcon(_LEAF_D,score/5*100,'#8fcf8a','#8fcf8a','<line x1="18" y1="46" x2="46" y2="18" stroke="#0e1d30" stroke-width="3"/>');
-  let drop='';
-  const w=waterSavedPct(p.matiere);
-  if(w){
-    const fill=Math.max(0,Math.min(100,w.pct));
-    let lbl,col;
-    if(w.pct>0){lbl='−'+w.pct+'%';col='#7cc3d4';}
-    else if(w.pct===0){lbl='réf.';col='rgba(237,228,207,0.6)';}
-    else {lbl='+'+(-w.pct)+'%';col='#d4a76a';}
-    drop=`<span style="display:inline-flex;align-items:center;gap:4px" title="Économie d'eau estimée vs coton conventionnel">${_fillIcon(_DROP_D,fill,'#5aa9bd','#6fb7c9')}<b style="font-size:12px;font-weight:600;color:${col}">${lbl}</b></span>`;
-  }
-  return `<span style="display:inline-flex;align-items:center;gap:12px;flex-wrap:wrap">`
-    +`<span style="display:inline-flex;align-items:center;gap:4px" title="Score éco">${leaf}<b style="font-size:12px;font-weight:600;color:var(--gold)">${score}/5</b></span>`
-    +`${drop}</span>`;
+  const w=waterSavedPct(p.matiere,ref&&ref.eau), c=co2SavedPct(p.matiere,ref&&ref.co2);
+  return impactGaugesV(w?w.pct:null, c?c.pct:null);
+}
+// Jauge horizontale Faible → Élevée (niveau absolu d'une empreinte), pour le panneau détaillé
+function _hgauge(label,valueText,pct,color){
+  const p=Math.max(3,Math.min(100,Math.round(pct)));
+  return `<div style="margin-bottom:13px">`
+    +`<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px"><span style="font-size:12px;color:rgba(237,228,207,0.7)">${label}</span><span style="font-size:18px;font-weight:300;color:var(--gold-l);font-family:'Cormorant Garamond',serif">${valueText}</span></div>`
+    +`<div style="position:relative;height:10px;border-radius:6px;background:#0c1828;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:${p}%;background:${color};border-radius:6px"></div><div style="position:absolute;left:${p}%;top:-2px;width:2px;height:14px;background:#F7F2E8"></div></div>`
+    +`<div style="display:flex;justify-content:space-between;margin-top:5px;font-size:10px;color:rgba(237,228,207,0.45)"><span>${t('niv_faible')}</span><span>${t('niv_moyenne')}</span><span>${t('niv_elevee')}</span></div>`
+    +`</div>`;
 }
 
 // ════════════════════════════════════════

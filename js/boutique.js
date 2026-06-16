@@ -185,7 +185,9 @@ function renderBoutiqueContent(products,filter=''){
   if(bqCurrentBrand){
     const brandProducts=bqAllProducts.filter(p=>p.marque===bqCurrentBrand);
     const sorted=bqSortProducts(brandProducts);
-    const avgEco=brandProducts.length?Math.round(brandProducts.reduce((s,p)=>s+(p.score_eco||0),0)/brandProducts.length):0;
+    const _avg=arr=>arr.length?Math.round(arr.reduce((a,b)=>a+b,0)/arr.length):null;
+    const avgW=_avg(brandProducts.map(p=>waterSavedPct(p.matiere)).filter(Boolean).map(x=>x.pct));
+    const avgC=_avg(brandProducts.map(p=>co2SavedPct(p.matiere)).filter(Boolean).map(x=>x.pct));
 
     const certifs=[...new Set(brandProducts.map(p=>p.label).filter(Boolean))].slice(0,3);
     content.innerHTML=`<div style="padding:18px 16px 16px;border-bottom:1px solid var(--gold-b);margin-bottom:14px">
@@ -194,7 +196,7 @@ function renderBoutiqueContent(products,filter=''){
         <div style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;background:rgba(240,234,216,0.06);border:1px solid rgba(240,234,216,0.12);flex-shrink:0">${_bagSvg}</div>
         <div style="flex:1;min-width:0">
           <div style="font-family:var(--fd);font-size:24px;font-weight:300;color:var(--white);line-height:1.1">${escapeHtml(bqCurrentBrand)}</div>
-          <div style="font-size:12px;color:var(--wd);letter-spacing:.3px;margin-top:2px;display:flex;align-items:center;gap:6px">${sorted.length} pièce${sorted.length>1?'s':''} ${impactGauges({score_eco:avgEco})}</div>
+          <div style="font-size:12px;color:var(--wd);letter-spacing:.3px;margin-top:2px;display:flex;align-items:center;gap:6px">${sorted.length} pièce${sorted.length>1?'s':''} ${impactGaugesV(avgW,avgC)}</div>
         </div>
       </div>
       ${certifs.length?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${certifs.map(c=>`<span class="certif-badge">${escapeHtml(c)}</span>`).join('')}</div>`:''}
@@ -208,11 +210,13 @@ function renderBoutiqueContent(products,filter=''){
     const brandsMap={};
     products.forEach(p=>{
       if(!p.marque)return;
-      if(!brandsMap[p.marque])brandsMap[p.marque]={name:p.marque,count:0,ecoSum:0};
-      brandsMap[p.marque].count++;
-      brandsMap[p.marque].ecoSum+=(p.score_eco||0);
+      if(!brandsMap[p.marque])brandsMap[p.marque]={name:p.marque,count:0,wSum:0,wN:0,cSum:0,cN:0};
+      const bm=brandsMap[p.marque];
+      bm.count++;
+      const w=waterSavedPct(p.matiere); if(w){bm.wSum+=w.pct;bm.wN++;}
+      const c=co2SavedPct(p.matiere); if(c){bm.cSum+=c.pct;bm.cN++;}
     });
-    const brandsList=Object.values(brandsMap).map(b=>({...b,avgEco:Math.round(b.ecoSum/b.count)})).sort((a,b)=>b.avgEco-a.avgEco||b.count-a.count);
+    const brandsList=Object.values(brandsMap).map(b=>({...b,avgW:b.wN?Math.round(b.wSum/b.wN):null,avgC:b.cN?Math.round(b.cSum/b.cN):null})).sort((a,b)=>(b.avgW||0)-(a.avgW||0)||b.count-a.count);
     if(!brandsList.length){
       content.innerHTML=`<div class="empty-state"><img src="mascote_ivory/the_gatherer.png" alt=""><div>${t('no_products')}</div></div>`;
       return;
@@ -221,7 +225,7 @@ function renderBoutiqueContent(products,filter=''){
       <div class="bq-brand-card" onclick="bqFilterByBrand('${b.name.replace(/'/g,'\\\'')}')">
         <div style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;background:rgba(240,234,216,0.06);border:1px solid rgba(240,234,216,0.12);margin:0 auto 6px">${_bagSvg}</div>
         <div style="font-size:13px;font-weight:600;color:var(--white);line-height:1.3">${escapeHtml(b.name)}</div>
-        <div style="margin-top:3px">${impactGauges({score_eco:b.avgEco})}</div>
+        <div style="margin-top:3px">${impactGaugesV(b.avgW,b.avgC)}</div>
         <div style="font-size:11px;color:var(--wd)">${b.count} pièce${b.count>1?'s':''}</div>
       </div>`).join('')}</div>`;
     return;

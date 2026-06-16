@@ -761,11 +761,8 @@ function openPieceSheet(h){
   const matiere=h.matiere||h.tags?.matiere||'inconnu';
   const emp=getEmpreinte(matiere);
   const scoreEco=emp.co2===null?3:emp.co2<3?5:emp.co2<7?4:emp.co2<12?3:emp.co2<20?2:1;
-  const chiffre=emp.eau!==null
-    ?`<div style="font-size:22px;font-weight:300;color:var(--gold);font-family:'Cormorant Garamond',serif">~${emp.eau.toLocaleString()}L</div><div style="font-size:11px;color:var(--wd);letter-spacing:1px">${t('eau_label')} · ${emp.co2}kg CO₂</div>`
-    :`<div style="font-size:13px;color:var(--wd)">${t('matiere_unknown')}</div>`;
 
-  currentLook={emoji:h.emoji||'',name:h.name,brand:h.brand||'',eco:scoreEco,tags:h.tags||{},postId:h.postId||null};
+  currentLook={emoji:h.emoji||'',name:h.name,brand:h.brand||'',eco:scoreEco,matiere:matiere,tags:h.tags||{},postId:h.postId||null};
 
   const imgWrap=document.getElementById('look-img-wrap');
   imgWrap.style.display='none';
@@ -793,10 +790,9 @@ function openPieceSheet(h){
     </div>
     <div style="margin:0 8px 16px;background:var(--black-3);border-radius:12px;padding:14px 16px;border:1px solid var(--gold-b)">
       <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px">${t('empreinte_titre')}</div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px;flex-wrap:wrap">
-        <div>${chiffre}</div>
-        <div style="text-align:right">${impactGauges({score_eco:scoreEco,matiere:matiere})}</div>
-      </div>
+      ${emp.eau!=null
+        ? `${_hgauge(t('emp_eau_lbl'),'~'+emp.eau.toLocaleString()+' L',emp.eau/5000*100,'#5aa9bd')}${emp.co2!=null?_hgauge(t('emp_co2_lbl'),'~'+emp.co2+' kg CO₂',emp.co2/20*100,'#8f7fc0'):''}`
+        : `<div style="font-size:13px;color:var(--wd);margin-bottom:10px">${t('matiere_unknown')}</div>`}
       <div style="font-size:12px;color:var(--wd);line-height:1.6;border-top:1px solid rgba(240,234,216,.1);padding-top:8px;font-style:italic">${emp.info}</div>
       <div style="font-size:9px;color:rgba(245,240,232,.3);margin-top:6px;letter-spacing:.5px">${t('donnees_estim')}</div>
     </div>
@@ -1212,6 +1208,9 @@ async function applyMatchScores(altsByCategory, detectedType, detectedColor){
 
 async function openAlt(item) {
   const p = item || currentLook || { emoji:'👗', name:t('this_item'), brand:'—', price:'—', eco:3 };
+  // La pièce scannée = la référence : les alternatives se comparent à SON empreinte (pas à un coton fixe)
+  const _refEmp = getEmpreinte(p.matiere || (p.tags && p.tags.matiere));
+  window._scanRef = (_refEmp && _refEmp.eau != null) ? { eau:_refEmp.eau, co2:_refEmp.co2 } : null;
   document.getElementById('scan-phase').style.display   = 'block';
   document.getElementById('result-phase').style.display = 'none';
   document.getElementById('scan-bar').style.width = '0%';
@@ -1262,7 +1261,7 @@ async function openAlt(item) {
       const methodBadge = detectionMethod === 'clip'
         ? `<span style="font-size:9px;background:rgba(240,234,216,.1);border:1px solid var(--gold-b);color:var(--gold);padding:2px 8px;border-radius:10px;letter-spacing:1px;margin-left:6px">🧠 CLIP Vision</span>`
         : `<span style="font-size:9px;background:rgba(245,240,232,.07);border:1px solid rgba(245,240,232,.15);color:var(--wd);padding:2px 8px;border-radius:10px;letter-spacing:1px;margin-left:6px">${t('detection_keywords')}</span>`;
-      document.getElementById('res-eco').innerHTML = impactGauges({score_eco:p.eco||2,matiere:(p.matiere||(p.tags&&p.tags.matiere))}) + methodBadge;
+      document.getElementById('res-eco').innerHTML = impactGaugesV(0,0) + methodBadge;
       document.querySelectorAll('.alt-tab').forEach((tabEl,i) => tabEl.classList.toggle('active', i===0));
       renderAltTabLive('ethique');
     }, 300);
@@ -1281,7 +1280,7 @@ async function openAlt(item) {
       document.getElementById('res-emoji').innerHTML = _itemSvg;
       document.getElementById('res-name').textContent  = p.name  || t('this_item');
       document.getElementById('res-brand').textContent = p.brand || '';
-      document.getElementById('res-eco').innerHTML = impactGauges({score_eco:p.eco||2,matiere:(p.matiere||(p.tags&&p.tags.matiere))});
+      document.getElementById('res-eco').innerHTML = impactGaugesV(0,0);
       document.querySelectorAll('.alt-tab').forEach((tabEl,i) => tabEl.classList.toggle('active', i===0));
       renderAltTabLive('ethique');
     }, 300);
@@ -1322,7 +1321,7 @@ function renderAltTabLive(type = 'ethique') {
         <div style="font-size:13px;font-weight:500;color:var(--white);margin-bottom:2px">${escapeHtml(a.nom)}</div>
         <div class="txt-xs-gold-mb">${escapeHtml(a.marque)}</div>
         <div class="row-tags">
-          <div class="eco-score">${impactGauges(a)}</div>
+          <div class="eco-score">${impactGauges(a, window._scanRef)}</div>
           ${a.matiere ? `<span class="txt-xxs-dim">${escapeHtml(a.matiere)}</span>` : ''}
           ${a.label ? `<span style="font-size:9px;background:rgba(80,180,80,.15);color:#7dc97d;border:1px solid rgba(80,180,80,.3);padding:1px 6px;border-radius:10px">${escapeHtml(a.label)}</span>` : ''}
         </div>
