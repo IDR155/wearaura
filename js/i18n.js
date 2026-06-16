@@ -37,7 +37,7 @@ const I18N = {
     casual:'Casual',chic:'Chic',sport:'Sport',vintage:'Vintage',
     minimal:'Minimal',streetwear:'Streetwear',boheme:'Bohème',luxe:'Luxe',
     empreinte_titre:'Empreinte estimée',
-    eau_label:"d'eau estimés",score_eco:'SCORE ÉCO',ig_eco:'Éco',ig_eau:'Eau',ig_co2:'CO₂',ig_high:'élevé',niv_faible:'Faible',niv_moyenne:'Moyenne',niv_elevee:'Élevée',emp_eau_lbl:'Empreinte eau',emp_co2_lbl:'Empreinte CO₂',
+    eau_label:"d'eau estimés",score_eco:'SCORE ÉCO',ig_eco:'Éco',ig_eau:'Eau',ig_co2:'CO₂',ig_high:'élevé',niv_faible:'Faible',niv_moyenne:'Moyenne',niv_elevee:'Élevée',emp_eau_lbl:'Empreinte eau',emp_co2_lbl:'Empreinte CO₂',ig_reuse:'Réutilisé',ig_reuse_hint:'Pièce de seconde main : réutilisée, donc pas de nouvelle production — empreinte quasi nulle.',
     donnees_estim:'* Données estimatives — moyennes industrie textile',
     voir_alternative:'Voir une alternative responsable',
     look_complet:'Le Look complet',
@@ -497,7 +497,7 @@ const I18N = {
     casual:'Casual',chic:'Chic',sport:'Sport',vintage:'Vintage',
     minimal:'Minimal',streetwear:'Streetwear',boheme:'Boho',luxe:'Luxury',
     empreinte_titre:'Estimated footprint',
-    eau_label:'of water estimated',score_eco:'ECO SCORE',ig_eco:'Eco',ig_eau:'Water',ig_co2:'CO₂',ig_high:'high',niv_faible:'Low',niv_moyenne:'Medium',niv_elevee:'High',emp_eau_lbl:'Water footprint',emp_co2_lbl:'Carbon footprint',
+    eau_label:'of water estimated',score_eco:'ECO SCORE',ig_eco:'Eco',ig_eau:'Water',ig_co2:'CO₂',ig_high:'high',niv_faible:'Low',niv_moyenne:'Medium',niv_elevee:'High',emp_eau_lbl:'Water footprint',emp_co2_lbl:'Carbon footprint',ig_reuse:'Reused',ig_reuse_hint:'Second-hand item: reused, so no new production — near-zero footprint.',
     donnees_estim:'* Estimated data — textile industry averages',
     voir_alternative:'Find a responsible alternative',
     look_complet:'Full Look',
@@ -1104,8 +1104,22 @@ function impactGaugesV(waterPct,co2Pct){
   if(!html) return '';
   return `<span style="display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap">${html}</span>`;
 }
+// Détecte une pièce de seconde main / vintage (son atout = la réutilisation, pas la matière)
+function isSecondHand(p){
+  if(!p) return false;
+  const cat=(p.categorie||p.categorie_alt||'').toLowerCase();
+  if(cat.includes('seconde')||cat.includes('occasion')||cat==='seconde_main') return true;
+  const txt=((p.nom||p.name||'')+' '+(p.marque||p.brand||'')).toLowerCase();
+  return /vintage|occasion|seconde\s*main|pre-?loved|pre-?owned|friperie|recommerce|d'occasion/.test(txt);
+}
+function _reuseBadge(){
+  return `<span style="display:inline-flex;align-items:center;gap:5px" title="${t('ig_reuse_hint')}">`
+    +`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8fcf8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>`
+    +`<b style="font-size:12px;font-weight:600;color:#8fcf8a">${t('ig_reuse')}</b></span>`;
+}
 function impactGauges(p,ref){
   if(!p) return '';
+  if(isSecondHand(p)) return `<span style="display:inline-flex;align-items:center">${_reuseBadge()}</span>`;
   const w=waterSavedPct(p.matiere,ref&&ref.eau), c=co2SavedPct(p.matiere,ref&&ref.co2);
   return impactGaugesV(w?w.pct:null, c?c.pct:null);
 }
