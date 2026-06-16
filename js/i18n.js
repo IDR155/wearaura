@@ -37,7 +37,7 @@ const I18N = {
     casual:'Casual',chic:'Chic',sport:'Sport',vintage:'Vintage',
     minimal:'Minimal',streetwear:'Streetwear',boheme:'Bohème',luxe:'Luxe',
     empreinte_titre:'Empreinte estimée',
-    eau_label:"d'eau estimés",score_eco:'SCORE ÉCO',ig_eco:'Éco',ig_eau:'Eau',ig_co2:'CO₂',ig_high:'élevé',niv_faible:'Faible',niv_moyenne:'Moyenne',niv_elevee:'Élevée',emp_eau_lbl:'Empreinte eau',emp_co2_lbl:'Empreinte CO₂',ig_reuse:'Réutilisé',ig_reuse_hint:'Pièce de seconde main : réutilisée, donc pas de nouvelle production — empreinte quasi nulle.',
+    eau_label:"d'eau estimés",score_eco:'SCORE ÉCO',ig_eco:'Éco',ig_eau:'Eau',ig_co2:'CO₂',ig_high:'élevé',niv_faible:'Faible',niv_moyenne:'Moyenne',niv_elevee:'Élevée',emp_eau_lbl:'Empreinte eau',emp_co2_lbl:'Empreinte CO₂',ig_reuse:'Réutilisé',ig_reuse_hint:'Pièce de seconde main : réutilisée, donc pas de nouvelle production — empreinte quasi nulle.',ig_ref:'réf.',
     donnees_estim:'* Données estimatives — moyennes industrie textile',
     voir_alternative:'Voir une alternative responsable',
     look_complet:'Le Look complet',
@@ -497,7 +497,7 @@ const I18N = {
     casual:'Casual',chic:'Chic',sport:'Sport',vintage:'Vintage',
     minimal:'Minimal',streetwear:'Streetwear',boheme:'Boho',luxe:'Luxury',
     empreinte_titre:'Estimated footprint',
-    eau_label:'of water estimated',score_eco:'ECO SCORE',ig_eco:'Eco',ig_eau:'Water',ig_co2:'CO₂',ig_high:'high',niv_faible:'Low',niv_moyenne:'Medium',niv_elevee:'High',emp_eau_lbl:'Water footprint',emp_co2_lbl:'Carbon footprint',ig_reuse:'Reused',ig_reuse_hint:'Second-hand item: reused, so no new production — near-zero footprint.',
+    eau_label:'of water estimated',score_eco:'ECO SCORE',ig_eco:'Eco',ig_eau:'Water',ig_co2:'CO₂',ig_high:'high',niv_faible:'Low',niv_moyenne:'Medium',niv_elevee:'High',emp_eau_lbl:'Water footprint',emp_co2_lbl:'Carbon footprint',ig_reuse:'Reused',ig_reuse_hint:'Second-hand item: reused, so no new production — near-zero footprint.',ig_ref:'ref.',
     donnees_estim:'* Estimated data — textile industry averages',
     voir_alternative:'Find a responsible alternative',
     look_complet:'Full Look',
@@ -1089,7 +1089,7 @@ function co2SavedPct(matiere,refCo2){
 }
 function _savedLabel(pct,posCol){
   if(pct>0) return {lbl:'−'+pct+'%',col:posCol};
-  if(pct===0) return {lbl:'réf.',col:'rgba(237,228,207,0.6)'};
+  if(pct===0) return {lbl:t('ig_ref'),col:'rgba(237,228,207,0.6)'};
   return {lbl:'+'+(-pct)+'%',col:'#d4a76a'};
 }
 function _co2Gauge(pct){
