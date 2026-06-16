@@ -1060,14 +1060,17 @@ function waterSavedPct(matiere,refEau){
 let _gaugeUid=0;
 const _LEAF_D='M10 54 C10 30 30 10 54 10 C54 34 34 54 10 54 Z';
 const _DROP_D='M32 6 C32 6 14 28 14 42 A18 18 0 1 0 50 42 C50 28 32 6 32 6 Z';
-function _fillIcon(pathD,fillPct,fillColor,strokeColor,extra){
+function _fillIcon(pathD,fillPct,fillColor,strokeColor,extra,bounds){
   const uid='ig'+(_gaugeUid++);
   const f=Math.max(0,Math.min(100,fillPct));
-  const h=64*f/100, y=64-h;
+  // Remplit selon la hauteur RÉELLE de la forme (top→bottom), pas le viewBox entier,
+  // sinon les formes hautes (nuage) paraissent vides.
+  const top=bounds?bounds.top:0, bot=bounds?bounds.bottom:64;
+  const fillTopY=bot-(bot-top)*f/100;
   return `<svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="display:block">`
     +`<defs><clipPath id="${uid}"><path d="${pathD}"/></clipPath></defs>`
     +`<path d="${pathD}" fill="rgba(240,234,216,0.10)"/>`
-    +`<rect x="0" y="${y.toFixed(1)}" width="64" height="${h.toFixed(1)}" fill="${fillColor}" clip-path="url(#${uid})"/>`
+    +`<rect x="0" y="${fillTopY.toFixed(1)}" width="64" height="${(64-fillTopY).toFixed(1)}" fill="${fillColor}" clip-path="url(#${uid})"/>`
     +`<path d="${pathD}" fill="none" stroke="${strokeColor}" stroke-width="3"/>${extra||''}</svg>`;
 }
 function _gaugeItem(ic,label,val,valCol,title){
@@ -1092,12 +1095,12 @@ function _savedLabel(pct,posCol){
 function _co2Gauge(pct){
   if(pct==null) return '';
   const s=_savedLabel(pct,'#c3b3e6');
-  return _gaugeItem(_fillIcon(_CLOUD_D,Math.max(0,Math.min(100,pct)),'#8f7fc0','#b9a7d9'),t('ig_co2'),s.lbl,s.col,'Émissions de CO₂ estimées vs coton conventionnel');
+  return _gaugeItem(_fillIcon(_CLOUD_D,Math.max(0,Math.min(100,pct)),'#8f7fc0','#b9a7d9','',{top:16,bottom:46}),t('ig_co2'),s.lbl,s.col,'Émissions de CO₂ estimées vs coton conventionnel');
 }
 function _waterGauge(pct){
   if(pct==null) return '';
   const s=_savedLabel(pct,'#7cc3d4');
-  return _gaugeItem(_fillIcon(_DROP_D,Math.max(0,Math.min(100,pct)),'#5aa9bd','#6fb7c9'),t('ig_eau'),s.lbl,s.col,"Économie d'eau estimée vs coton conventionnel");
+  return _gaugeItem(_fillIcon(_DROP_D,Math.max(0,Math.min(100,pct)),'#5aa9bd','#6fb7c9','',{top:6,bottom:60}),t('ig_eau'),s.lbl,s.col,"Économie d'eau estimée vs coton conventionnel");
 }
 function impactGaugesV(waterPct,co2Pct){
   const html=_co2Gauge(co2Pct)+_waterGauge(waterPct);
