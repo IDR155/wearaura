@@ -13,7 +13,7 @@
   .back { display: inline-flex; align-items: center; gap: 8px; color: var(--gold); font-size: 12px; letter-spacing: 1px; text-decoration: none; margin-bottom: 32px; cursor: pointer; }
   .back:hover { opacity: 0.7; }
   .tabs { display: flex; border: 1px solid var(--gold-b); border-radius: 50px; padding: 4px; margin-bottom: 40px; }
-  .tab { flex: 1; text-align: center; padding: 10px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: rgba(237,228,207,0.5); cursor: pointer; border-radius: 50px; transition: background-color 200ms cubic-bezier(0.23,1,0.32,1), color 200ms cubic-bezier(0.23,1,0.32,1); }
+  .tab { flex: 1; text-align: center; padding: 9px 5px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: rgba(237,228,207,0.5); cursor: pointer; border-radius: 50px; transition: background-color 200ms cubic-bezier(0.23,1,0.32,1), color 200ms cubic-bezier(0.23,1,0.32,1); }
   .tab.active { background: var(--gold); color: var(--black); font-weight: 500; }
   .content { display: none; }
   .content.active { display: block; }
@@ -41,6 +41,7 @@
   <div class="tab active" onclick="switchTab('cgu')">CGU</div>
   <div class="tab" onclick="switchTab('privacy')">Confidentialité</div>
   <div class="tab" onclick="switchTab('affil')">Liens affiliés</div>
+  <div class="tab" onclick="switchTab('legal')">Mentions légales</div>
 </div>
 
 <!-- ══ CGU ══ -->
@@ -50,7 +51,7 @@
 
   <h2>1. Présentation du service</h2>
   <p>WearAura est une application permettant aux utilisateurs de partager des "looks" mode avec des hotspots interactifs sur les vêtements, et d'explorer des alternatives éthiques ou de seconde main aux produits identifiés.</p>
-  <p>Éditeur : WearAura. Contact : <a href="mailto:contact@wearaura.fr">contact@wearaura.fr</a></p>
+  <p>Éditeur : Idriss Bouamor (projet étudiant — voir <a href="#legal" onclick="switchTab('legal')">Mentions légales</a>). Contact : <a href="mailto:contact@wearaura.fr">contact@wearaura.fr</a></p>
 
   <h2>2. Accès au service</h2>
   <p>L'accès à WearAura est gratuit. Un compte est nécessaire pour publier des contenus. La création de compte requiert une adresse email valide et un mot de passe.</p>
@@ -262,10 +263,42 @@
   </div>
 </div>
 
+<!-- ══ MENTIONS LÉGALES ══ -->
+<div id="tab-legal" class="content">
+  <h1>Mentions légales</h1>
+  <div class="date">Dernière mise à jour : Juin 2026</div>
+
+  <p>Conformément à l'article 6 de la loi n°2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique (LCEN), voici les informations relatives à l'éditeur et à l'hébergeur du site.</p>
+
+  <h2>Éditeur du site</h2>
+  <p>WearAura est édité par <strong style="color:var(--white)">Idriss Bouamor</strong>, dans le cadre d'un projet étudiant non commercial (statut national d'étudiant-entrepreneur — SNEE). Aucune société n'est immatriculée à ce jour ; une structure juridique sera créée préalablement à toute monétisation.</p>
+  <p>Contact : <a href="mailto:contact@wearaura.fr">contact@wearaura.fr</a></p>
+
+  <h2>Directeur de la publication</h2>
+  <p>Idriss Bouamor</p>
+
+  <h2>Hébergeur</h2>
+  <p>Le site est hébergé par <strong style="color:var(--white)">Netlify, Inc.</strong><br>
+  512 2nd Street, Suite 200, San Francisco, CA 94107, États-Unis<br>
+  Téléphone : +1 415 691 1573<br>
+  <a href="https://www.netlify.com" target="_blank">www.netlify.com</a></p>
+
+  <h2>Base de données</h2>
+  <p>Les données applicatives (comptes, contenus) sont hébergées par <strong style="color:var(--white)">Supabase</strong> sur des serveurs situés dans l'Union européenne. Le détail des traitements figure dans la <a href="#privacy" onclick="switchTab('privacy')">politique de confidentialité</a>.</p>
+
+  <h2>Propriété intellectuelle</h2>
+  <p>La marque WearAura, son logo et les éléments graphiques du site sont la propriété de l'éditeur. Toute reproduction sans autorisation est interdite. Les contenus publiés par les utilisateurs restent leur propriété (voir CGU, article 3).</p>
+
+  <div class="divider"></div>
+  <div class="contact-box">
+    <p>Pour toute question : <a href="mailto:contact@wearaura.fr">contact@wearaura.fr</a></p>
+  </div>
+</div>
+
 <script>
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach((tabEl, i) => {
-    tabEl.classList.toggle('active', ['cgu','privacy','affil'][i] === tab);
+    tabEl.classList.toggle('active', ['cgu','privacy','affil','legal'][i] === tab);
   });
   document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
@@ -274,7 +307,7 @@ function switchTab(tab) {
 // Lien direct vers un onglet : terms.html#privacy / #affil / #cgu
 // (URL exigée par App Store Connect et Google Play Console pour la politique de confidentialité)
 const initialTab = location.hash.replace('#', '');
-if (['cgu', 'privacy', 'affil'].includes(initialTab)) switchTab(initialTab);
+if (['cgu', 'privacy', 'affil', 'legal'].includes(initialTab)) switchTab(initialTab);
 </script>
 </body>
 </html>
