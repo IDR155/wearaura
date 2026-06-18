@@ -9,6 +9,9 @@ function switchAuthTab(tab){
   });
   document.getElementById('auth-login').style.display=tab==='login'?'block':'none';
   document.getElementById('auth-signup').style.display=tab==='signup'?'block':'none';
+  // Le pied "En continuant…" fait doublon avec la case de consentement de l'inscription : on le masque sur cet onglet (et il libère de la place).
+  const foot=document.querySelector('.auth-foot');
+  if(foot)foot.style.display=tab==='signup'?'none':'block';
 }
 function showErr(msg){const e=document.getElementById('auth-err');e.textContent=msg;e.style.display='block';}
 
@@ -26,6 +29,7 @@ async function doSignup(){
   const un=document.getElementById('s-un').value.trim().replace('@','');
   const email=document.getElementById('s-em').value.trim(),pw=document.getElementById('s-pw').value;
   if(!fn||!email||!pw||!un)return showErr(t('fill_fields'));
+  if(!document.getElementById('s-consent')?.checked)return showErr(t('accept_terms'));
   const btn=document.getElementById('btn-signup');btn.disabled=true;btn.textContent=t('creating');
   const {data,error}=await sb.auth.signUp({email,password:pw,options:{data:{first_name:fn,last_name:ln,username:un,full_name:`${fn} ${ln}`}}});
   btn.disabled=false;btn.textContent=t('create_account');

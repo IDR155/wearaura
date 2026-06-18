@@ -162,7 +162,7 @@ body{background:var(--black);font-family:var(--fb);color:var(--white);overflow:h
 #sc-auth{background:radial-gradient(ellipse at top,#0F2040,#07101E 60%);overflow-y:auto;padding:calc(28px + var(--sat,0px)) 28px calc(20px + var(--sab,0px));justify-content:space-between;z-index:60}
 #sc-forgot.active{z-index:60}
 #sc-auth::-webkit-scrollbar{display:none}
-.auth-tabs{display:flex;border:1px solid var(--gold-b);border-radius:50px;padding:4px;margin:14px 0 14px}
+.auth-tabs{display:flex;border:1px solid var(--gold-b);border-radius:50px;padding:4px;margin:6px 0 12px}
 .auth-tab{flex:1;text-align:center;padding:9px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--wd);cursor:pointer;border-radius:50px;transition:background .3s,border-color .3s,color .3s,opacity .3s,transform .3s}
 .auth-tab.active{background:var(--gold);color:var(--black);font-weight:600}
 .fg{margin-bottom:10px}

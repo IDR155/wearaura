@@ -9,6 +9,8 @@ const I18N = {
     create_account:'Créer un compte',or:'ou',
     terms_agree:'En continuant, vous acceptez nos',
     terms_link:'CGU',privacy_link:'Politique de confidentialité',
+    signup_consent:'J\'ai 15 ans ou plus et j\'accepte les <a href="terms.html" target="_blank" onclick="event.stopPropagation()" style="color:var(--gold);text-decoration:underline">CGU</a> et la <a href="terms.html#privacy" target="_blank" onclick="event.stopPropagation()" style="color:var(--gold);text-decoration:underline">politique de confidentialité</a>.',
+    accept_terms:'Tu dois cocher la case (15 ans ou plus + acceptation des CGU) pour créer ton compte.',
     explorer:'Explorer',following:'Suivis',for_you:'Pour toi',
     voir_plus:'voir plus',share:'Partager',look_du_jour:'Look du jour',
     new_look:'New Look',create_title:'Nouveau Look',step2_label:'Étape 2 — Placer les étiquettes',
@@ -481,6 +483,8 @@ const I18N = {
     create_account:'Create Account',or:'or',
     terms_agree:'By continuing, you agree to our',
     terms_link:'Terms',privacy_link:'Privacy Policy',
+    signup_consent:'I am 15 or older and I accept the <a href="terms.html" target="_blank" onclick="event.stopPropagation()" style="color:var(--gold);text-decoration:underline">Terms</a> and the <a href="terms.html#privacy" target="_blank" onclick="event.stopPropagation()" style="color:var(--gold);text-decoration:underline">Privacy Policy</a>.',
+    accept_terms:'You must check the box (15 or older + accept the Terms) to create your account.',
     explorer:'Explore',following:'Following',for_you:'For You',
     voir_plus:'see more',share:'Share',look_du_jour:'Look of the day',
     new_look:'New Look',create_title:'New Look',step2_label:'Step 2 — Place tags',
@@ -983,6 +987,10 @@ function applyLang(){
     const val=t(key);
     if(attr)el.setAttribute(attr,val);
     else el.textContent=val;
+  });
+  // Textes contenant du HTML (liens) : injectés via innerHTML
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+    el.innerHTML=t(el.getAttribute('data-i18n-html'));
   });
   // Onboarding descriptions (contain <br>, use innerHTML)
   const obDescs={
