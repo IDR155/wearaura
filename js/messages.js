@@ -45,9 +45,30 @@ function startGlobalRealtime(){
           }
         })
       .subscribe();
-    // Demander la permission notif après 15s (non intrusif)
-    setTimeout(_requestNotifPermission, 15000);
+    // Demander la permission notif tôt, dès la 1re interaction après l'entrée dans l'app
+    // (et non plus 15s plus tard, ce qui tombait parfois en plein milieu d'une création).
+    _scheduleNotifPermissionOnGesture();
   }catch(e){}
+}
+
+// Déclenche la demande de permission à la 1re interaction utilisateur, mais jamais
+// pendant la création d'un post (#sc-create ouvert) pour ne pas interrompre le flow.
+// Safari/iOS exige un geste utilisateur pour requestPermission() → on s'appuie dessus.
+let _notifPermGestureBound=false;
+function _scheduleNotifPermissionOnGesture(){
+  if(_notifPermGestureBound)return;
+  if(!('Notification' in window)||Notification.permission!=='default')return;
+  _notifPermGestureBound=true;
+  const handler=()=>{
+    const create=document.getElementById('sc-create');
+    // Si l'écran de création est ouvert, on attend un autre geste (hors création)
+    if(create&&getComputedStyle(create).display!=='none')return;
+    document.removeEventListener('pointerdown',handler,true);
+    document.removeEventListener('keydown',handler,true);
+    _requestNotifPermission();
+  };
+  document.addEventListener('pointerdown',handler,true);
+  document.addEventListener('keydown',handler,true);
 }
 function stopGlobalRealtime(){
   if(_globalRealtime){_globalRealtime.unsubscribe();_globalRealtime=null;}
