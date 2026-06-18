@@ -115,36 +115,35 @@
   <p><strong style="color:var(--white)">Données de compte :</strong> adresse email, prénom, nom, nom d'utilisateur, mot de passe (haché, non lisible).</p>
   <p><strong style="color:var(--white)">Données de profil :</strong> photo de profil, bio, localisation (optionnelle).</p>
   <p><strong style="color:var(--white)">Contenus publiés :</strong> photos de looks, hotspots, légendes, tags, localisation du look (optionnelle).</p>
-  <p><strong style="color:var(--white)">Données comportementales :</strong> clics sur les hotspots, clics sur les alternatives, types d'alternatives consultées (éthique / seconde main), temps de publication d'un look. Ces données sont collectées de manière anonymisée et agrégée.</p>
+  <p><strong style="color:var(--white)">Données d'usage :</strong> actions effectuées dans l'application (onglets consultés, looks publiés, clics sur les alternatives, scans lancés, messages envoyés). Ces données sont associées à ton compte (pseudonymisées) ; le contenu de tes photos n'en fait jamais partie.</p>
   <p><strong style="color:var(--white)">Permissions de l'appareil :</strong> l'accès à la <strong style="color:var(--white)">caméra</strong> et à la <strong style="color:var(--white)">galerie photos</strong> est utilisé uniquement pour capturer ou importer vos looks et analyser une image (scan). Aucun accès n'a lieu en arrière-plan. Les <strong style="color:var(--white)">notifications push</strong> ne sont envoyées qu'avec votre autorisation explicite, modifiable à tout moment dans les réglages de votre appareil.</p>
 
   <h2>3. Finalités du traitement</h2>
   <ul>
     <li>Fournir et améliorer le service WearAura</li>
     <li>Afficher les contenus et les alternatives pertinentes</li>
-    <li>Mesurer l'usage de l'application (analytics)</li>
-    <li>Produire des études de tendances anonymisées (données comportementales agrégées — voir section 5)</li>
+    <li>Mesurer l'usage de l'application pour l'améliorer (analytics internes — voir section 5)</li>
     <li>Envoyer des notifications liées à votre activité (likes, commentaires, follows)</li>
   </ul>
 
   <h2>4. Base légale</h2>
   <ul>
     <li><strong style="color:var(--white)">Exécution du contrat</strong> : données de compte et de profil</li>
-    <li><strong style="color:var(--white)">Intérêt légitime</strong> : analytics d'usage, amélioration du service</li>
-    <li><strong style="color:var(--white)">Consentement</strong> : données comportementales utilisées à des fins d'études de tendances</li>
+    <li><strong style="color:var(--white)">Intérêt légitime</strong> : analytics d'usage internes, amélioration du service</li>
+    <li><strong style="color:var(--white)">Consentement</strong> : envoi de la photo à Mistral pour l'analyse IA (activable / désactivable à tout moment)</li>
   </ul>
 
-  <h2>5. Données comportementales et études de tendances</h2>
+  <h2>5. Données d'usage (analytics internes)</h2>
   <div class="highlight">
-    WearAura peut utiliser des données comportementales anonymisées et agrégées (ex : "65% des utilisateurs ayant consulté une veste en polyester ont cliqué sur une alternative en coton recyclé") à des fins d'études de tendances commercialisées auprès de bureaux de style ou de marques de mode. Ces données ne permettent en aucun cas d'identifier un utilisateur individuel.
+    WearAura enregistre des données d'usage (actions dans l'app : onglets consultés, looks publiés, clics sur les alternatives, scans lancés) afin de comprendre comment l'application est utilisée et de l'améliorer. Ces données ne sont <strong style="color:var(--white)">ni vendues, ni partagées avec des tiers à des fins commerciales</strong>, et le contenu de tes photos n'y figure pas.
   </div>
-  <p>Vous pouvez retirer votre consentement à tout moment via les paramètres de votre compte.</p>
+  <p>Ces statistiques sont collectées via notre propre base de données (Supabase, UE), sans outil de tracking publicitaire tiers ni cookie de mesure d'audience.</p>
 
   <h2>6. Partage des données</h2>
   <p>WearAura ne vend jamais vos données personnelles. Les données peuvent être partagées avec :</p>
   <ul>
     <li><strong style="color:var(--white)">Supabase</strong> (hébergement base de données — serveurs EU)</li>
-    <li><strong style="color:var(--white)">Mistral AI</strong> (analyse d'images via modèle Pixtral pour la suggestion d'alternatives — données non conservées)</li>
+    <li><strong style="color:var(--white)">Mistral AI</strong> (analyse d'images pour la détection des vêtements, uniquement si tu actives l'analyse IA — photo conservée 30 jours max pour la lutte anti-abus puis supprimée, non utilisée pour l'entraînement)</li>
     <li><strong style="color:var(--white)">Plateformes d'affiliation</strong> (Awin, Effiliation) — uniquement les clics trackés, sans données personnelles</li>
   </ul>
 
@@ -152,7 +151,7 @@
   <ul>
     <li>Données de compte : conservées jusqu'à suppression du compte</li>
     <li>Contenus publiés : conservés jusqu'à suppression manuelle ou du compte</li>
-    <li>Données comportementales agrégées : conservées indéfiniment sous forme anonymisée</li>
+    <li>Données d'usage : associées au compte, supprimées avec le compte</li>
     <li>Logs techniques : 90 jours</li>
   </ul>
 
