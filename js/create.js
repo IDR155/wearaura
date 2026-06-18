@@ -3,6 +3,8 @@
 function resetCreate() {
   selFile = null;
   hspots = []; selHspot = null;
+  const thumb = document.getElementById('gallery-thumb');
+  if(thumb) thumb.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
   document.getElementById('c-step1').style.display = 'flex';
   document.getElementById('c-step2').style.display = 'none';
   document.getElementById('c-step3').style.display = 'none';
@@ -154,6 +156,7 @@ function confirmGoBack(){
 
 function onFileSelect(e) {
   const file = e.target.files[0]; if (!file) return;
+  e.target.value = '';
   const reader = new FileReader();
   reader.onload = ev => {
     const rawUrl = ev.target.result;

@@ -119,8 +119,23 @@ function openNewDM(){
   const sc=document.getElementById('sc-new-dm');sc.style.display='flex';
   _attachNewDMSwipe(sc);
   document.getElementById('dm-search-input').value='';
-  document.getElementById('dm-search-results').innerHTML=`<div style="font-size:12px;color:var(--wd);text-align:center;padding:30px">${t('dm_search_hint')}</div>`;
+  _loadDMSuggestions();
   setTimeout(()=>document.getElementById('dm-search-input').focus(),200);
+}
+// Par défaut (avant toute recherche) : suggère les comptes suivis, plus rapide à atteindre
+// qu'une recherche à vide.
+async function _loadDMSuggestions(){
+  const results=document.getElementById('dm-search-results');
+  if(!me){results.innerHTML=`<div style="font-size:12px;color:var(--wd);text-align:center;padding:30px">${t('dm_search_hint')}</div>`;return;}
+  results.innerHTML=skRows(3);
+  try{
+    const{data:follows}=await sb.from('follows').select('following_id').eq('follower_id',me.id).limit(20);
+    const ids=(follows||[]).map(f=>f.following_id);
+    if(!ids.length){results.innerHTML=`<div style="font-size:12px;color:var(--wd);text-align:center;padding:30px">${t('dm_search_hint')}</div>`;return;}
+    const{data}=await sb.from('profiles').select('id,username,full_name,avatar_url').in('id',ids);
+    if(!data?.length){results.innerHTML=`<div style="font-size:12px;color:var(--wd);text-align:center;padding:30px">${t('dm_search_hint')}</div>`;return;}
+    results.innerHTML=data.map(p=>userRowItem(p,`startConversation('${p.id}','${(p.full_name||p.username||'User').replace(/'/g,"&#39;").replace(/"/g,'&quot;')}','${(p.avatar_url||'').replace(/'/g,'%27').replace(/"/g,'%22')}','${p.username?('@'+p.username).replace(/'/g,'&#39;').replace(/"/g,'&quot;'):''}')`)).join('');
+  }catch(e){results.innerHTML=`<div style="font-size:12px;color:var(--wd);text-align:center;padding:30px">${t('dm_search_hint')}</div>`;}
 }
 function closeNewDM(){
   const sc=document.getElementById('sc-new-dm');
@@ -177,7 +192,7 @@ function updateGroupCreateBtn(){
 // ── Recherche DM ──
 async function searchUsersForDM(q){
   const results=document.getElementById('dm-search-results');
-  if(q.length<2){results.innerHTML=`<div style="font-size:12px;color:var(--wd);text-align:center;padding:30px">${t('min_chars')}</div>`;return;}
+  if(q.length<2){_loadDMSuggestions();return;}
   results.innerHTML=skRows(3);
   try{
     const{data}=await sb.from('profiles').select('id,username,full_name,avatar_url')
@@ -379,6 +394,10 @@ function demoConversationsList(){
 async function openConversationScreen(convId,otherUid,name,avatarUrl,sub,isGroup=false){
   currentConvId=convId;currentConvUid=otherUid;currentConvIsGroup=isGroup;
   const screen=document.getElementById('sc-conversation');screen.style.display='flex';
+  // La bnav (z-index:300) passe sinon par-dessus l'écran de conversation (z-index:155)
+  // et bloque le clic dans le champ de saisie.
+  const bnav=document.getElementById('shared-bnav');
+  if(bnav) bnav.style.display='none';
   const avEl=document.getElementById('conv-screen-av');
   if(isGroup){avEl.innerHTML=`<div style="width:100%;height:100%;background:linear-gradient(135deg,var(--gold-dim),var(--black-3));display:flex;align-items:center;justify-content:center;border-radius:50%"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(240,234,216,0.5)" stroke-width="1.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>`;}
   else if(avatarUrl){avEl.innerHTML=`<img src="${avatarUrl}" alt="" style="width:100%;height:100%;object-fit:cover">`;}
@@ -627,6 +646,8 @@ function closeConversationScreen(){
   const sc=document.getElementById('sc-conversation');
   sc.style.transition='transform .25s cubic-bezier(0.23,1,0.32,1)';
   sc.style.transform='translateX(100%)';
+  const bnav=document.getElementById('shared-bnav');
+  if(bnav) bnav.style.display='';
   setTimeout(()=>{
     sc.style.display='none';
     sc.style.transform='';
@@ -689,13 +710,16 @@ function autoResizeMsgInput(el){el.style.height='auto';el.style.height=Math.min(
 let _isNewConversation=false;
 async function startConversation(otherUid,name,avatarUrl,handle){
   closeNewDM();
+  // Ouvre l'écran de conversation tout de suite (sans attendre la requête ci-dessous) pour
+  // éviter de laisser apparaître l'accueil des messages le temps de la résolution réseau.
+  openConversationScreen(null,otherUid,name,avatarUrl,handle,false);
   try{
     const{data:existing}=await sb.from('conversations').select('id')
       .or(`and(participant_1.eq.${me.id},participant_2.eq.${otherUid}),and(participant_1.eq.${otherUid},participant_2.eq.${me.id})`)
       .eq('is_group',false).maybeSingle();
     _isNewConversation=!existing?.id;
     // Ne crée PAS la conversation en base avant le 1er message
-    openConversationScreen(existing?.id||null,otherUid,name,avatarUrl,handle,false);
+    if(existing?.id&&currentConvUid===otherUid){currentConvId=existing.id;await loadMessages(existing.id);}
   }catch(e){toast('❌ '+t('conv_create_error'));}
 }
 

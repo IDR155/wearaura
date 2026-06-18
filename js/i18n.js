@@ -106,7 +106,7 @@ const I18N = {
     ob2_title:"Comprends l'impact",
     ob2_desc:"Chaque pièce affiche son empreinte estimée\net une alternative éthique ou seconde main.",
     ob3_title:'Publie en 3 étapes',
-    ob3_desc:"Photo → place tes hotspots sur chaque pièce\n→ décris le style. Ton look devient une information utile.",
+    ob3_desc:"1 · Prends une photo de ton look\n2 · Place un point sur chaque vêtement\n3 · Décris le style — ton look inspire la communauté",
     suivant:'Suivant →',cest_parti:"C'est parti ✨",passer:'Passer',
     toast_published:'Look publié !',toast_saved:'Sauvegardé',
     toast_error:'Erreur',toast_login_like:'Connecte-toi pour liker',
@@ -566,7 +566,7 @@ const I18N = {
     ob2_title:'Understand the impact',
     ob2_desc:"Each item shows its estimated footprint\nand an ethical or second-hand alternative.",
     ob3_title:'Post in 3 steps',
-    ob3_desc:"Photo → place hotspots on each item\n→ describe the style. Your look becomes useful info.",
+    ob3_desc:"1 · Snap a photo of your look\n2 · Tag each piece with a point\n3 · Describe the style — your look inspires others",
     suivant:'Next →',cest_parti:"Let's go ✨",passer:'Skip',
     toast_published:'Look published!',toast_saved:'Saved',
     toast_error:'Error',toast_login_like:'Log in to like',
@@ -1011,8 +1011,8 @@ const ALT_DATA = {
 // ── LEAN VISION — Empreinte par matière ──
 const EMPREINTE = {
   'coton':      {eau:2700, co2:5.5,  label:'Coton conventionnel',     info:'Le coton est très gourmand en eau et pesticides.'},
-  'lin':        {eau:500,  co2:1.2,  label:'Lin naturel',             info:'Le lin pousse sans irrigation ni pesticides.'},
-  'laine':      {eau:1800, co2:26,   label:'Laine',                   info:"La laine a une empreinte carbone élevée due à l'élevage."},
+  'lin':        {eau:500,  co2:1.2,  label:'Lin naturel',             info:"Le lin pousse sans irrigation ni pesticides, mais l'impact dépend du pays de culture et des traitements éventuels."},
+  'laine':      {eau:1800, co2:26,   label:'Laine',                   info:"Empreinte carbone élevée due à l'élevage. La laine importée subit souvent des traitements chimiques forts (anti-mites, anti-feutrage)."},
   'soie':       {eau:1100, co2:4.0,  label:'Soie',                    info:"La soie consomme peu d'eau mais requiert beaucoup de main-d'œuvre."},
   'cuir':       {eau:17000,co2:17,   label:'Cuir animal',             info:"Le cuir a l'une des empreintes les plus lourdes de la mode."},
   'cuir-vegan': {eau:400,  co2:3.0,  label:'Cuir vegan',              info:'Bien meilleur que le cuir animal selon la composition.'},
