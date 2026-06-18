@@ -1079,13 +1079,18 @@
       </div>
 
       <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Quel est l'impact écologique de l'analyse IA ?<span class="faq-arr">›</span></div>
+        <div class="faq-a">Une analyse de ta photo par l'IA consomme environ 5 g de CO₂ et 0,15 L d'eau (estimation, d'après l'analyse de cycle de vie publiée par Mistral). C'est de l'ordre de 18 000× moins que l'eau nécessaire à un t-shirt en coton neuf (~2 700 L). L'analyse est optionnelle : tu peux l'activer ou la couper à tout moment dans Réglages → Données & IA.</div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
         <div class="faq-q">Comment trouver une alternative à une pièce ?<span class="faq-arr">›</span></div>
         <div class="faq-a">Dans le feed, touche la photo pour faire apparaître les étiquettes. Clique sur le "+" doré d'une pièce. La fiche s'ouvre avec l'empreinte estimée. Appuie sur "Voir une alternative responsable" pour découvrir une option éthique ou seconde main.</div>
       </div>
 
       <div class="faq-item" onclick="toggleFaq(this)">
         <div class="faq-q">Mes données restent-elles privées ?<span class="faq-arr">›</span></div>
-        <div class="faq-a">Tes photos ne quittent jamais ton appareil pour l'analyse (Lean Vision tourne localement). Tes données de compte sont hébergées chez Supabase (EU). Nous ne vendons jamais tes données personnelles. Les données comportementales anonymisées peuvent être utilisées à des fins d'études de tendances — voir notre Politique de confidentialité.</div>
+        <div class="faq-a">La détection des couleurs et des types (Lean Vision) tourne sur ton appareil. La détection automatique des pièces par IA est optionnelle : si tu l'actives, ta photo est envoyée à Mistral (IA européenne, RGPD) le temps de l'analyse, conservée 30 jours maximum pour la lutte anti-abus puis supprimée, et jamais utilisée pour entraîner l'IA. Tes données de compte sont hébergées chez Supabase (UE). Nous ne vendons jamais tes données et n'utilisons aucun tracker publicitaire — voir notre Politique de confidentialité.</div>
       </div>
 
       <div class="faq-item" onclick="toggleFaq(this)">
@@ -2357,6 +2362,7 @@
     </div>
     <div style="font-size:13px;line-height:1.65;color:var(--wd);margin-bottom:8px" data-i18n="ai_consent_body">WearAura peut détecter automatiquement les pièces sur ta photo pour te faire gagner du temps.</div>
     <div style="font-size:12px;line-height:1.6;color:rgba(240,234,216,.55);margin-bottom:20px" data-i18n="ai_consent_privacy">Ta photo est alors envoyée à Mistral (IA européenne, RGPD) le temps de l'analyse. Mistral ne s'en sert pas pour entraîner ses modèles et ne la revend pas ; elle est conservée 30 jours maximum (lutte anti-abus) puis supprimée.</div>
+    <div style="font-size:12px;line-height:1.55;color:var(--gold);background:var(--gold-dim);border:1px solid var(--gold-b);border-radius:10px;padding:10px 12px;margin-bottom:18px" data-i18n="ai_consent_impact">🌱 Une analyse ≈ 5 g CO₂ et 0,15 L d'eau (estimation) — soit environ 18 000× moins qu'un t-shirt neuf.</div>
     <button onclick="aiConsentChoose(true)" class="btn" data-i18n="ai_consent_enable" style="width:100%;margin-bottom:10px">Activer l'analyse auto</button>
     <button onclick="aiConsentChoose(false)" data-i18n="ai_consent_decline" style="width:100%;background:transparent;border:1px solid var(--gold-b);border-radius:50px;padding:13px;font-family:var(--fb);font-size:12px;letter-spacing:1px;color:var(--wd);cursor:pointer">Non, je place mes tags moi-même</button>
     <div style="font-size:11px;color:rgba(240,234,216,.4);text-align:center;margin-top:14px" data-i18n="ai_consent_footnote">Modifiable à tout moment dans les réglages.</div>
@@ -2364,7 +2370,7 @@
 </div>
 
 <script src="js/config.js?v=7" defer></script>
-<script src="js/i18n.js?v=33" defer></script>
+<script src="js/i18n.js?v=34" defer></script>
 <script src="js/utils.js?v=4" defer></script>
 <script src="js/nav.js?v=10" defer></script>
 <script src="js/search.js?v=2" defer></script>
