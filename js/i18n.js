@@ -24,7 +24,7 @@ const I18N = {
     type_label:'TYPE',color_label:'COULEUR',
     material_label:'MATIÈRE',style_label:'STYLE DU LOOK',
     color_auto:'— détectée automatiquement ✓',
-    next_caption:'Next: Caption →',
+    next_caption:'Suivant : description →',
     blazer:'Blazer',veste:'Veste',manteau:'Manteau',robe:'Robe',
     jupe:'Jupe',pantalon:'Pantalon',jean:'Jean',pull:'Pull',
     top:'Top',chemise:'Chemise',sneaker:'Sneaker',sac:'Sac',accessoire:'Accessoire',
