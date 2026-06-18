@@ -606,7 +606,7 @@ function doCapture() {
       document.getElementById('prev-img').src = url;
       stopCamera();
       goStepCreate(2);
-      autoDetectHspots(url);
+      _maybeAutoDetect(url);
     });
   } else {
     document.getElementById('file-in').click();

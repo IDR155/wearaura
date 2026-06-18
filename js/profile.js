@@ -1414,6 +1414,7 @@ function openSettings(){
   ['edit-profile-form','change-pw-form','change-email-form'].forEach(id=>{document.getElementById(id).style.display='none';});
   loadSettingsPrefs();
   loadPrivateStatus();
+  if(typeof initAiAutoToggleUI==='function') initAiAutoToggleUI();
 }
 function closeSettings(){
   document.getElementById('settings-panel').style.right='-100%';

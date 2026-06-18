@@ -769,6 +769,71 @@ setInterval(() => {
 // sans que l'utilisateur ait à sortir et re-choisir sa photo
 let _lastDetectSrc = null;
 
+// ═══════════════════════════════════════════
+// CONSENTEMENT IA — analyse opt-in (sobriété + RGPD)
+// La photo ne part chez Mistral que si l'utilisateur a explicitement accepté.
+// localStorage wa_ai_auto : '1' = analyse auto ON · '0' = IA coupée · absent = pas encore choisi
+// ═══════════════════════════════════════════
+let _aiPendingUrl = null;
+
+// Affiche/masque les boutons IA de l'étape 2 selon la préférence
+function _applyAiUiState() {
+  const off = localStorage.getItem('wa_ai_auto') === '0';
+  const pill = document.getElementById('redetect-btn');
+  const icon = document.getElementById('redetect-btn-2');
+  if (pill) pill.style.display = off ? 'none' : 'flex';
+  if (icon) icon.style.display = off ? 'none' : 'flex';
+}
+
+// Point d'entrée appelé à la place de autoDetectHspots() après une photo
+function _maybeAutoDetect(url) {
+  const pref = localStorage.getItem('wa_ai_auto');
+  _lastDetectSrc = url;             // mémorise la photo pour une analyse ultérieure
+  _applyAiUiState();
+  if (pref === '1') { autoDetectHspots(url); return; }   // auto accepté
+  if (pref === '0') { return; }                           // IA coupée → placement manuel
+  _aiPendingUrl = url;              // pas encore choisi → demande le consentement
+  _showAiConsent();
+}
+
+function _showAiConsent() {
+  const el = document.getElementById('ai-consent');
+  if (el) el.style.display = 'flex';
+}
+function _hideAiConsent() {
+  const el = document.getElementById('ai-consent');
+  if (el) el.style.display = 'none';
+}
+
+// Choix dans l'écran de consentement (true = activer l'analyse auto)
+function aiConsentChoose(enable) {
+  localStorage.setItem('wa_ai_auto', enable ? '1' : '0');
+  if (typeof applyToggleUI === 'function') applyToggleUI('toggle-ai-auto', enable);
+  _hideAiConsent();
+  _applyAiUiState();
+  if (enable && _aiPendingUrl) autoDetectHspots(_aiPendingUrl);
+  _aiPendingUrl = null;
+}
+
+// Interrupteur dans les réglages
+function toggleAiAuto() {
+  const enable = localStorage.getItem('wa_ai_auto') !== '1';
+  localStorage.setItem('wa_ai_auto', enable ? '1' : '0');
+  if (typeof applyToggleUI === 'function') applyToggleUI('toggle-ai-auto', enable);
+  if (typeof toast === 'function') toast(enable ? t('ai_toast_on') : t('ai_toast_off'));
+  _applyAiUiState();
+  // Active alors qu'une photo est déjà à l'écran sans hotspots → lance l'analyse
+  if (enable && typeof currentStep !== 'undefined' && currentStep === 2 && (!hspots || hspots.length === 0)) {
+    const src = _lastDetectSrc || (document.getElementById('prev-img') || {}).src;
+    if (src) autoDetectHspots(src);
+  }
+}
+
+// Init de l'UI du toggle (à l'ouverture des réglages)
+function initAiAutoToggleUI() {
+  if (typeof applyToggleUI === 'function') applyToggleUI('toggle-ai-auto', localStorage.getItem('wa_ai_auto') === '1');
+}
+
 // Masque les boutons "Relancer" pendant une détection active — un double
 // lancement ferait deux appels Pixtral concurrents sur la même photo
 let _detectInProgress = false;

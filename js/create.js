@@ -176,7 +176,7 @@ function onFileSelect(e) {
       };
       stopCamera();
       goStepCreate(2);
-      autoDetectHspots(url); // reçoit déjà l'image à ≤ 1080px
+      _maybeAutoDetect(url); // analyse seulement si l'utilisateur a accepté l'IA (sinon consentement / manuel)
     });
   };
   reader.readAsDataURL(file);
