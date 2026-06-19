@@ -26,11 +26,16 @@ async function doLogin(){
 }
 async function doSignup(){
   const fn=document.getElementById('s-fn').value.trim(),ln=document.getElementById('s-ln').value.trim();
-  const un=document.getElementById('s-un').value.trim().replace('@','');
+  const un=document.getElementById('s-un').value.trim();
   const email=document.getElementById('s-em').value.trim(),pw=document.getElementById('s-pw').value;
   if(!fn||!email||!pw||!un)return showErr(t('fill_fields'));
   if(!document.getElementById('s-consent')?.checked)return showErr(t('accept_terms'));
+  // Le champ username ne doit pas contenir d'email (autofill Safari) — message clair
+  if(un.includes('@'))return showErr(t('username_no_email'));
   const btn=document.getElementById('btn-signup');btn.disabled=true;btn.textContent=t('creating');
+  // Vérifie la disponibilité du username AVANT de créer le compte (sinon erreur générique)
+  const {data:taken}=await sb.from('profiles').select('id').ilike('username',un).maybeSingle();
+  if(taken){btn.disabled=false;btn.textContent=t('create_account');return showErr(t('username_taken'));}
   const {data,error}=await sb.auth.signUp({email,password:pw,options:{data:{first_name:fn,last_name:ln,username:un,full_name:`${fn} ${ln}`}}});
   btn.disabled=false;btn.textContent=t('create_account');
   if(error)return showErr(friendlyError(error));
