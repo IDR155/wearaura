@@ -32,6 +32,7 @@ async function doSignup(){
   if(!document.getElementById('s-consent')?.checked)return showErr(t('accept_terms'));
   // Le champ username ne doit pas contenir d'email (autofill Safari) — message clair
   if(un.includes('@'))return showErr(t('username_no_email'));
+  if(pw.length<6)return showErr(t('password_too_short'));
   const btn=document.getElementById('btn-signup');btn.disabled=true;btn.textContent=t('creating');
   // Vérifie la disponibilité du username AVANT de créer le compte (sinon erreur générique)
   const {data:taken}=await sb.from('profiles').select('id').ilike('username',un).maybeSingle();

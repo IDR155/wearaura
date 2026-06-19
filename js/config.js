@@ -30,6 +30,8 @@ const SB_FRIENDLY_ERROR_KEYS = {
   'Invalid login credentials': 'err_bad_credentials',
   'User already registered': 'err_email_taken',
   'over_email_send_rate_limit': 'err_rate_limit',
+  'weak_password': 'password_too_short',
+  'Password should be at least': 'password_too_short',
 };
 const SB_FRIENDLY_ERRORS_FR = {
   'err_already_done': "Cette action a déjà été effectuée.",
