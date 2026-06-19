@@ -54,6 +54,7 @@ const I18N = {
     minimal:'Minimal',streetwear:'Streetwear',boheme:'Bohème',luxe:'Luxe',
     empreinte_titre:'Empreinte estimée',
     eau_label:"d'eau estimés",score_eco:'SCORE ÉCO',ig_eco:'Éco',ig_eau:'Eau',ig_co2:'CO₂',ig_high:'élevé',niv_faible:'Faible',niv_moyenne:'Moyenne',niv_elevee:'Élevée',emp_eau_lbl:'Empreinte eau',emp_co2_lbl:'Empreinte CO₂',ig_reuse:'Réutilisé',ig_reuse_hint:'Pièce de seconde main : réutilisée, donc pas de nouvelle production — empreinte quasi nulle.',ig_ref:'réf.',
+    scan_mat_title:'Matière de ta pièce',scan_mat_sub:'On part d\'une estimation selon le type. Précise la vraie matière pour une comparaison plus juste.',scan_mat_note:'Estimation — touche pour préciser la matière',
     donnees_estim:'* Données estimatives — moyennes industrie textile',
     voir_alternative:'Voir une alternative responsable',
     look_complet:'Le Look complet',
@@ -531,6 +532,7 @@ const I18N = {
     minimal:'Minimal',streetwear:'Streetwear',boheme:'Boho',luxe:'Luxury',
     empreinte_titre:'Estimated footprint',
     eau_label:'of water estimated',score_eco:'ECO SCORE',ig_eco:'Eco',ig_eau:'Water',ig_co2:'CO₂',ig_high:'high',niv_faible:'Low',niv_moyenne:'Medium',niv_elevee:'High',emp_eau_lbl:'Water footprint',emp_co2_lbl:'Carbon footprint',ig_reuse:'Reused',ig_reuse_hint:'Second-hand item: reused, so no new production — near-zero footprint.',ig_ref:'ref.',
+    scan_mat_title:'Your item\'s material',scan_mat_sub:'We start from an estimate based on the type. Set the real material for a more accurate comparison.',scan_mat_note:'Estimate — tap to set the material',
     donnees_estim:'* Estimated data — textile industry averages',
     voir_alternative:'Find a responsible alternative',
     look_complet:'Full Look',
@@ -1163,6 +1165,29 @@ function impactGauges(p,ref){
   if(isSecondHand(p)) return `<span style="display:inline-flex;align-items:center">${_reuseBadge()}</span>`;
   const w=waterSavedPct(p.matiere,ref&&ref.eau), c=co2SavedPct(p.matiere,ref&&ref.co2);
   return impactGaugesV(w?w.pct:null, c?c.pct:null);
+}
+// ── Traçabilité du SCAN : matière par défaut selon le type (B), corrigeable par l'utilisateur (A) ──
+const TYPE_DEFAULT_MAT = {
+  blazer:'laine', veste:'coton', manteau:'laine', robe:'viscose', jupe:'coton',
+  pantalon:'coton', jean:'denim', pull:'laine', top:'coton', chemise:'coton',
+  sneaker:'synthétique', bottes:'cuir', sandales:'cuir', chaussures:'cuir', sac:'cuir',
+};
+function guessMatFromType(type){
+  if(!type) return 'coton';
+  return TYPE_DEFAULT_MAT[(''+type).toLowerCase()] || 'coton';
+}
+// Matières sélectionnables dans le picker (clés EMPREINTE)
+const SCAN_MAT_CHOICES = ['coton','coton bio','lin','chanvre','laine','soie','denim','viscose','lyocell','synthétique','polyester','polyester recyclé','recyclé','cuir','cuir-vegan'];
+// Puce matière de la pièce scannée : matière + empreinte estimée, tappable pour corriger
+function scannedMatChip(matKey){
+  const e=getEmpreinte(matKey);
+  const eau = e.eau!=null ? `${e.eau.toLocaleString('fr-FR')} L` : '—';
+  const co2 = e.co2!=null ? `${e.co2} kg` : '—';
+  const editIco = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;opacity:.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`;
+  return `<span onclick="openScanMatPicker()" title="${t('scan_mat_title')}" style="display:inline-flex;align-items:center;gap:7px;cursor:pointer;background:var(--gold-dim);border:1px solid var(--gold-b);border-radius:50px;padding:3px 11px;font-size:11px;color:var(--gold-l);vertical-align:middle">`
+    +`<span style="font-weight:500">${escapeHtml(e.label)}</span>`
+    +`<span style="opacity:.7">≈ ${eau} · ${co2} CO₂</span>`
+    +editIco+`</span>`;
 }
 // Jauge horizontale Faible → Élevée (niveau absolu d'une empreinte), pour le panneau détaillé
 function _hgauge(label,valueText,pct,color){

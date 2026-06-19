@@ -1261,7 +1261,11 @@ async function openAlt(item) {
       const methodBadge = detectionMethod === 'clip'
         ? `<span style="font-size:9px;background:rgba(240,234,216,.1);border:1px solid var(--gold-b);color:var(--gold);padding:2px 8px;border-radius:10px;letter-spacing:1px;margin-left:6px">🧠 CLIP Vision</span>`
         : `<span style="font-size:9px;background:rgba(245,240,232,.07);border:1px solid rgba(245,240,232,.15);color:var(--wd);padding:2px 8px;border-radius:10px;letter-spacing:1px;margin-left:6px">${t('detection_keywords')}</span>`;
-      document.getElementById('res-eco').innerHTML = impactGaugesV(0,0) + methodBadge;
+      const _scanMat = p.matiere ? _matKey(p.matiere) : guessMatFromType(detectedType);
+      window._scanMat = _scanMat; window._scanMethodBadge = methodBadge;
+      const _se = getEmpreinte(_scanMat);
+      window._scanRef = (_se && _se.eau!=null) ? {eau:_se.eau, co2:_se.co2} : null;
+      document.getElementById('res-eco').innerHTML = scannedMatChip(_scanMat) + methodBadge;
       document.querySelectorAll('.alt-tab').forEach((tabEl,i) => tabEl.classList.toggle('active', i===0));
       renderAltTabLive('ethique');
     }, 300);
@@ -1280,7 +1284,11 @@ async function openAlt(item) {
       document.getElementById('res-emoji').innerHTML = _itemSvg;
       document.getElementById('res-name').textContent  = p.name  || t('this_item');
       document.getElementById('res-brand').textContent = p.brand || '';
-      document.getElementById('res-eco').innerHTML = impactGaugesV(0,0);
+      const _scanMatC = p.matiere ? _matKey(p.matiere) : (guessMatFromType(detectTypeFromKeywords(p.name||''))||'coton');
+      window._scanMat=_scanMatC; window._scanMethodBadge='';
+      const _seC=getEmpreinte(_scanMatC);
+      window._scanRef=(_seC&&_seC.eau!=null)?{eau:_seC.eau,co2:_seC.co2}:null;
+      document.getElementById('res-eco').innerHTML = scannedMatChip(_scanMatC);
       document.querySelectorAll('.alt-tab').forEach((tabEl,i) => tabEl.classList.toggle('active', i===0));
       renderAltTabLive('ethique');
     }, 300);
@@ -1292,7 +1300,34 @@ function altTab(el, type) {
   renderAltTabLive(type);
 }
 
+// ── Sélecteur de matière de la pièce scannée (corrige l'estimation par défaut) ──
+function openScanMatPicker(){
+  const list=document.getElementById('scan-mat-list');
+  if(list){
+    list.innerHTML = SCAN_MAT_CHOICES.map(k=>{
+      const e=getEmpreinte(k);
+      const active=(window._scanMat===k);
+      const sub=e.eau!=null?`${e.eau.toLocaleString('fr-FR')} L · ${e.co2} kg`:'—';
+      return `<span onclick="setScanMaterial('${k}')" style="cursor:pointer;display:inline-flex;flex-direction:column;gap:1px;padding:8px 12px;border-radius:14px;border:1px solid ${active?'var(--gold)':'var(--gold-b)'};background:${active?'var(--gold-dim)':'transparent'}">`
+        +`<span style="font-size:12px;color:${active?'var(--gold-l)':'var(--white)'}">${escapeHtml(e.label)}</span>`
+        +`<span style="font-size:10px;color:var(--wd);opacity:.7">${sub}</span></span>`;
+    }).join('');
+  }
+  const el=document.getElementById('scan-mat-picker'); if(el)el.style.display='flex';
+}
+function closeScanMatPicker(){ const el=document.getElementById('scan-mat-picker'); if(el)el.style.display='none'; }
+function setScanMaterial(key){
+  window._scanMat=key;
+  const e=getEmpreinte(key);
+  window._scanRef=(e&&e.eau!=null)?{eau:e.eau,co2:e.co2}:null;
+  const eco=document.getElementById('res-eco');
+  if(eco) eco.innerHTML=scannedMatChip(key)+(window._scanMethodBadge||'');
+  closeScanMatPicker();
+  renderAltTabLive(window._scanTab||'ethique'); // recalcule les −% des alternatives vs la nouvelle matière
+}
+
 function renderAltTabLive(type = 'ethique') {
+  window._scanTab = type;
   const items = currentAltData[type] || [];
   const container = document.getElementById('alt-content');
   if (!items.length) {
