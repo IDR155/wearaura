@@ -1153,6 +1153,29 @@ function impactGaugesV(waterPct,co2Pct){
   if(!html) return '';
   return `<span style="display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap">${html}</span>`;
 }
+// ── Jauges ABSOLUES : empreinte réelle (L / kg), SANS comparaison ──
+// À utiliser là où il n'y a pas de vraie référence (ex. boutique : on ne compare
+// à rien de précis). Le remplissage reflète l'ampleur ; le chiffre est la vraie valeur.
+function empreinteVals(matiere){const e=getEmpreinte(matiere);return (e&&e.eau!=null)?{eau:e.eau,co2:e.co2}:null;}
+function impactGaugesAbsVals(eau,co2){
+  let html='';
+  if(co2!=null){
+    const f=Math.max(8,Math.min(100,Math.round(co2/12*100)));
+    html+=_gaugeItem(_fillIcon(_CLOUD_D,f,'#8f7fc0','#b9a7d9','',{top:16,bottom:46}),t('ig_co2'),'~'+(Math.round(co2*10)/10)+' kg','#c3b3e6',t('emp_co2_lbl'));
+  }
+  if(eau!=null){
+    const f=Math.max(8,Math.min(100,Math.round(eau/3000*100)));
+    html+=_gaugeItem(_fillIcon(_DROP_D,f,'#5aa9bd','#6fb7c9','',{top:6,bottom:60}),t('ig_eau'),'~'+Math.round(eau).toLocaleString('fr-FR')+' L','#7cc3d4',t('emp_eau_lbl'));
+  }
+  return html?`<span style="display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap">${html}</span>`:'';
+}
+function impactGaugesAbs(p){
+  if(!p) return '';
+  if(isSecondHand(p)) return `<span style="display:inline-flex;align-items:center">${_reuseBadge()}</span>`;
+  const e=getEmpreinte(p.matiere);
+  if(!e||e.eau==null) return '';
+  return impactGaugesAbsVals(e.eau,e.co2);
+}
 // Détecte une pièce de seconde main / vintage (son atout = la réutilisation, pas la matière)
 function isSecondHand(p){
   if(!p) return false;

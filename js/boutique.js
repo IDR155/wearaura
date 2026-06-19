@@ -186,8 +186,9 @@ function renderBoutiqueContent(products,filter=''){
     const brandProducts=bqAllProducts.filter(p=>p.marque===bqCurrentBrand);
     const sorted=bqSortProducts(brandProducts);
     const _avg=arr=>arr.length?Math.round(arr.reduce((a,b)=>a+b,0)/arr.length):null;
-    const avgW=_avg(brandProducts.map(p=>waterSavedPct(p.matiere)).filter(Boolean).map(x=>x.pct));
-    const avgC=_avg(brandProducts.map(p=>co2SavedPct(p.matiere)).filter(Boolean).map(x=>x.pct));
+    const _emp=brandProducts.map(p=>empreinteVals(p.matiere)).filter(Boolean);
+    const avgEau=_avg(_emp.map(x=>x.eau));
+    const avgCo2=_emp.length?Math.round(_emp.reduce((a,b)=>a+b.co2,0)/_emp.length*10)/10:null;
 
     const certifs=[...new Set(brandProducts.map(p=>p.label).filter(Boolean))].slice(0,3);
     content.innerHTML=`<div style="padding:18px 16px 16px;border-bottom:1px solid var(--gold-b);margin-bottom:14px">
@@ -196,7 +197,7 @@ function renderBoutiqueContent(products,filter=''){
         <div style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;background:rgba(240,234,216,0.06);border:1px solid rgba(240,234,216,0.12);flex-shrink:0">${_bagSvg}</div>
         <div style="flex:1;min-width:0">
           <div style="font-family:var(--fd);font-size:24px;font-weight:300;color:var(--white);line-height:1.1">${escapeHtml(bqCurrentBrand)}</div>
-          <div style="font-size:12px;color:var(--wd);letter-spacing:.3px;margin-top:2px;display:flex;align-items:center;gap:6px">${sorted.length} pièce${sorted.length>1?'s':''} ${impactGaugesV(avgW,avgC)}</div>
+          <div style="font-size:12px;color:var(--wd);letter-spacing:.3px;margin-top:2px;display:flex;align-items:center;gap:6px">${sorted.length} pièce${sorted.length>1?'s':''} ${impactGaugesAbsVals(avgEau,avgCo2)}</div>
         </div>
       </div>
       ${certifs.length?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${certifs.map(c=>`<span class="certif-badge">${escapeHtml(c)}</span>`).join('')}</div>`:''}
@@ -213,10 +214,9 @@ function renderBoutiqueContent(products,filter=''){
       if(!brandsMap[p.marque])brandsMap[p.marque]={name:p.marque,count:0,wSum:0,wN:0,cSum:0,cN:0};
       const bm=brandsMap[p.marque];
       bm.count++;
-      const w=waterSavedPct(p.matiere); if(w){bm.wSum+=w.pct;bm.wN++;}
-      const c=co2SavedPct(p.matiere); if(c){bm.cSum+=c.pct;bm.cN++;}
+      const ev=empreinteVals(p.matiere); if(ev){bm.wSum+=ev.eau;bm.wN++;bm.cSum+=ev.co2;bm.cN++;}
     });
-    const brandsList=Object.values(brandsMap).map(b=>({...b,avgW:b.wN?Math.round(b.wSum/b.wN):null,avgC:b.cN?Math.round(b.cSum/b.cN):null})).sort((a,b)=>(b.avgW||0)-(a.avgW||0)||b.count-a.count);
+    const brandsList=Object.values(brandsMap).map(b=>({...b,avgW:b.wN?Math.round(b.wSum/b.wN):null,avgC:b.cN?Math.round(b.cSum/b.cN*10)/10:null})).sort((a,b)=>(a.avgW==null?1e9:a.avgW)-(b.avgW==null?1e9:b.avgW)||b.count-a.count);
     if(!brandsList.length){
       content.innerHTML=`<div class="empty-state"><img src="mascote_ivory/the_gatherer.png" alt=""><div>${t('no_products')}</div></div>`;
       return;
@@ -225,7 +225,7 @@ function renderBoutiqueContent(products,filter=''){
       <div class="bq-brand-card" onclick="bqFilterByBrand('${b.name.replace(/'/g,'\\\'')}')">
         <div style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;background:rgba(240,234,216,0.06);border:1px solid rgba(240,234,216,0.12);margin:0 auto 6px">${_bagSvg}</div>
         <div style="font-size:13px;font-weight:600;color:var(--white);line-height:1.3">${escapeHtml(b.name)}</div>
-        <div style="margin-top:3px">${impactGaugesV(b.avgW,b.avgC)}</div>
+        <div style="margin-top:3px">${impactGaugesAbsVals(b.avgW,b.avgC)}</div>
         <div style="font-size:11px;color:var(--wd)">${b.count} pièce${b.count>1?'s':''}</div>
       </div>`).join('')}</div>`;
     return;
@@ -297,7 +297,7 @@ function bqCarouselCard(p){
   const idx=_bqRegister(p);
   const imgContent=p.image_url
     ?`<img src="${p.image_url}" alt="${escapeHtml(pNom(p))}" onerror="this.style.display='none';this.parentNode.querySelector('.bq-emoji-fb').style.display='flex'">`:'';
-  const gauges=impactGauges(p);
+  const gauges=impactGaugesAbs(p);
   const demoBadge=p._isDemo?`<div class="demo-badge">${t('bq_apercu_demo')}</div>`:'';
   const credit=p.image_photographer?`<div class="pexels-credit" title="Photo via Pexels">${escapeHtml(p.image_photographer)}</div>`:'';
   return `<div class="bq-carousel-card"
@@ -348,7 +348,7 @@ function bqProductCard(p){
       <div class="bq-product-name">${escapeHtml(pNom(p))}</div>
       <div class="bq-product-brand">${escapeHtml(p.marque)}</div>
       ${p.matiere?`<div style="font-size:11px;color:var(--wd);margin-bottom:4px">${escapeHtml(p.matiere)}</div>`:''}
-      <div style="margin-bottom:6px">${impactGauges(p)}</div>
+      <div style="margin-bottom:6px">${impactGaugesAbs(p)}</div>
       <div class="bq-product-footer">
         <div class="bq-product-price">${escapeHtml(String(p.prix))}€</div>
         <div class="bq-product-voir">${t('bq_voir')}</div>
