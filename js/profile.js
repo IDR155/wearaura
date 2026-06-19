@@ -1423,7 +1423,7 @@ function closeAll(){
   cancelBackConfirm();
   _cancelEdit();
   const ov=document.getElementById('overlay');
-  const SHEETS=['sheet-comments','prod-sheet','alt-sheet','sheet-share','retouche-sheet'];
+  const SHEETS=['sheet-comments','prod-sheet','alt-sheet','sheet-share','retouche-sheet','bq-product-sheet'];
   // Lancer l'animation de sortie sur tous les sheets visibles
   const visible=SHEETS.filter(id=>{const e=document.getElementById(id);return e&&e.classList.contains('show');});
   if(visible.length){
