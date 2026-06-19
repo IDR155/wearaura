@@ -306,17 +306,18 @@ function bqOpenProduct(idx){
         ? `${_hgauge(t('emp_eau_lbl'),'~'+emp.eau.toLocaleString('fr-FR')+' L',emp.eau/5000*100,'#5aa9bd')}${emp.co2!=null?_hgauge(t('emp_co2_lbl'),'~'+emp.co2+' kg CO₂',emp.co2/20*100,'#8f7fc0'):''}`
         : `<div style="font-size:13px;color:var(--wd)">${t('matiere_unknown')}</div>`);
   const certifs = p.label?`<div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px"><span class="certif-badge">${escapeHtml(p.label)}</span></div>`:'';
-  const demoBadge = p._isDemo?`<div class="demo-badge">${t('bq_apercu_demo')}</div>`:'';
+  const fbSvg=`<span style="position:absolute;inset:0;display:${p.image_url?'none':'flex'};align-items:center;justify-content:center"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="rgba(240,234,216,0.3)" stroke-width="1.2" stroke-linecap="round"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/></svg></span>`;
   document.getElementById('bq-prod-body').innerHTML=`
-    <div style="width:100%;height:240px;background:var(--black-3);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center">
-      ${img}${demoBadge}
-      <span style="position:absolute;inset:0;display:${p.image_url?'none':'flex'};align-items:center;justify-content:center"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(240,234,216,0.3)" stroke-width="1.2" stroke-linecap="round"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/></svg></span>
+    <div style="display:flex;gap:14px;padding:18px 20px 6px;align-items:flex-start">
+      <div style="width:84px;height:84px;border-radius:12px;background:var(--black-3);position:relative;overflow:hidden;flex-shrink:0">${img}${fbSvg}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-family:var(--fd);font-size:19px;font-weight:400;color:var(--gold);line-height:1.2;margin-bottom:3px">${escapeHtml(pNom(p))}</div>
+        <div style="font-size:13px;color:var(--wd)">${escapeHtml(p.marque||'—')}${p._isDemo?` · <span style="opacity:.7">${t('demo_badge')}</span>`:''}</div>
+        ${p.prix?`<div style="font-size:18px;color:var(--gold-l);font-weight:500;margin-top:5px">${escapeHtml(String(p.prix))}€</div>`:''}
+      </div>
     </div>
-    <div style="padding:16px 20px 10px">
-      <div style="font-family:var(--fd);font-size:22px;font-weight:400;color:var(--gold);margin-bottom:4px">${escapeHtml(pNom(p))}</div>
-      <div style="font-size:13px;color:var(--wd)">${escapeHtml(p.marque||'—')}</div>
-      ${p.prix?`<div style="font-size:18px;color:var(--gold-l);font-weight:500;margin-top:6px">${escapeHtml(String(p.prix))}€</div>`:''}
-      ${p.matiere?`<div style="font-size:12px;color:var(--wd);margin-top:6px;letter-spacing:.5px">${t('matiere_prefix')} : ${escapeHtml(emp.label)}</div>`:''}
+    <div style="padding:0 20px 12px">
+      ${p.matiere?`<div style="font-size:12px;color:var(--wd);letter-spacing:.5px">${t('matiere_prefix')} : ${escapeHtml(emp.label)}</div>`:''}
       ${certifs}
     </div>
     <div style="margin:0 20px 16px;background:var(--black-3);border-radius:12px;padding:14px 16px;border:1px solid var(--gold-b)">
