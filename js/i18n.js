@@ -1062,7 +1062,7 @@ const EMPREINTE = {
   'soie':       {eau:1100, co2:4.0,  label:'Soie',                    info:"La soie consomme peu d'eau mais requiert beaucoup de main-d'œuvre."},
   'cuir':       {eau:17000,co2:17,   label:'Cuir animal',             info:"Le cuir a l'une des empreintes les plus lourdes de la mode."},
   'cuir-vegan': {eau:400,  co2:3.0,  label:'Cuir vegan',              info:'Bien meilleur que le cuir animal selon la composition.'},
-  'denim':      {eau:3500, co2:7.0,  label:'Denim / Jean',            info:"Un jean nécessite ~3500L d'eau, surtout pour la teinture."},
+  'denim':      {eau:7500, co2:25,   label:'Denim / Jean',            info:"Un jean ≈ 7 500 L d'eau et ~25 kg CO₂e sur son cycle de vie (ADEME, Water Footprint Network)."},
   'recyclé':    {eau:300,  co2:1.5,  label:'Matière recyclée',        info:"Les fibres recyclées réduisent l'empreinte de 70% en moyenne."},
   'synthétique':{eau:200,  co2:9.0,  label:'Synthétique (polyester…)',info:'Peu d\'eau mais émet des microplastiques au lavage.'},
   'coton bio':  {eau:1350, co2:3.8,  label:'Coton biologique',        info:"Le coton bio consomme ~2 fois moins d'eau et exclut les pesticides de synthèse."},
