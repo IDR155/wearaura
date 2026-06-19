@@ -298,7 +298,7 @@ function bqOpenProduct(idx){
   const sh=isSecondHand(p);
   const emp=getEmpreinte(p.matiere);
   const img=p.image_url
-    ? `<img src="${p.image_url}" alt="${escapeHtml(pNom(p))}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0" onerror="this.style.display='none'">`
+    ? `<img src="${p.image_url}" alt="${escapeHtml(pNom(p))}" style="width:100%;height:100%;object-fit:cover;object-position:center top;position:absolute;inset:0" onerror="this.style.display='none'">`
     : '';
   const footprint = sh
     ? `<div style="font-size:13px;color:var(--wd);line-height:1.6">${t('ig_reuse_hint')}</div>`
@@ -308,7 +308,7 @@ function bqOpenProduct(idx){
   const certifs = p.label?`<div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px"><span class="certif-badge">${escapeHtml(p.label)}</span></div>`:'';
   const demoBadge = p._isDemo?`<div class="demo-badge">${t('bq_apercu_demo')}</div>`:'';
   document.getElementById('bq-prod-body').innerHTML=`
-    <div style="width:100%;aspect-ratio:4/5;background:var(--black-3);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center">
+    <div style="width:100%;height:240px;background:var(--black-3);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center">
       ${img}${demoBadge}
       <span style="position:absolute;inset:0;display:${p.image_url?'none':'flex'};align-items:center;justify-content:center"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(240,234,216,0.3)" stroke-width="1.2" stroke-linecap="round"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/></svg></span>
     </div>
