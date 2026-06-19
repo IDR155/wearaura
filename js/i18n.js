@@ -54,8 +54,8 @@ const I18N = {
     minimal:'Minimal',streetwear:'Streetwear',boheme:'Bohème',luxe:'Luxe',
     empreinte_titre:'Empreinte estimée',
     eau_label:"d'eau estimés",score_eco:'SCORE ÉCO',ig_eco:'Éco',ig_eau:'Eau',ig_co2:'CO₂',ig_high:'élevé',niv_faible:'Faible',niv_moyenne:'Moyenne',niv_elevee:'Élevée',emp_eau_lbl:'Empreinte eau',emp_co2_lbl:'Empreinte CO₂',ig_reuse:'Réutilisé',ig_reuse_hint:'Pièce de seconde main : réutilisée, donc pas de nouvelle production — empreinte quasi nulle.',ig_ref:'réf.',
-    scan_mat_title:'Matière de ta pièce',scan_mat_sub:'On part d\'une estimation selon le type. Précise la vraie matière pour une comparaison plus juste.',scan_mat_note:'Estimation — touche pour préciser la matière',
-    donnees_estim:'* Données estimatives — moyennes industrie textile',
+    scan_mat_title:'Matière de ta pièce',scan_mat_sub:'On part d\'une estimation selon le type. Précise la vraie matière pour une comparaison plus juste.',scan_mat_note:'Estimation — touche pour préciser la matière',scan_mat_sources:'Estimations (ordres de grandeur) — sources : ADEME & Water Footprint Network.',scan_mat_ref:'Référence officielle : ADEME Ecobalyse →',
+    donnees_estim:'* Estimations par matière (ordres de grandeur) — sources : ADEME & Water Footprint Network',
     voir_alternative:'Voir une alternative responsable',
     look_complet:'Le Look complet',
     piece_identifiee:'pièce identifiée',pieces_identifiees:'pièces identifiées',
@@ -532,8 +532,8 @@ const I18N = {
     minimal:'Minimal',streetwear:'Streetwear',boheme:'Boho',luxe:'Luxury',
     empreinte_titre:'Estimated footprint',
     eau_label:'of water estimated',score_eco:'ECO SCORE',ig_eco:'Eco',ig_eau:'Water',ig_co2:'CO₂',ig_high:'high',niv_faible:'Low',niv_moyenne:'Medium',niv_elevee:'High',emp_eau_lbl:'Water footprint',emp_co2_lbl:'Carbon footprint',ig_reuse:'Reused',ig_reuse_hint:'Second-hand item: reused, so no new production — near-zero footprint.',ig_ref:'ref.',
-    scan_mat_title:'Your item\'s material',scan_mat_sub:'We start from an estimate based on the type. Set the real material for a more accurate comparison.',scan_mat_note:'Estimate — tap to set the material',
-    donnees_estim:'* Estimated data — textile industry averages',
+    scan_mat_title:'Your item\'s material',scan_mat_sub:'We start from an estimate based on the type. Set the real material for a more accurate comparison.',scan_mat_note:'Estimate — tap to set the material',scan_mat_sources:'Estimates (orders of magnitude) — sources: ADEME & Water Footprint Network.',scan_mat_ref:'Official reference: ADEME Ecobalyse →',
+    donnees_estim:'* Per-material estimates (orders of magnitude) — sources: ADEME & Water Footprint Network',
     voir_alternative:'Find a responsible alternative',
     look_complet:'Full Look',
     piece_identifiee:'item identified',pieces_identifiees:'items identified',
@@ -1049,6 +1049,12 @@ const ALT_DATA = {
 };
 
 // ── LEAN VISION — Empreinte par matière ──
+// ── Empreinte estimée par matière (eau en L, CO₂ en kg, par vêtement type) ──
+// Ordres de grandeur, PAS des valeurs exactes (un même tissu varie selon pays de culture,
+// teinture, transport). Sources : Water Footprint Network (eau, ex. t-shirt coton ≈ 2700 L)
+// et moyennes ACV ADEME pour le CO₂. Référence officielle FR à privilégier pour toute
+// communication publique : ADEME Ecobalyse (https://ecobalyse.beta.gouv.fr) — outil
+// gouvernemental d'affichage environnemental textile. À revérifier avant toute pub légale.
 const EMPREINTE = {
   'coton':      {eau:2700, co2:5.5,  label:'Coton conventionnel',     info:'Le coton est très gourmand en eau et pesticides.'},
   'lin':        {eau:500,  co2:1.2,  label:'Lin naturel',             info:"Le lin pousse sans irrigation ni pesticides, mais l'impact dépend du pays de culture et des traitements éventuels."},
