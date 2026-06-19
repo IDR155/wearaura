@@ -1064,18 +1064,18 @@ async function fetchAlternativesFallback(categorie) {
 function getFallbackAlternatives(type, categorie) {
   const all = {
     ethique: [
-      { nom:'Better Sweater Fleece', marque:'Patagonia', type:'pull', prix:129, url:'https://www.patagonia.com/fr/shop/fleece-jackets', score_eco:5, emoji:'🧥', label:'Fair Trade', categorie:'ethique', image_url:'https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&h=400&w=400' },
-      { nom:'Campo Sneaker', marque:'Veja', type:'sneaker', prix:120, url:'https://www.veja-store.com/fr/sneakers/campo/', score_eco:5, emoji:'👟', label:'GOTS', categorie:'ethique', image_url:'https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&h=400&w=400' },
-      { nom:'Blazer Coton Bio', marque:'Thinking Mu', type:'blazer', prix:195, url:'https://www.thinkingmu.com/collections/blazers', score_eco:5, emoji:'🧥', label:'GOTS', categorie:'ethique', image_url:'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&h=400&w=400' },
+      { nom:'Better Sweater Fleece', marque:'Patagonia', type:'pull', matiere:'recyclé', prix:129, url:'https://www.patagonia.com/fr/shop/fleece-jackets', score_eco:5, emoji:'🧥', label:'Fair Trade', categorie:'ethique', image_url:'https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&h=400&w=400' },
+      { nom:'Campo Sneaker', marque:'Veja', type:'sneaker', matiere:'coton bio', prix:120, url:'https://www.veja-store.com/fr/sneakers/campo/', score_eco:5, emoji:'👟', label:'GOTS', categorie:'ethique', image_url:'https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&h=400&w=400' },
+      { nom:'Blazer Coton Bio', marque:'Thinking Mu', type:'blazer', matiere:'coton bio', prix:195, url:'https://www.thinkingmu.com/collections/blazers', score_eco:5, emoji:'🧥', label:'GOTS', categorie:'ethique', image_url:'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&h=400&w=400' },
     ],
     seconde_main: [
-      { nom:'Manteau Max Mara', marque:'Vestiaire Collective', type:'manteau', prix:145, url:'https://www.vestiairecollective.com', score_eco:5, emoji:'💎', label:'', categorie:'seconde_main', image_url:'https://images.pexels.com/photos/7621136/pexels-photo-7621136.jpeg?auto=compress&cs=tinysrgb&h=400&w=400' },
-      { nom:'Trench Vintage Burberry', marque:'Vinted', type:'veste', prix:38, url:'https://www.vinted.fr', score_eco:5, emoji:'🌿', label:'', categorie:'seconde_main', image_url:'https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&h=400&w=400' },
-      { nom:'Robe Y2K Fleurie', marque:'Depop', type:'robe', prix:24, url:'https://www.depop.com', score_eco:5, emoji:'👗', label:'', categorie:'seconde_main', image_url:'https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg?auto=compress&cs=tinysrgb&h=400&w=400' },
+      { nom:'Manteau Max Mara', marque:'Vestiaire Collective', type:'manteau', matiere:'laine', prix:145, url:'https://www.vestiairecollective.com', score_eco:5, emoji:'💎', label:'', categorie:'seconde_main', image_url:'https://images.pexels.com/photos/7621136/pexels-photo-7621136.jpeg?auto=compress&cs=tinysrgb&h=400&w=400' },
+      { nom:'Trench Vintage Burberry', marque:'Vinted', type:'veste', matiere:'coton', prix:38, url:'https://www.vinted.fr', score_eco:5, emoji:'🌿', label:'', categorie:'seconde_main', image_url:'https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&h=400&w=400' },
+      { nom:'Robe Y2K Fleurie', marque:'Depop', type:'robe', matiere:'viscose', prix:24, url:'https://www.depop.com', score_eco:5, emoji:'👗', label:'', categorie:'seconde_main', image_url:'https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg?auto=compress&cs=tinysrgb&h=400&w=400' },
     ],
     budget: [
-      { nom:'Jean Brut Selvedge', marque:'Atelier Tuffery', type:'jean', prix:185, url:'https://www.ateliertuffery.com', score_eco:5, emoji:'👖', label:'Fabriqué en France', categorie:'ethique', image_url:'https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?auto=compress&cs=tinysrgb&h=400&w=400' },
-      { nom:'Parka Recyclée', marque:'Picture Organic', type:'manteau', prix:280, url:'https://www.picture-organic-clothing.com', score_eco:5, emoji:'🧥', label:'B Corp', categorie:'ethique', image_url:'https://images.pexels.com/photos/6984661/pexels-photo-6984661.jpeg?auto=compress&cs=tinysrgb&h=400&w=400' },
+      { nom:'Jean Brut Selvedge', marque:'Atelier Tuffery', type:'jean', matiere:'denim', prix:185, url:'https://www.ateliertuffery.com', score_eco:5, emoji:'👖', label:'Fabriqué en France', categorie:'ethique', image_url:'https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?auto=compress&cs=tinysrgb&h=400&w=400' },
+      { nom:'Parka Recyclée', marque:'Picture Organic', type:'manteau', matiere:'polyester recyclé', prix:280, url:'https://www.picture-organic-clothing.com', score_eco:5, emoji:'🧥', label:'B Corp', categorie:'ethique', image_url:'https://images.pexels.com/photos/6984661/pexels-photo-6984661.jpeg?auto=compress&cs=tinysrgb&h=400&w=400' },
     ]
   };
   const items = all[categorie] || all.ethique;
