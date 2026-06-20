@@ -4,29 +4,16 @@
 //             Network-first pour API Supabase/Jamendo
 // ═══════════════════════════════════════════
 
-const CACHE = 'wa-v144';
+const CACHE = 'wa-v145';
 
-// Assets à précacher à l'installation
+// Assets à précacher à l'installation.
+// NB : on ne précache QUE les ressources servies sans ?v= (coquille + statiques).
+// Le CSS et les JS sont chargés avec ?v=N : leur précache ici ne matcherait jamais
+// la requête versionnée. Ils sont mis en cache à la volée (network-first) et,
+// hors-ligne, récupérés via le fallback ignoreSearch (voir networkFirst).
 const STATIC = [
   '/',
   '/index.html',
-  '/app.css',
-  '/js/config.js',
-  '/js/i18n.js',
-  '/js/utils.js',
-  '/js/nav.js',
-  '/js/search.js',
-  '/js/auth.js',
-  '/js/camera.js',
-  '/js/feed.js',
-  '/js/boutique.js',
-  '/js/create.js',
-  '/js/messages.js',
-  '/js/profile.js',
-  '/js/stories.js',
-  '/js/scan.js',
-  '/js/coach.js',
-  '/js/app.js',
   '/manifest.json',
   '/wolf.webp',
   '/icon-192.png',
@@ -168,8 +155,10 @@ async function networkFirst(request) {
     }
     return response;
   } catch {
-    // Offline : retourne le cache si disponible
-    const cached = await caches.match(request);
+    // Offline : cache exact, sinon n'importe quelle version cachée (ignoreSearch).
+    // Permet de servir un js/css déjà en cache même après un bump de ?v=.
+    const cached = await caches.match(request)
+                || await caches.match(request, { ignoreSearch: true });
     if (cached) return cached;
     // Fallback JSON pour les appels API
     const accept = request.headers.get('Accept') || '';

@@ -958,7 +958,9 @@ function renderLookSheet(look){
 }
 
 function ecoStars(n){return Array.from({length:5},(_,i)=>`<span style="color:var(--gold);opacity:${i<n?.9:.2}">${_leafSvg}</span>`).join('');}
-function safeUrl(url){return(url&&/^https?:\/\//i.test(url))?url:'#';}
+// Valide le schéma (bloque javascript:/data:) ET neutralise les caractères qui
+// permettraient de sortir de onclick="window.open('...')" (quote/HTML breakout).
+function safeUrl(url){return(url&&/^https?:\/\//i.test(url))?url.replace(/'/g,'%27').replace(/"/g,'%22').replace(/</g,'%3C').replace(/>/g,'%3E').replace(/\\/g,'%5C'):'#';}
 
 // ════════════════════════════════════════
 // ═══════════════════════════════════════════
