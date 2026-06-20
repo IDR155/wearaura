@@ -14,6 +14,10 @@ const _DBG = {
 // contenu utilisateur (pseudos, légendes, commentaires, messages) en innerHTML.
 function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
 
+// ── Préférence "réduire les animations" (accessibilité) ──
+// Lecture live : l'utilisateur peut changer le réglage système en cours de session.
+function prefersReducedMotion(){return !!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);}
+
 // ── Wrapper d'erreurs Supabase / friendly messages ──
 const SB_FRIENDLY_ERROR_KEYS = {
   '23505': 'err_already_done',

@@ -255,7 +255,7 @@ function goTab(tab) {
   var idx = _TRACK_TABS.indexOf(tab);
   if (idx >= 0) {
     var t = _trackEl();
-    if (t) t.scrollTo({ left: idx * t.clientWidth, behavior: 'smooth' });
+    if (t) t.scrollTo({ left: idx * t.clientWidth, behavior: prefersReducedMotion()?'auto':'smooth' });
   }
   updateNavActive(tab);
 }

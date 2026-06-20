@@ -505,7 +505,7 @@ function openScanEditPanel(index) {
 
   // Scroller le chip dans la vue
   var chip = document.querySelector('.scan-piece-chip[data-index="' + index + '"]');
-  if (chip) chip.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  if (chip) chip.scrollIntoView({ behavior: prefersReducedMotion()?'auto':'smooth', inline: 'center', block: 'nearest' });
 
   // Remplir les champs
   document.getElementById('sep-piece').value   = p.piece   || '';

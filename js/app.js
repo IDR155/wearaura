@@ -134,7 +134,7 @@ init().catch(e => _DBG.err('init() rejeté', e));
         if(el){el.style.display='none';el.style.transform='';el.style.transition='';}
       });
     }
-    track.scrollTo({left:target*W,behavior:'smooth'});
+    track.scrollTo({left:target*W,behavior:prefersReducedMotion()?'auto':'smooth'});
   }
   track.addEventListener('touchend',onRelease,{passive:true});
   track.addEventListener('touchcancel',function(){

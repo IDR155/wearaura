@@ -477,7 +477,8 @@ function doubleTapLike(e,el,id,isDemo){
   const rect=el.getBoundingClientRect();
   const x=touch?.clientX??rect.left+rect.width/2;
   const y=touch?.clientY??rect.top+rect.height/2;
-  // ── Cœur animé via RAF (non bloqué par prefers-reduced-motion CSS) ──
+  // ── Cœur animé via RAF — respecte prefers-reduced-motion (sinon on saute le burst) ──
+  if(!prefersReducedMotion()){
   const wrap=document.createElement('div');
   wrap.style.cssText=`position:fixed;left:${x}px;top:${y}px;z-index:99999;pointer-events:none`;
   const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
@@ -498,6 +499,7 @@ function doubleTapLike(e,el,id,isDemo){
     svg.style.opacity=op;
     if(p<1)requestAnimationFrame(frame);else wrap.remove();
   })(t0);
+  }
   navigator.vibrate?.([8,0,8]);
   if(isDemo==='false'||isDemo===false) addLikeOnly(id);
 }
