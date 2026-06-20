@@ -38,7 +38,7 @@ function _updateStep3Preview(){
   const avWrap = document.getElementById('p3-av');
   const srcImg = document.getElementById('my-avatar')?.querySelector('img');
   if(avWrap && srcImg?.src && !avWrap.querySelector('img')){
-    avWrap.innerHTML = `<img src="${srcImg.src}" alt="" style="width:100%;height:100%;object-fit:cover">`;
+    avWrap.innerHTML = `<img src="${escapeHtml(srcImg.src)}" alt="" style="width:100%;height:100%;object-fit:cover">`;
   }
 
   // Musique (variable définie dans stories.js, chargé après create.js)
@@ -165,7 +165,7 @@ function onFileSelect(e) {
     // Evite de décoder 12 MP (48 MB) en mémoire deux fois de suite → crash Safari mobile.
     _createPreviewUrl(rawUrl, 1080, (url) => {
       const thumb = document.getElementById('gallery-thumb');
-      if(thumb) thumb.innerHTML = `<img src="${url}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:10px">`;
+      if(thumb) thumb.innerHTML = `<img src="${escapeHtml(url)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:10px">`;
       const previewImg = document.getElementById('prev-img');
       previewImg.src = url;
       previewImg.onload = () => {

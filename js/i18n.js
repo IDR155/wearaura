@@ -463,6 +463,8 @@ const I18N = {
     empty_search_other_kw:'Essaie un autre mot-clé.',
     empty_no_views:"Aucune vue pour l'instant",
     post_maybe_deleted:'Il a peut-être été supprimé.',
+    post_not_found:'Post introuvable',
+    error_loading:'Impossible de charger les commentaires.',
     confirm_delete_look:'Supprimer ce look ?',
     confirm_irreversible:'Cette action est irréversible.',
     notif_wants_message:"veut t'envoyer un message",
@@ -942,6 +944,8 @@ const I18N = {
     empty_search_other_kw:'Try another keyword.',
     empty_no_views:'No views yet',
     post_maybe_deleted:'It may have been deleted.',
+    post_not_found:'Post not found',
+    error_loading:"Couldn't load comments.",
     confirm_delete_look:'Delete this look?',
     confirm_irreversible:'This action is irreversible.',
     notif_wants_message:'wants to message you',
@@ -1226,7 +1230,7 @@ function _hgauge(label,valueText,pct,color){
   return `<div style="margin-bottom:13px">`
     +`<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px"><span style="font-size:12px;color:rgba(237,228,207,0.7)">${label}</span><span style="font-size:18px;font-weight:300;color:var(--gold-l);font-family:'Cormorant Garamond',serif">${valueText}</span></div>`
     +`<div style="position:relative;height:10px;border-radius:6px;background:#0c1828;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:${p}%;background:${color};border-radius:6px"></div><div style="position:absolute;left:${p}%;top:-2px;width:2px;height:14px;background:#F7F2E8"></div></div>`
-    +`<div style="display:flex;justify-content:space-between;margin-top:5px;font-size:10px;color:rgba(237,228,207,0.45)"><span>${t('niv_faible')}</span><span>${t('niv_moyenne')}</span><span>${t('niv_elevee')}</span></div>`
+    +`<div style="display:flex;justify-content:space-between;margin-top:5px;font-size:11px;color:rgba(237,228,207,0.45)"><span>${t('niv_faible')}</span><span>${t('niv_moyenne')}</span><span>${t('niv_elevee')}</span></div>`
     +`</div>`;
 }
 

@@ -602,7 +602,7 @@ function doCapture() {
 
       selFile = new File([blob], 'wearaura_' + Date.now() + '.jpg', { type: 'image/jpeg' });
       const thumb = document.getElementById('gallery-thumb');
-      if(thumb) thumb.innerHTML = `<img src="${url}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:10px">`;
+      if(thumb) thumb.innerHTML = `<img src="${escapeHtml(url)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:10px">`;
       document.getElementById('prev-img').src = url;
       stopCamera();
       goStepCreate(2);
@@ -657,7 +657,7 @@ function buildRetoucheFilterPreviews(imageUrl){
     <div class="filter-card ${rtActivePreset===f.filter&&i===0&&!rtActivePreset?'active':rtActivePreset===f.filter?'active':i===0&&!rtActivePreset?'active':''}"
       onclick="applyRetouchePreset(${i},this)">
       <div class="filter-preview">
-        <img src="${imageUrl}" alt="" style="filter:${f.filter||'none'};width:100%;height:100%;object-fit:cover">
+        <img src="${escapeHtml(imageUrl)}" alt="" style="filter:${f.filter||'none'};width:100%;height:100%;object-fit:cover">
       </div>
       <div class="filter-name">${f.name}</div>
     </div>`).join('');

@@ -238,7 +238,7 @@ async function searchUsersForGroup(q){
 
 function userRowItem(p,onclickStr,isSelected=false){
   const name=p.username||p.full_name||'User';
-  const av=p.avatar_url?`<img src="${p.avatar_url}" alt="" style="width:100%;height:100%;object-fit:cover">`:`<span style="font-size:18px">${escapeHtml(name.charAt(0))}</span>`;
+  const av=p.avatar_url?`<img src="${escapeHtml(p.avatar_url)}" alt="" style="width:100%;height:100%;object-fit:cover">`:`<span style="font-size:18px">${escapeHtml(name.charAt(0))}</span>`;
   return `<div onclick="${onclickStr}" style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(240,234,216,.06);cursor:pointer">
     <div style="width:46px;height:46px;border-radius:50%;border:2px solid ${isSelected?'var(--gold)':'var(--gold-b)'};background:var(--black-3);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">${av}</div>
     <div style="flex:1"><div style="font-size:14px;font-weight:500;color:var(--white)">${escapeHtml(name)}</div>${p.username?`<div style="font-size:12px;color:var(--gold)">${escapeHtml(p.username)}</div>`:''}</div>
@@ -263,10 +263,10 @@ function renderGroupSelectedMembers(){
   if(!groupSelectedMembers.length){container.style.display='none';return;}
   container.style.display='flex';
   container.innerHTML=groupSelectedMembers.map(m=>{
-    const av=m.avatar?`<img src="${m.avatar}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:`<span style="font-size:16px">${escapeHtml(m.name.charAt(0))}</span>`;
+    const av=m.avatar?`<img src="${escapeHtml(m.avatar)}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:`<span style="font-size:16px">${escapeHtml(m.name.charAt(0))}</span>`;
     return `<div class="member-chip" onclick="toggleGroupMember('${m.id}','${m.name.replace(/'/g,"&#39;").replace(/"/g,'&quot;')}','${m.avatar.replace(/'/g,'%27').replace(/"/g,'%22')}')">
       <div class="member-chip-av">${av}<div class="member-chip-remove">✕</div></div>
-      <div style="font-size:9px;color:var(--wd);max-width:44px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(m.name.split(' ')[0])}</div>
+      <div style="font-size:11px;color:var(--wd);max-width:44px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(m.name.split(' ')[0])}</div>
     </div>`;
   }).join('');
 }
@@ -357,7 +357,7 @@ async function loadConversations(){
 function convItemHtml(convId,otherUid,avatarUrl,name,sub,lastMsg,time,unread,isGroup,conv){
   let avContent=isGroup
     ?`<div style="width:100%;height:100%;background:linear-gradient(135deg,var(--gold-dim),var(--black-3));display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(240,234,216,0.5)" stroke-width="1.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>`
-    :avatarUrl?`<img src="${avatarUrl}" alt="" style="width:100%;height:100%;object-fit:cover">`
+    :avatarUrl?`<img src="${escapeHtml(avatarUrl)}" alt="" style="width:100%;height:100%;object-fit:cover">`
     :`<span style="font-size:20px">${escapeHtml(name.charAt(0))}</span>`;
   const safeAv=(avatarUrl||'').replace(/'/g,'%27').replace(/"/g,'%22');
   const safeName=name.replace(/'/g,'&#39;').replace(/"/g,'&quot;');
@@ -370,7 +370,7 @@ function convItemHtml(convId,otherUid,avatarUrl,name,sub,lastMsg,time,unread,isG
     ontouchstart="convSwipeStart(this,event)" ontouchmove="convSwipeMove(this,event)" ontouchend="convSwipeEnd(this,event)">
     <div style="position:relative;flex-shrink:0">
       <div style="width:52px;height:52px;border-radius:14px;border:1.5px solid ${unread>0?'var(--gold)':'rgba(240,234,216,0.2)'};background:var(--black-3);overflow:hidden;display:flex;align-items:center;justify-content:center">${avContent}</div>
-      ${unread>0?`<div style="position:absolute;bottom:0;right:0;min-width:18px;height:18px;background:var(--gold);border-radius:9px;border:2px solid var(--black);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--black);padding:0 3px">${unread>9?'9+':unread}</div>`:''}
+      ${unread>0?`<div style="position:absolute;bottom:0;right:0;min-width:18px;height:18px;background:var(--gold);border-radius:9px;border:2px solid var(--black);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--black);padding:0 3px">${unread>9?'9+':unread}</div>`:''}
     </div>
     <div style="flex:1;min-width:0">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">
@@ -398,7 +398,7 @@ function demoConversationsList(){
   return demos.map(d=>`<div class="conv-item" onclick="toast(t('login_messages'))">
     <div style="position:relative;flex-shrink:0">
       <div style="width:52px;height:52px;border-radius:50%;border:2px solid ${d.unread>0?'var(--gold)':'var(--gold-b)'};background:var(--black-3);display:flex;align-items:center;justify-content:center;font-size:22px">${d.em}</div>
-      ${d.unread>0?`<div style="position:absolute;bottom:0;right:0;min-width:18px;height:18px;background:var(--gold);border-radius:9px;border:2px solid var(--black);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--black)">${d.unread}</div>`:''}
+      ${d.unread>0?`<div style="position:absolute;bottom:0;right:0;min-width:18px;height:18px;background:var(--gold);border-radius:9px;border:2px solid var(--black);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--black)">${d.unread}</div>`:''}
     </div>
     <div style="flex:1;min-width:0">
       <div style="display:flex;justify-content:space-between;margin-bottom:2px">
@@ -421,7 +421,7 @@ async function openConversationScreen(convId,otherUid,name,avatarUrl,sub,isGroup
   if(bnav) bnav.style.display='none';
   const avEl=document.getElementById('conv-screen-av');
   if(isGroup){avEl.innerHTML=`<div style="width:100%;height:100%;background:linear-gradient(135deg,var(--gold-dim),var(--black-3));display:flex;align-items:center;justify-content:center;border-radius:50%"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(240,234,216,0.5)" stroke-width="1.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>`;}
-  else if(avatarUrl){avEl.innerHTML=`<img src="${avatarUrl}" alt="" style="width:100%;height:100%;object-fit:cover">`;}
+  else if(avatarUrl){avEl.innerHTML=`<img src="${escapeHtml(avatarUrl)}" alt="" style="width:100%;height:100%;object-fit:cover">`;}
   else{avEl.innerHTML=`<span>${escapeHtml(name.charAt(0))}</span>`;}
   document.getElementById('conv-screen-name').textContent=name;
   const subEl=document.getElementById('conv-screen-sub');
@@ -553,7 +553,7 @@ function appendMessage(msg,scroll=true){
   div.dataset.sent=isSent?'1':'0';
   const safeContent=msg.content.replace(/'/g,"\\'").replace(/"/g,'&quot;');
   const dotsBtn=isSent?`<button class="msg-dots-btn" aria-label="Options" onclick="event.stopPropagation();showMsgCtx('${msg.id}','${safeContent}','${msg.created_at}',this.closest('.msg-sent-wrap'),event)">⋮</button>`:'';
-  const senderTag=showSender?`<div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">${senderAv?`<img src="${senderAv}" alt="" style="width:20px;height:20px;border-radius:50%;object-fit:cover;flex-shrink:0">`:`<div style="width:20px;height:20px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-b);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;color:var(--gold)">${escapeHtml((senderName||'?').charAt(0).toUpperCase())}</div>`}<span style="font-size:11px;color:var(--gold);font-weight:600">@${escapeHtml(senderName)}</span></div>`:'';
+  const senderTag=showSender?`<div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">${senderAv?`<img src="${escapeHtml(senderAv)}" alt="" style="width:20px;height:20px;border-radius:50%;object-fit:cover;flex-shrink:0">`:`<div style="width:20px;height:20px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-b);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;color:var(--gold)">${escapeHtml((senderName||'?').charAt(0).toUpperCase())}</div>`}<span style="font-size:11px;color:var(--gold);font-weight:600">@${escapeHtml(senderName)}</span></div>`:'';
 
   // Détecter les posts partagés [POST:id]
   const postMatch=msg.content.match(/^\[POST:([^\]]+)\]$/);
@@ -795,7 +795,7 @@ async function loadActivityNotifications(){
 function renderActivityItem(n){
   const prof=n.profiles||{};
   const name=escapeHtml(prof.username||prof.full_name||t('someone'));
-  const av=prof.avatar_url?`<img src="${prof.avatar_url}" alt="" style="width:100%;height:100%;object-fit:cover">`:`<span style="font-size:18px">${name.charAt(0)}</span>`;
+  const av=prof.avatar_url?`<img src="${escapeHtml(prof.avatar_url)}" alt="" style="width:100%;height:100%;object-fit:cover">`:`<span style="font-size:18px">${name.charAt(0)}</span>`;
   const time=timeAgo(n.created_at);
   const icons={
     like:'<svg width="12" height="12" viewBox="0 0 24 24" fill="#1E4FD8" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>',
@@ -1212,7 +1212,7 @@ function doMsgSearch(q){
       const followingSet=new Set((followData||[]).map(f=>f.following_id));
       res.innerHTML=data.map(p=>{
         const isFollowing=followingSet.has(p.id);
-        const av=p.avatar_url?`<img src="${p.avatar_url}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="rgba(240,234,216,0.4)" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+        const av=p.avatar_url?`<img src="${escapeHtml(p.avatar_url)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="rgba(240,234,216,0.4)" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
         const badge=isFollowing?'':`<span style="font-size:11px;padding:3px 8px;border-radius:50px;background:rgba(240,234,216,0.1);border:1px solid rgba(240,234,216,0.2);color:var(--wd);margin-left:auto;flex-shrink:0">Demande</span>`;
         return `<div onclick="startMsgFromSearch('${p.id}','${(p.full_name||p.username||'').replace(/'/g,"&#39;")}','${(p.avatar_url||'').replace(/'/g,'%27')}','${(p.username||'').replace(/'/g,"&#39;")}',${isFollowing})"
           style="display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;transition:background .15s;border-radius:12px;margin:0 8px"
@@ -1253,7 +1253,7 @@ async function openGroupInfo(){
       const isMe=p.id===me?.id;
       const isAdmin=p.id===conv.created_by;
       const name=p.username||p.full_name||'?';
-      const av=p.avatar_url?`<img src="${p.avatar_url}" alt="" style="width:42px;height:42px;border-radius:50%;object-fit:cover">`:`<div style="width:42px;height:42px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-b);display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--gold)">${escapeHtml(name.charAt(0).toUpperCase())}</div>`;
+      const av=p.avatar_url?`<img src="${escapeHtml(p.avatar_url)}" alt="" style="width:42px;height:42px;border-radius:50%;object-fit:cover">`:`<div style="width:42px;height:42px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-b);display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--gold)">${escapeHtml(name.charAt(0).toUpperCase())}</div>`;
       return `<div style="display:flex;align-items:center;gap:12px;padding:10px 20px;cursor:${isMe?'default':'pointer'}" ${isMe?'':` onclick="closeGroupInfo();openUserProfile('${p.id}')"`}>
         ${av}
         <div style="flex:1;min-width:0">

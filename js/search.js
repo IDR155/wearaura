@@ -243,7 +243,7 @@ function postGridItem(p) {
   const bgs=['bg-1','bg-2','bg-3','bg-4','bg-5','bg-6','bg-7','bg-8','bg-9'];
   const ems=['👗','🧥','👠','👜','🎩','🌿','💎','🧣','🌸'];
   const i=Math.floor(Math.random()*9);
-  const img = p.image_url ? `<img src="${p.image_url}" alt="" loading="lazy">` : `<span style="font-size:36px">${ems[i]}</span>`;
+  const img = p.image_url ? `<img src="${escapeHtml(p.image_url)}" alt="" loading="lazy">` : `<span style="font-size:36px">${ems[i]}</span>`;
   return `<div class="srch-post-item ${!p.image_url?bgs[i]:''}" onclick="openPostView('${p.id}')">${img}</div>`;
 }
 
@@ -273,7 +273,7 @@ async function searchPeople(q) {
 }
 
 function personItem(p) {
-  const av = p.avatar_url ? `<img src="${p.avatar_url}" alt="">` : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(240,234,216,0.4)" stroke-width="1.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+  const av = p.avatar_url ? `<img src="${escapeHtml(p.avatar_url)}" alt="">` : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(240,234,216,0.4)" stroke-width="1.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
   return `<div class="srch-person-item" onclick="openUserProfile('${p.id}')">
     <div class="srch-person-av">${av}</div>
     <div style="flex:1;min-width:0">
@@ -320,8 +320,8 @@ async function searchBoutiques(q) {
 
 function boutiqueItem(m) {
   const badge = m.categorie_alt==='ethique'
-    ? `<span style="font-size:9px;background:rgba(80,180,80,.15);color:#7dc97d;border:1px solid rgba(80,180,80,.3);padding:2px 8px;border-radius:10px">${escapeHtml(m.label_certif||t('bq_ethique_badge'))}</span>`
-    : `<span style="font-size:9px;background:var(--gold-dim);color:var(--gold-l);border:1px solid var(--gold-b);padding:2px 8px;border-radius:10px">${t('bq_sm_badge')}</span>`;
+    ? `<span style="font-size:11px;background:rgba(80,180,80,.15);color:#7dc97d;border:1px solid rgba(80,180,80,.3);padding:2px 8px;border-radius:10px">${escapeHtml(m.label_certif||t('bq_ethique_badge'))}</span>`
+    : `<span style="font-size:11px;background:var(--gold-dim);color:var(--gold-l);border:1px solid var(--gold-b);padding:2px 8px;border-radius:10px">${t('bq_sm_badge')}</span>`;
   return `<div class="srch-boutique-item" onclick="window.open('${safeUrl(m.url_affilie)}','_blank')">
     <div style="width:44px;height:44px;border-radius:10px;background:var(--black-2);border:1px solid var(--gold-b);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(240,234,216,0.4)" stroke-width="1.5" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
     <div style="flex:1;min-width:0">
@@ -415,16 +415,16 @@ async function loadFeedExplorerGrid(tag='',country=''){
   const bgs=['bg-1','bg-2','bg-3','bg-4','bg-5','bg-6','bg-7','bg-8','bg-9'];
   const ems=['👗','🧥','👠','👜','🎩','🌿','💎','🧣','🌸'];
   grid.innerHTML=data.map((p,i)=>{
-    const img=p.image_url?`<img data-src="${p.image_url}" alt="" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0">`:`<div class="exp-placeholder ${bgs[i%9]}">${ems[i%9]}</div>`;
+    const img=p.image_url?`<img data-src="${escapeHtml(p.image_url)}" alt="" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0">`:`<div class="exp-placeholder ${bgs[i%9]}">${ems[i%9]}</div>`;
     const flag=p.country?{France:'🇫🇷',Japan:'🇯🇵',USA:'🇺🇸',Italy:'🇮🇹','South Korea':'🇰🇷',Morocco:'🇲🇦',UK:'🇬🇧'}[p.country]||'📍':'📍';
     const user=escapeHtml(p.profiles?.username||'user');
     return `<div class="exp-item" onclick="openPostView('${p.id}')">
       <div class="exp-item-img">${img}</div>
       <div class="exp-item-info">
-        ${p.city?`<div class="exp-loc">${flag} <span style="font-size:9px;opacity:.6;text-transform:uppercase;letter-spacing:.5px">${p.country||''}</span> ${escapeHtml(p.city)}</div>`:''}
+        ${p.city?`<div class="exp-loc">${flag} <span style="font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:.5px">${p.country||''}</span> ${escapeHtml(p.city)}</div>`:''}
         <div class="exp-caption">${escapeHtml(p.caption||'')}</div>
         <div class="exp-meta">
-          <div class="exp-user-row"><div class="exp-av"><img src="wolf.png" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'"></div><span class="exp-user">${user}</span></div>
+          <div class="exp-user-row"><div class="exp-av"><img src="wolf.webp" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'"></div><span class="exp-user">${user}</span></div>
           <div class="exp-likes">♡ ${fmtN(p.likes_count||0)}</div>
         </div>
       </div>

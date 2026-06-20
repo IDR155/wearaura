@@ -4,7 +4,7 @@
 //             Network-first pour API Supabase/Jamendo
 // ═══════════════════════════════════════════
 
-const CACHE = 'wa-v143';
+const CACHE = 'wa-v144';
 
 // Assets à précacher à l'installation
 const STATIC = [
@@ -28,8 +28,7 @@ const STATIC = [
   '/js/coach.js',
   '/js/app.js',
   '/manifest.json',
-  '/wolf.png',
-  '/couronne.png',
+  '/wolf.webp',
   '/icon-192.png',
   '/catalog-demo.json',
 ];

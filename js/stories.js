@@ -301,7 +301,7 @@ function _setPlayIcon(idx, state) {
   const btn = document.getElementById('mplay-' + idx);
   if (!btn) return;
   if (state === 'loading') {
-    btn.innerHTML = `<span style="font-size:9px;color:var(--gold);display:block;animation:spin .8s linear infinite">↻</span>`;
+    btn.innerHTML = `<span style="font-size:11px;color:var(--gold);display:block;animation:spin .8s linear infinite">↻</span>`;
     btn.style.borderColor = 'rgba(240,234,216,0.35)';
   } else if (state === 'play') {
     btn.innerHTML = `<svg width="10" height="10" viewBox="0 0 24 24" fill="var(--gold)" stroke="none"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>`;
@@ -526,7 +526,7 @@ async function loadStories() {
     .sort(([, a], [, b]) => (b.hasUnseen ? 1 : 0) - (a.hasUnseen ? 1 : 0))
     .forEach(([uid, data]) => {
       const av = data.profile?.avatar_url
-        ? `<img data-src="${data.profile.avatar_url}" alt="">`
+        ? `<img data-src="${escapeHtml(data.profile.avatar_url)}" alt="">`
         : `<span style="font-size:16px;font-weight:700;color:var(--gold)">${(data.profile?.username || '?')[0].toUpperCase()}</span>`;
       const uname = escapeHtml((data.profile?.username || 'user').slice(0, 10));
       const storyLabel = data.hasUnseen ? `Nouvelle story de ${uname}` : `Story de ${uname}`;
@@ -543,8 +543,8 @@ function _myStoryBubble(data) {
   if (data?.items?.[0]?.image_url) {
     const isVid = _isVideoUrl(data.items[0].image_url);
     const preview = isVid
-      ? `<video src="${data.items[0].image_url}" muted autoplay loop playsinline style="width:100%;height:100%;object-fit:cover"></video>`
-      : `<img data-src="${data.items[0].image_url}" alt="" style="width:100%;height:100%;object-fit:cover">`;
+      ? `<video src="${escapeHtml(data.items[0].image_url)}" muted autoplay loop playsinline style="width:100%;height:100%;object-fit:cover"></video>`
+      : `<img data-src="${escapeHtml(data.items[0].image_url)}" alt="" style="width:100%;height:100%;object-fit:cover">`;
     return `<div class="story-bubble story-bubble--mine">${preview}<div class="story-add-badge">+</div></div>`;
   }
   return `<div class="story-bubble story-bubble--add">
@@ -594,7 +594,7 @@ function _renderStoryViewer() {
   document.getElementById('sv-username').textContent = data.profile?.username || 'user';
   const av = document.getElementById('sv-avatar');
   av.innerHTML = data.profile?.avatar_url
-    ? `<img src="${data.profile.avatar_url}" alt="" style="width:100%;height:100%;object-fit:cover">`
+    ? `<img src="${escapeHtml(data.profile.avatar_url)}" alt="" style="width:100%;height:100%;object-fit:cover">`
     : `<span style="font-size:15px;font-weight:700;color:var(--gold)">${(data.profile?.username || '?')[0].toUpperCase()}</span>`;
   document.getElementById('sv-time').textContent = timeAgo(story.created_at);
   document.getElementById('sv-caption').textContent = story.caption || '';
@@ -1050,7 +1050,7 @@ async function openStoryViewsPanel() {
       const name = p.full_name || p.username || 'Utilisateur';
       const handle = p.username ? '@' + p.username : '';
       const av = p.avatar_url
-        ? `<img src="${p.avatar_url}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
+        ? `<img src="${escapeHtml(p.avatar_url)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
         : `<span style="font-size:14px;font-weight:700;color:var(--gold);text-transform:uppercase">${(p.username||'?')[0]}</span>`;
       const emoji = reactionMap[v.viewer_id] || '';
       return `<div style="display:flex;align-items:center;gap:12px;padding:10px 20px">

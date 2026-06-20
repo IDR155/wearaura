@@ -49,7 +49,7 @@
 <link rel="preconnect" href="https://whaxwmztbkgnfokuqlcc.supabase.co">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-<link rel="stylesheet" href="app.css?v=17">
+<link rel="stylesheet" href="app.css?v=18">
 </head>
 <body>
 <div class="phone" id="phone">
@@ -57,7 +57,7 @@
 <!-- SPLASH -->
 <div id="sc-splash" class="screen active" style="justify-content:center;align-items:center;background:radial-gradient(ellipse at center,#0F2040,#07101E 70%)">
   <div style="text-align:center;animation:fadeUp 1s ease forwards;padding:0 32px">
-    <img src="image.png" style="width:min(340px,80vw);display:block;margin:0 auto 32px" alt="WearAura">
+    <img src="image.webp" style="width:min(340px,80vw);display:block;margin:0 auto 32px" alt="WearAura">
     <div style="width:36px;height:36px;border:2px solid rgba(240,234,216,0.3);border-top-color:#F0EAD8;border-radius:50%;animation:spin 0.9s linear infinite;margin:0 auto"></div>
   </div>
 </div>
@@ -66,7 +66,7 @@
 <div id="sc-auth" class="screen">
   <div>
     <div style="display:flex;justify-content:center;align-items:center;width:100%;margin-bottom:8px;margin-top:0">
-      <img src="image.png" style="width:min(220px,52vw);object-fit:contain" alt="WearAura">
+      <img src="image.webp" style="width:min(220px,52vw);object-fit:contain" alt="WearAura">
     </div>
     <div style="display:flex;justify-content:center;gap:4px;margin-bottom:12px">
       <button class="auth-lang-btn active" id="auth-lang-fr" onclick="setLang('fr')" aria-label="Français">FR</button>
@@ -1410,7 +1410,7 @@
     </div>
     <!-- Audience -->
     <div style="margin-bottom:16px">
-      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Audience</div>
+      <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Audience</div>
       <div class="tags-wrap">
         <div class="story-aud-chip story-aud-chip--active" data-v="everyone" onclick="setStoryVisibility('everyone',this)">Tout le monde</div>
         <div class="story-aud-chip" data-v="followers" onclick="setStoryVisibility('followers',this)">Abonnés</div>
@@ -1479,9 +1479,9 @@
   <!-- Range selector + confirmer -->
   <div id="music-confirm-bar" style="display:none;flex-shrink:0;padding:14px 20px 10px;background:rgba(7,16,30,0.97);border-top:1px solid rgba(240,234,216,0.07)">
     <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:10px">
-      <div><div style="font-size:9px;color:var(--wd);letter-spacing:.8px;margin-bottom:3px">DÉBUT</div><div id="music-lbl-start" class="txt-gold-brand">0:00</div></div>
+      <div><div style="font-size:11px;color:var(--wd);letter-spacing:.8px;margin-bottom:3px">DÉBUT</div><div id="music-lbl-start" class="txt-gold-brand">0:00</div></div>
       <div style="text-align:center;padding-bottom:2px"><div id="music-lbl-dur" style="font-size:12px;color:rgba(240,234,216,0.4);letter-spacing:.5px">30s</div></div>
-      <div style="text-align:right"><div style="font-size:9px;color:var(--wd);letter-spacing:.8px;margin-bottom:3px">FIN</div><div id="music-lbl-end" class="txt-gold-brand">0:30</div></div>
+      <div style="text-align:right"><div style="font-size:11px;color:var(--wd);letter-spacing:.8px;margin-bottom:3px">FIN</div><div id="music-lbl-end" class="txt-gold-brand">0:30</div></div>
     </div>
     <div id="music-range-track" style="position:relative;height:52px;display:flex;align-items:center;touch-action:none;margin-bottom:12px;cursor:pointer" onpointerdown="_trackDown(event)">
       <div style="position:absolute;left:8px;right:8px;height:3px;background:rgba(240,234,216,0.1);border-radius:2px;pointer-events:none">
@@ -1496,8 +1496,8 @@
   </div>
   <!-- Note Jamendo -->
   <div id="music-source-note" style="flex-shrink:0;padding:6px 20px 8px;display:flex;align-items:center;justify-content:center;gap:6px">
-    <span style="font-size:9px;color:rgba(237,228,207,0.25);letter-spacing:.5px">Musique libre par</span>
-    <a href="https://www.jamendo.com" target="_blank" rel="noopener noreferrer" style="font-size:9px;color:rgba(237,228,207,0.35);letter-spacing:.5px;text-decoration:none">Jamendo</a>
+    <span style="font-size:11px;color:rgba(237,228,207,0.25);letter-spacing:.5px">Musique libre par</span>
+    <a href="https://www.jamendo.com" target="_blank" rel="noopener noreferrer" style="font-size:11px;color:rgba(237,228,207,0.35);letter-spacing:.5px;text-decoration:none">Jamendo</a>
   </div>
 
   <!-- Bouton flottant + -->
@@ -2366,8 +2366,8 @@
     <div style="font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:400;color:var(--white);margin-bottom:4px" data-i18n="scan_mat_title">Matière de ta pièce</div>
     <div style="font-size:12px;line-height:1.6;color:var(--wd);margin-bottom:18px" data-i18n="scan_mat_sub">On part d'une estimation selon le type. Précise la vraie matière pour une comparaison plus juste.</div>
     <div id="scan-mat-list" style="display:flex;flex-wrap:wrap;gap:8px"></div>
-    <div style="font-size:10px;line-height:1.5;color:rgba(240,234,216,.4);margin-top:16px" data-i18n="scan_mat_sources">Estimations (ordres de grandeur) — sources : ADEME & Water Footprint Network.</div>
-    <a href="https://ecobalyse.beta.gouv.fr" target="_blank" rel="noopener" style="font-size:10px;color:var(--gold);text-decoration:underline" data-i18n="scan_mat_ref">Référence officielle : ADEME Ecobalyse →</a>
+    <div style="font-size:11px;line-height:1.5;color:rgba(240,234,216,.4);margin-top:16px" data-i18n="scan_mat_sources">Estimations (ordres de grandeur) — sources : ADEME & Water Footprint Network.</div>
+    <a href="https://ecobalyse.beta.gouv.fr" target="_blank" rel="noopener" style="font-size:11px;color:var(--gold);text-decoration:underline" data-i18n="scan_mat_ref">Référence officielle : ADEME Ecobalyse →</a>
   </div>
 </div>
 </div>
@@ -2391,20 +2391,20 @@
   </div>
 </div>
 
-<script src="js/config.js?v=8" defer></script>
-<script src="js/i18n.js?v=38" defer></script>
+<script src="js/config.js?v=9" defer></script>
+<script src="js/i18n.js?v=40" defer></script>
 <script src="js/utils.js?v=4" defer></script>
 <script src="js/nav.js?v=10" defer></script>
-<script src="js/search.js?v=2" defer></script>
+<script src="js/search.js?v=5" defer></script>
 <script src="js/auth.js?v=2" defer></script>
-<script src="js/camera.js?v=7" defer></script>
-<script src="js/feed.js?v=15" defer></script>
-<script src="js/boutique.js?v=15" defer></script>
-<script src="js/create.js?v=21" defer></script>
-<script src="js/messages.js?v=13" defer></script>
-<script src="js/profile.js?v=27" defer></script>
-<script src="js/stories.js?v=9" defer></script>
-<script src="js/scan.js?v=57" defer></script>
+<script src="js/camera.js?v=8" defer></script>
+<script src="js/feed.js?v=17" defer></script>
+<script src="js/boutique.js?v=17" defer></script>
+<script src="js/create.js?v=22" defer></script>
+<script src="js/messages.js?v=15" defer></script>
+<script src="js/profile.js?v=29" defer></script>
+<script src="js/stories.js?v=11" defer></script>
+<script src="js/scan.js?v=58" defer></script>
 <script src="js/coach.js?v=3" defer></script>
 <script src="js/app.js?v=4" defer></script>
 <!-- ═══════════════════════════════════════════ -->
@@ -2738,11 +2738,11 @@
   <div style="display:flex;align-items:center;justify-content:center;gap:40px;padding:18px 20px;flex-shrink:0;background:#000;border-top:1px solid rgba(240,234,216,0.07)">
     <div onclick="switchCropMode('portrait')" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer">
       <canvas id="crop-prev-portrait" width="54" height="72" style="border-radius:8px;border:2px solid var(--gold);transition:border-color .2s"></canvas>
-      <div id="crop-lbl-portrait" style="font-size:9px;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase;font-weight:600">Profil ✓</div>
+      <div id="crop-lbl-portrait" style="font-size:11px;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase;font-weight:600">Profil ✓</div>
     </div>
     <div onclick="switchCropMode('circle')" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer">
       <canvas id="crop-prev-circle" width="54" height="54" style="border-radius:50%;border:2px solid rgba(240,234,216,0.2);transition:border-color .2s"></canvas>
-      <div id="crop-lbl-circle" style="font-size:9px;letter-spacing:1.5px;color:var(--wd);text-transform:uppercase">Feed</div>
+      <div id="crop-lbl-circle" style="font-size:11px;letter-spacing:1.5px;color:var(--wd);text-transform:uppercase">Feed</div>
     </div>
   </div>
 </div>

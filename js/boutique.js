@@ -298,7 +298,7 @@ function bqOpenProduct(idx){
   const sh=isSecondHand(p);
   const emp=getEmpreinte(p.matiere);
   const img=p.image_url
-    ? `<img src="${p.image_url}" alt="${escapeHtml(pNom(p))}" style="width:100%;height:100%;object-fit:cover;object-position:center top;position:absolute;inset:0" onerror="this.style.display='none'">`
+    ? `<img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(pNom(p))}" style="width:100%;height:100%;object-fit:cover;object-position:center top;position:absolute;inset:0" onerror="this.style.display='none'">`
     : '';
   const footprint = sh
     ? `<div style="font-size:13px;color:var(--wd);line-height:1.6">${t('ig_reuse_hint')}</div>`
@@ -324,10 +324,10 @@ function bqOpenProduct(idx){
       <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px">${t('empreinte_titre')}</div>
       ${footprint}
       ${(!sh&&emp.info)?`<div style="font-size:12px;color:var(--wd);line-height:1.6;border-top:1px solid rgba(240,234,216,.1);padding-top:8px;margin-top:4px;font-style:italic">${emp.info}</div>`:''}
-      <div style="font-size:9px;color:rgba(245,240,232,.3);margin-top:6px;letter-spacing:.5px">${t('donnees_estim')}</div>
+      <div style="font-size:11px;color:rgba(245,240,232,.3);margin-top:6px;letter-spacing:.5px">${t('donnees_estim')}</div>
     </div>
     <div style="padding:0 20px">
-      <div style="margin-bottom:10px"><span style="display:inline-block;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:rgba(240,234,216,0.12);border:1px solid rgba(240,234,216,0.3);color:rgba(240,234,216,0.7);padding:2px 7px;border-radius:4px">${t('lien_affilie')}</span></div>
+      <div style="margin-bottom:10px"><span style="display:inline-block;font-size:11px;letter-spacing:1px;text-transform:uppercase;background:rgba(240,234,216,0.12);border:1px solid rgba(240,234,216,0.3);color:rgba(240,234,216,0.7);padding:2px 7px;border-radius:4px">${t('lien_affilie')}</span></div>
       <button class="btn" onclick="bqGoToProduct(${idx})">${t('bq_voir_produit')}</button>
     </div>`;
   document.getElementById('overlay').classList.add('show');
@@ -352,7 +352,7 @@ function closeBqProduct(){
 function bqCarouselCard(p){
   const idx=_bqRegister(p);
   const imgContent=p.image_url
-    ?`<img src="${p.image_url}" alt="${escapeHtml(pNom(p))}" onerror="this.style.display='none';this.parentNode.querySelector('.bq-emoji-fb').style.display='flex'">`:'';
+    ?`<img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(pNom(p))}" onerror="this.style.display='none';this.parentNode.querySelector('.bq-emoji-fb').style.display='flex'">`:'';
   const gauges=impactGaugesAbs(p);
   const demoBadge=p._isDemo?`<div class="demo-badge">${t('bq_apercu_demo')}</div>`:'';
   const credit=p.image_photographer?`<div class="pexels-credit" title="Photo via Pexels">${escapeHtml(p.image_photographer)}</div>`:'';
@@ -384,7 +384,7 @@ function bqCarouselCard(p){
 function bqProductCard(p){
   const idx=_bqRegister(p);
   const imgContent=p.image_url
-    ?`<img src="${p.image_url}" alt="${escapeHtml(pNom(p))}" onerror="this.style.display='none';this.parentNode.querySelector('.bq-emoji-fb').style.display='flex'">`:'';
+    ?`<img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(pNom(p))}" onerror="this.style.display='none';this.parentNode.querySelector('.bq-emoji-fb').style.display='flex'">`:'';
   const demoBadge=p._isDemo?`<div class="demo-badge">${t('bq_apercu_demo')}</div>`:'';
   const credit=p.image_photographer?`<div class="pexels-credit" title="Photo via Pexels">${escapeHtml(p.image_photographer)}</div>`:'';
   return `<div class="bq-product-card"
@@ -416,7 +416,7 @@ function bqProductCard(p){
 
 function bqSecondhandCard(p){
   const imgContent=p.image_url
-    ?`<img src="${p.image_url}" alt="${escapeHtml(pNom(p))}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`
+    ?`<img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(pNom(p))}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`
     :_clotheSvgFb;
   return `<div class="bq-sm-card" onclick="window.open('${safeUrl(p.url)}','_blank')">
     <div class="bq-sm-img">${imgContent}</div>
@@ -462,7 +462,7 @@ function bqCtxShow(p){
   const imgEl=document.getElementById('bq-ctx-img');
   if(imgEl){
     imgEl.innerHTML=p.image_url
-      ?`<img src="${p.image_url}" alt="" style="width:100%;height:100%;object-fit:cover">`
+      ?`<img src="${escapeHtml(p.image_url)}" alt="" style="width:100%;height:100%;object-fit:cover">`
       :_clotheSvgFb;
   }
   const nameEl=document.getElementById('bq-ctx-name');

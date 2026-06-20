@@ -169,9 +169,9 @@ function renderSlides(posts,isDemo,containerId='feed-scroll'){
     // ── pid déclaré EN PREMIER (utilisé dans img et hotspotsZone) ──
     const pid=p.id||'demo'+i;
     const imgAlt=escapeHtml(p.caption||('Look de '+p.user));
-    const img=p.imageUrl?`<img data-src="${p.imageUrl}" alt="${imgAlt}" onload="_autoFit(this);_fitHzone(this,'${pid}')" onerror="this.closest('.feed-slide')&&(this.closest('.feed-slide').style.display='none')">`:`<span class="slide-emoji">${_slideFb}</span>`;
+    const img=p.imageUrl?`<img data-src="${escapeHtml(p.imageUrl)}" alt="${imgAlt}" onload="_autoFit(this);_fitHzone(this,'${pid}')" onerror="this.closest('.feed-slide')&&(this.closest('.feed-slide').style.display='none')">`:`<span class="slide-emoji">${_slideFb}</span>`;
     const avImg=p.avatarUrl
-      ?`<img src="${p.avatarUrl}" alt="Photo de profil de ${escapeHtml(p.user||'')}">`
+      ?`<img src="${escapeHtml(p.avatarUrl)}" alt="Photo de profil de ${escapeHtml(p.user||'')}">`
       :`<span style="font-size:15px;font-weight:700;color:var(--gold);text-transform:uppercase">${(p.user||'?').charAt(0)}</span>`;
     const followBtn=(me&&p.uid!==me.id)?`<button class="btn-follow ${p.followed?'following':''}" onclick="toggleFollow('${p.uid}',this)" style="margin-left:10px">${p.followed?t('suivi'):t('suivre')}</button>`:'';
     window.__hs=window.__hs||{};
@@ -686,7 +686,7 @@ async function loadComments(postId){
   const profs=await getProfiles(uids);
   const pm=Object.fromEntries(profs.map(p=>[p.id,p]));
   list.innerHTML=data.map(c=>{
-    const av=pm[c.user_id]?.avatar_url?`<img src="${pm[c.user_id].avatar_url}" alt="" class="img-cover">`:wolfAv('32px');
+    const av=pm[c.user_id]?.avatar_url?`<img src="${escapeHtml(pm[c.user_id].avatar_url)}" alt="" class="img-cover">`:wolfAv('32px');
     const isOwn=me&&c.user_id===me.id;
     let menuBtn='',actions='';
     if(isOwn){
@@ -981,14 +981,14 @@ async function loadExplore(tag='',country=''){
   const bgs=['bg-1','bg-2','bg-3','bg-4','bg-5','bg-6','bg-7','bg-8','bg-9'];
   const ems=['👗','🧥','👠','👜','🎩','🌿','💎','🧣','🌸'];
   grid.innerHTML=data.map((p,i)=>{
-    const img=p.image_url?`<img data-src="${p.image_url}" alt="" style="width:100%;height:100%;object-fit:cover">`:`<div class="exp-placeholder ${bgs[i%9]}">${ems[i%9]}</div>`;
+    const img=p.image_url?`<img data-src="${escapeHtml(p.image_url)}" alt="" style="width:100%;height:100%;object-fit:cover">`:`<div class="exp-placeholder ${bgs[i%9]}">${ems[i%9]}</div>`;
     return `<div class="exp-item" onclick="openPostView('${p.id}')">
       <div class="exp-item-img">${img}</div>
       <div class="exp-item-info">
         ${p.city?`<div class="exp-loc"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="margin-right:2px;vertical-align:-1px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${escapeHtml(p.city)}</div>`:''}
         <div class="exp-caption">${escapeHtml(p.caption||'')}</div>
         <div class="exp-meta">
-          <div class="exp-user-row"><div class="exp-av" style="overflow:hidden"><img src="wolf.png" alt="" class="img-cover" onerror="this.style.display='none'"></div><span class="exp-user">${escapeHtml(pm[p.user_id]?.username||'user')}</span></div>
+          <div class="exp-user-row"><div class="exp-av" style="overflow:hidden"><img src="wolf.webp" alt="" loading="lazy" class="img-cover" onerror="this.style.display='none'"></div><span class="exp-user">${escapeHtml(pm[p.user_id]?.username||'user')}</span></div>
           <div class="exp-likes">♡ ${fmtN(p.likes_count||0)}</div>
         </div>
       </div>

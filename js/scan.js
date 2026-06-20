@@ -672,7 +672,7 @@ function _renderScanHistory(items) {
       : '';
     return `<div class="scan-hist-item${em ? ' edit-mode' : ''}" ${em ? '' : `onclick="openHistoryScan(${i})"`}>
       <div class="scan-hist-thumb">
-        <img src="${item.image_url}" alt="Scan du ${date}" loading="lazy" onerror="this.style.display='none'">
+        <img src="${escapeHtml(item.image_url)}" alt="Scan du ${date}" loading="lazy" onerror="this.style.display='none'">
         <div class="scan-hist-badge">${count} pièce${count > 1 ? 's' : ''}</div>
         ${delBtn}
       </div>

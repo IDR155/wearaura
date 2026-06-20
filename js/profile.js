@@ -24,7 +24,7 @@ async function loadProfile(){
   if(handleEl) handleEl.textContent=displayHandle;
   const avatarSrc=prof?.avatar_portrait_url||prof?.avatar_url;
   if(avatarSrc){
-    document.getElementById('my-avatar').innerHTML=`<img src="${avatarSrc}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">`;
+    document.getElementById('my-avatar').innerHTML=`<img src="${escapeHtml(avatarSrc)}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">`;
     const delBtn=document.getElementById('av-delete-btn');
     if(delBtn) delBtn.style.display='flex';
   }
@@ -70,7 +70,7 @@ async function loadProfile(){
       ontouchend="_pgridTouchEnd()"
       ontouchcancel="_pgridTouchEnd()"
       oncontextmenu="event.preventDefault();_showDeletePostConfirm('${p.id}');return false">
-      ${p.image_url?`<img data-src="${p.image_url}" alt="" draggable="false" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}
+      ${p.image_url?`<img data-src="${escapeHtml(p.image_url)}" alt="" draggable="false" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}
       ${p.image_url?`<span class="pgrid-ph" style="display:none">${_camSvgFb}</span>`:`<span class="pgrid-ph">${_camSvgFb}</span>`}
       <div id="pgrid-like-${p.id}" style="display:${likes>0?'flex':'none'};position:absolute;bottom:8px;right:8px;align-items:center;gap:3px;z-index:4;pointer-events:none">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="white" stroke="none" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,0.8))"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
@@ -253,7 +253,7 @@ async function loadWishlistGrid(){
     const url=v.alt_url&&safeUrl(v.alt_url)!=='#'?safeUrl(v.alt_url):`https://www.google.com/search?q=${encodeURIComponent((name+' '+brand).trim())}`;
     const hasImg=!!v.alt_image_url;
     const imgPart=hasImg
-      ?`<img src="${v.alt_image_url}" alt="${safeName}" class="img-cover-r" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+      ?`<img src="${escapeHtml(v.alt_image_url)}" alt="${safeName}" class="img-cover-r" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
       :'';
     const fallbackIcon=`<div style="display:${hasImg?'none':'flex'};width:100%;height:100%;align-items:center;justify-content:center"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(240,234,216,0.3)" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>`;
     return `<div class="alt-result-card" style="margin-bottom:10px" onclick="window.open('${url}','_blank')">
@@ -306,7 +306,7 @@ async function loadLikedGrid(){
   const{data:posts}=await sb.from('posts').select('id,image_url').eq('hidden',false).in('id',postIds);
   if(!posts||!posts.length){grid.innerHTML='';return;}
   const ordered=postIds.map(id=>posts.find(p=>p.id===id)).filter(Boolean);
-  grid.innerHTML=ordered.map(p=>`<div class="pgrid-item">${p.image_url?`<img data-src="${p.image_url}" alt="">`:`<span class="pgrid-ph">${_heartSvgFb}</span>`}</div>`).join('');
+  grid.innerHTML=ordered.map(p=>`<div class="pgrid-item">${p.image_url?`<img data-src="${escapeHtml(p.image_url)}" alt="">`:`<span class="pgrid-ph">${_heartSvgFb}</span>`}</div>`).join('');
   observeLazy(grid);
 }
 
@@ -327,7 +327,7 @@ async function loadSavedGrid(){
   if(!posts||!posts.length){grid.innerHTML='';return;}
   // Conserver l'ordre d'enregistrement
   const ordered=postIds.map(id=>posts.find(p=>p.id===id)).filter(Boolean);
-  grid.innerHTML=ordered.map(p=>`<div class="pgrid-item">${p.image_url?`<img data-src="${p.image_url}" alt="">`:`<span class="pgrid-ph">${_camSvgFb}</span>`}</div>`).join('');
+  grid.innerHTML=ordered.map(p=>`<div class="pgrid-item">${p.image_url?`<img data-src="${escapeHtml(p.image_url)}" alt="">`:`<span class="pgrid-ph">${_camSvgFb}</span>`}</div>`).join('');
   observeLazy(grid);
 }
 
@@ -531,7 +531,7 @@ async function confirmCrop(){
   // Mise à jour DB — avatar_url = cercle (feed), avatar_portrait_url = portrait (profil)
   const{error}=await sb.from('profiles').upsert({id:me.id,avatar_url:url,avatar_portrait_url:urlP});
   if(error) await sb.from('profiles').upsert({id:me.id,avatar_url:url});
-  document.getElementById('my-avatar').innerHTML=`<img src="${urlP}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">`;
+  document.getElementById('my-avatar').innerHTML=`<img src="${escapeHtml(urlP)}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">`;
   const delBtn=document.getElementById('av-delete-btn');
   if(delBtn)delBtn.style.display='flex';
   toast(t('avatar_updated'));
@@ -539,7 +539,7 @@ async function confirmCrop(){
   if(typeof invalidateProfileCache==='function') invalidateProfileCache(me.id);
   // Mise à jour directe des avatars DÉJÀ dans le DOM
   document.querySelectorAll(`.slide-avatar[data-uid="${me.id}"]`).forEach(el=>{
-    el.innerHTML=`<img src="${url}" alt="">`;
+    el.innerHTML=`<img src="${escapeHtml(url)}" alt="">`;
   });
 }
 
@@ -571,7 +571,7 @@ async function _onAvatarUploadDirect(file){
   if(error)return toast(t('error_upload'));
   const {data:u}=sb.storage.from('posts').getPublicUrl(path);
   await sb.from('profiles').upsert({id:me.id,avatar_url:u.publicUrl});
-  document.getElementById('my-avatar').innerHTML=`<img src="${u.publicUrl}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">`;
+  document.getElementById('my-avatar').innerHTML=`<img src="${escapeHtml(u.publicUrl)}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">`;
   const delBtn=document.getElementById('av-delete-btn');
   if(delBtn) delBtn.style.display='flex';
   toast(t('avatar_updated'));
@@ -596,7 +596,7 @@ async function openUserProfile(uid){
       bioCard.style.display='none';
     }
     const portraitSrc=prof.avatar_portrait_url||prof.avatar_url;
-    if(portraitSrc)document.getElementById('vp-av').innerHTML=`<img src="${portraitSrc}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">`;
+    if(portraitSrc)document.getElementById('vp-av').innerHTML=`<img src="${escapeHtml(portraitSrc)}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">`;
   }
   const {data:posts}=await sb.from('posts').select('id,image_url,likes_count').eq('user_id',uid).eq('hidden',false).order('created_at',{ascending:false});
   const {count}=await sb.from('follows').select('*',{count:'exact',head:true}).eq('following_id',uid);
@@ -651,7 +651,7 @@ async function openUserProfile(uid){
       vpGrid.style.display='block';
       vpGrid.innerHTML=`<div style="padding:48px 20px;text-align:center"><img src="mascote_ivory/the_star_gazer.png" alt="" style="display:block;width:60%;max-width:200px;height:auto;margin:0 auto 14px;opacity:.95"><div style="font-size:13px;color:var(--wd);line-height:1.6">${t('aucun_post')}</div></div>`;
     }else{
-      vpGrid.innerHTML=posts.map(p=>`<div class="pgrid-item" onclick="openPostView('${p.id}')">${p.image_url?`<img data-src="${p.image_url}" alt="">`:`<span class="pgrid-ph">${_camSvgFb}</span>`}</div>`).join('');
+      vpGrid.innerHTML=posts.map(p=>`<div class="pgrid-item" onclick="openPostView('${p.id}')">${p.image_url?`<img data-src="${escapeHtml(p.image_url)}" alt="">`:`<span class="pgrid-ph">${_camSvgFb}</span>`}</div>`).join('');
       observeLazy(vpGrid);
     }
   }
@@ -794,7 +794,7 @@ function openPieceSheet(h){
         ? `${_hgauge(t('emp_eau_lbl'),'~'+emp.eau.toLocaleString()+' L',emp.eau/5000*100,'#5aa9bd')}${emp.co2!=null?_hgauge(t('emp_co2_lbl'),'~'+emp.co2+' kg CO₂',emp.co2/20*100,'#8f7fc0'):''}`
         : `<div style="font-size:13px;color:var(--wd);margin-bottom:10px">${t('matiere_unknown')}</div>`}
       <div style="font-size:12px;color:var(--wd);line-height:1.6;border-top:1px solid rgba(240,234,216,.1);padding-top:8px;font-style:italic">${emp.info}</div>
-      <div style="font-size:9px;color:rgba(245,240,232,.3);margin-top:6px;letter-spacing:.5px">${t('donnees_estim')}</div>
+      <div style="font-size:11px;color:rgba(245,240,232,.3);margin-top:6px;letter-spacing:.5px">${t('donnees_estim')}</div>
     </div>
     ${unknownSection}
     <div class="p-inner">
@@ -821,7 +821,7 @@ function openLookComplet(look){
 
   const pieces=(look.hotspots||[]);
   const piecesHTML=pieces.length>0
-    ?pieces.map(h=>`<div class="look-item" onclick="closeAll();setTimeout(()=>openPieceSheet(${JSON.stringify({...h,tags:look.tags,postId:look.id}).replace(/"/g,'&quot;')}),250)"><div class="look-item-img">${h.emoji||'🏷️'}</div><div class="look-item-info"><div class="look-item-name">${escapeHtml(h.name||'—')}</div><div class="look-item-brand">${escapeHtml(h.brand||'')}</div><div class="look-item-ref">${escapeHtml(h.price||'')}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">${h.type?`<span style="font-size:9px;color:var(--gold);opacity:.7">${escapeHtml(h.type)}</span>`:''} ${h.matiere?`<span style="font-size:9px;color:var(--wd)">${escapeHtml(h.matiere)}</span>`:''}<span style="color:var(--gold);font-size:16px;opacity:.4">›</span></div></div>`).join('')
+    ?pieces.map(h=>`<div class="look-item" onclick="closeAll();setTimeout(()=>openPieceSheet(${JSON.stringify({...h,tags:look.tags,postId:look.id}).replace(/"/g,'&quot;')}),250)"><div class="look-item-img">${h.emoji||'🏷️'}</div><div class="look-item-info"><div class="look-item-name">${escapeHtml(h.name||'—')}</div><div class="look-item-brand">${escapeHtml(h.brand||'')}</div><div class="look-item-ref">${escapeHtml(h.price||'')}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">${h.type?`<span style="font-size:11px;color:var(--gold);opacity:.7">${escapeHtml(h.type)}</span>`:''} ${h.matiere?`<span style="font-size:11px;color:var(--wd)">${escapeHtml(h.matiere)}</span>`:''}<span style="color:var(--gold);font-size:16px;opacity:.4">›</span></div></div>`).join('')
     :`<div style="text-align:center;padding:20px;color:var(--wd);font-size:12px">${t('aucune_piece')}</div>`;
 
   document.getElementById('look-products').innerHTML=`
@@ -1259,8 +1259,8 @@ async function openAlt(item) {
       document.getElementById('res-name').textContent  = p.name  || t('this_item');
       document.getElementById('res-brand').textContent = p.brand || '';
       const methodBadge = detectionMethod === 'clip'
-        ? `<span style="font-size:9px;background:rgba(240,234,216,.1);border:1px solid var(--gold-b);color:var(--gold);padding:2px 8px;border-radius:10px;letter-spacing:1px;margin-left:6px">🧠 CLIP Vision</span>`
-        : `<span style="font-size:9px;background:rgba(245,240,232,.07);border:1px solid rgba(245,240,232,.15);color:var(--wd);padding:2px 8px;border-radius:10px;letter-spacing:1px;margin-left:6px">${t('detection_keywords')}</span>`;
+        ? `<span style="font-size:11px;background:rgba(240,234,216,.1);border:1px solid var(--gold-b);color:var(--gold);padding:2px 8px;border-radius:10px;letter-spacing:1px;margin-left:6px">🧠 CLIP Vision</span>`
+        : `<span style="font-size:11px;background:rgba(245,240,232,.07);border:1px solid rgba(245,240,232,.15);color:var(--wd);padding:2px 8px;border-radius:10px;letter-spacing:1px;margin-left:6px">${t('detection_keywords')}</span>`;
       const _scanMat = p.matiere ? _matKey(p.matiere) : guessMatFromType(detectedType);
       window._scanMat = _scanMat; window._scanMethodBadge = methodBadge;
       const _se = getEmpreinte(_scanMat);
@@ -1310,7 +1310,7 @@ function openScanMatPicker(){
       const sub=e.eau!=null?`${e.eau.toLocaleString('fr-FR')} L · ${e.co2} kg`:'—';
       return `<span onclick="setScanMaterial('${k}')" style="cursor:pointer;display:inline-flex;flex-direction:column;gap:1px;padding:8px 12px;border-radius:14px;border:1px solid ${active?'var(--gold)':'var(--gold-b)'};background:${active?'var(--gold-dim)':'transparent'}">`
         +`<span style="font-size:12px;color:${active?'var(--gold-l)':'var(--white)'}">${escapeHtml(e.label)}</span>`
-        +`<span style="font-size:10px;color:var(--wd);opacity:.7">${sub}</span></span>`;
+        +`<span style="font-size:11px;color:var(--wd);opacity:.7">${sub}</span></span>`;
     }).join('');
   }
   const el=document.getElementById('scan-mat-picker'); if(el)el.style.display='flex';
@@ -1339,7 +1339,7 @@ function renderAltTabLive(type = 'ethique') {
     const userVote=_altVotesCache[aKey];
     const hasImg = !!a.image_url;
     const imgPart = hasImg
-      ? `<img src="${a.image_url}" alt="${escapeHtml(a.nom)}"
+      ? `<img src="${escapeHtml(a.image_url)}" alt="${escapeHtml(a.nom)}"
            class="img-cover-r"
            onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
       : '';
@@ -1349,7 +1349,7 @@ function renderAltTabLive(type = 'ethique') {
       : `https://www.google.com/search?q=${encodeURIComponent((a.nom+' '+a.marque).trim())}`;
     const altIdx=_bqRegister({...a,url:productUrl});
     const demoBadge=a._isDemo?`<div class="demo-badge demo-badge--sm">${t('demo_badge')}</div>`:'';
-    const altCredit=a.image_photographer?`<div class="pexels-credit" style="font-size:7px;bottom:2px;right:2px;padding:1px 4px" title="Photo: ${escapeHtml(a.image_photographer)}"></div>`:'';
+    const altCredit=a.image_photographer?`<div class="pexels-credit" style="font-size:10px;bottom:2px;right:2px;padding:1px 4px" title="Photo: ${escapeHtml(a.image_photographer)}"></div>`:'';
     return `
     <div class="alt-result-card" onclick="bqOpenProduct(${altIdx})">
       <div class="alt-result-img" style="overflow:hidden;border-radius:8px;position:relative">${imgPart}${emojiFallback}${demoBadge}${altCredit}</div>
@@ -1359,16 +1359,16 @@ function renderAltTabLive(type = 'ethique') {
         <div class="row-tags">
           <div class="eco-score">${impactGauges(a, window._scanRef)}</div>
           ${a.matiere ? `<span class="txt-xxs-dim">${escapeHtml(a.matiere)}</span>` : ''}
-          ${a.label ? `<span style="font-size:9px;background:rgba(80,180,80,.15);color:#7dc97d;border:1px solid rgba(80,180,80,.3);padding:1px 6px;border-radius:10px">${escapeHtml(a.label)}</span>` : ''}
+          ${a.label ? `<span style="font-size:11px;background:rgba(80,180,80,.15);color:#7dc97d;border:1px solid rgba(80,180,80,.3);padding:1px 6px;border-radius:10px">${escapeHtml(a.label)}</span>` : ''}
         </div>
         <div style="margin-top:6px">
-          <span style="display:inline-block;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:rgba(240,234,216,0.12);border:1px solid rgba(240,234,216,0.3);color:rgba(240,234,216,0.7);padding:2px 7px;border-radius:4px">${t('lien_affilie')}</span>
+          <span style="display:inline-block;font-size:11px;letter-spacing:1px;text-transform:uppercase;background:rgba(240,234,216,0.12);border:1px solid rgba(240,234,216,0.3);color:rgba(240,234,216,0.7);padding:2px 7px;border-radius:4px">${t('lien_affilie')}</span>
         </div>
       </div>
       <div style="text-align:right;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:4px">
         <div style="font-size:14px;font-weight:500;color:var(--gold-l)">${a.prix ? a.prix+'€' : '—'}</div>
         ${typeof a._match==='number'?`<div style="font-size:11px;font-weight:600;color:${a._match>=60?'#7dc97d':a._match>=30?'#D4AF6F':'var(--wd)'};letter-spacing:.3px">${a._match}% match</div>`:''}
-        <div style="font-size:9px;letter-spacing:1px;color:var(--wd);text-transform:uppercase">${t('voir_arrow')}</div>
+        <div style="font-size:11px;letter-spacing:1px;color:var(--wd);text-transform:uppercase">${t('voir_arrow')}</div>
         <div onclick="event.stopPropagation();voteAlt('${aKey.replace(/'/g,'\\\'')}','${(a.marque||'').replace(/'/g,'\\\'')}', '${a.type||''}', 'up', this)" class="alt-heart ${userVote==='up'?'active':''}" data-key="${aKey.replace(/'/g,'\\\'')}" style="cursor:pointer;padding:4px;margin-top:2px">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="${userVote==='up'?'#1E4FD8':'none'}" stroke="${userVote==='up'?'#1E4FD8':'var(--wd)'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:fill 150ms cubic-bezier(0.23,1,0.32,1),stroke 150ms cubic-bezier(0.23,1,0.32,1)"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </div>
@@ -1985,7 +1985,7 @@ function renderFollowTab(){
   const filtered=query?profs.filter(p=>(p.username||'').toLowerCase().includes(query)||(p.full_name||'').toLowerCase().includes(query)):profs;
   if(!filtered.length){list.innerHTML=`<div class="empty-state-sm">${t('empty_no_results')}</div>`;return;}
   list.innerHTML=filtered.map(p=>{
-    const av=p.avatar_url?`<img src="${p.avatar_url}" alt="" loading="lazy" class="img-cover">`:`<span class="txt-lg-gold-caps">${(p.username||p.full_name||'?').charAt(0)}</span>`;
+    const av=p.avatar_url?`<img src="${escapeHtml(p.avatar_url)}" alt="" loading="lazy" class="img-cover">`:`<span class="txt-lg-gold-caps">${(p.username||p.full_name||'?').charAt(0)}</span>`;
     const isSelf=me&&p.id===me.id;
     const iFollowThem=_flwMyFollowing.includes(p.id);
     const theyFollowMe=_flwMyFollowers.includes(p.id);
@@ -2225,7 +2225,7 @@ async function openEditProfilePanel(){
   // Avatar preview
   const avEl=document.getElementById('ep-avatar-preview');
   if(prof?.avatar_url){
-    avEl.innerHTML=`<img src="${prof.avatar_url}" class="img-cover" alt="">`;
+    avEl.innerHTML=`<img src="${escapeHtml(prof.avatar_url)}" class="img-cover" alt="">`;
   }else{
     const initial=(prof?.full_name||prof?.username||'?').charAt(0).toUpperCase();
     avEl.innerHTML=`<span style="font-family:var(--fd);font-size:38px;font-weight:300;color:var(--gold)">${initial}</span>`;
@@ -2279,7 +2279,7 @@ async function onEditProfileAvatarSelect(e){
   // Immediate local preview
   const avEl=document.getElementById('ep-avatar-preview');
   const reader=new FileReader();
-  reader.onload=ev=>{avEl.innerHTML=`<img src="${ev.target.result}" class="img-cover" alt="">`;};
+  reader.onload=ev=>{avEl.innerHTML=`<img src="${escapeHtml(ev.target.result)}" class="img-cover" alt="">`;};
   reader.readAsDataURL(file);
   // Upload to Supabase
   const ext=file.name.split('.').pop().toLowerCase();
@@ -2288,7 +2288,7 @@ async function onEditProfileAvatarSelect(e){
   if(error)return toast(t('error_upload'));
   const{data:u}=sb.storage.from('posts').getPublicUrl(path);
   await sb.from('profiles').upsert({id:me.id,avatar_url:u.publicUrl});
-  document.getElementById('my-avatar').innerHTML=`<img src="${u.publicUrl}" alt="">`;
+  document.getElementById('my-avatar').innerHTML=`<img src="${escapeHtml(u.publicUrl)}" alt="">`;
   toast(t('avatar_updated'));
 }
 
@@ -2428,7 +2428,7 @@ async function openBlockedUsers(){
     const profMap={};profs.forEach(p=>profMap[p.id]=p);
     list.innerHTML=blocks.map(b=>{
       const p=profMap[b.blocked_id]||{username:'inconnu',full_name:'Utilisateur inconnu'};
-      const av=p.avatar_url?`<img src="${p.avatar_url}" alt="" loading="lazy" class="img-cover">`:`<span style="font-size:14px;color:var(--gold);text-transform:uppercase">${(p.username||'?').charAt(0)}</span>`;
+      const av=p.avatar_url?`<img src="${escapeHtml(p.avatar_url)}" alt="" loading="lazy" class="img-cover">`:`<span style="font-size:14px;color:var(--gold);text-transform:uppercase">${(p.username||'?').charAt(0)}</span>`;
       return `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(240,234,216,0.08)">
         <div style="width:40px;height:40px;border-radius:var(--r-md);background:var(--black-3);overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0">${av}</div>
         <div class="flex-min">
@@ -2483,14 +2483,14 @@ async function renderSharedPostInBubble(msgId,postId){
     container.style.minHeight='0';
     container.innerHTML=`<div style="background:var(--black-3);border:1px solid rgba(240,234,216,0.12);border-radius:12px;overflow:hidden;width:170px">
       <div style="position:relative;aspect-ratio:1/1;background:var(--black-2)">
-        ${post.image_url?`<img src="${post.image_url}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;opacity:.5">${_camSvgFb}</div>`}
+        ${post.image_url?`<img src="${escapeHtml(post.image_url)}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;opacity:.5">${_camSvgFb}</div>`}
       </div>
       <div style="padding:7px 9px;background:var(--black-3)">
         <div style="font-size:12px;font-weight:600;color:var(--white);margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml((post.caption||'Post').slice(0,32))}</div>
         <div style="font-size:11px;color:var(--gold);margin-bottom:5px">@${escapeHtml(post.username)}</div>
         <div style="display:flex;align-items:center;justify-content:space-between;gap:6px">
-          <span style="display:inline-block;font-size:8px;letter-spacing:.5px;text-transform:uppercase;background:rgba(240,234,216,0.1);border:1px solid rgba(240,234,216,0.25);color:rgba(240,234,216,0.7);padding:1px 5px;border-radius:3px">Post</span>
-          <span style="font-size:8px;letter-spacing:.8px;color:var(--gold);text-transform:uppercase">Voir →</span>
+          <span style="display:inline-block;font-size:11px;letter-spacing:.5px;text-transform:uppercase;background:rgba(240,234,216,0.1);border:1px solid rgba(240,234,216,0.25);color:rgba(240,234,216,0.7);padding:1px 5px;border-radius:3px">Post</span>
+          <span style="font-size:11px;letter-spacing:.8px;color:var(--gold);text-transform:uppercase">Voir →</span>
         </div>
       </div>
     </div>`;
@@ -2541,7 +2541,7 @@ function renderShareList(users){
     return;
   }
   list.innerHTML=users.map(p=>{
-    const av=p.avatar_url?`<img src="${p.avatar_url}" alt="" loading="lazy" class="img-cover">`:`<span class="txt-lg-gold-caps">${(p.username||p.full_name||'?').charAt(0)}</span>`;
+    const av=p.avatar_url?`<img src="${escapeHtml(p.avatar_url)}" alt="" loading="lazy" class="img-cover">`:`<span class="txt-lg-gold-caps">${(p.username||p.full_name||'?').charAt(0)}</span>`;
     return `<div onclick="sendPostAsDM('${p.id}','${escapeHtml(p.full_name||p.username||'').replace(/'/g,'')}',this)" class="list-row">
       <div style="width:42px;height:42px;border-radius:50%;background:var(--black-3);overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(240,234,216,0.15)">${av}</div>
       <div class="flex-min">

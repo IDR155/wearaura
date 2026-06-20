@@ -68,11 +68,11 @@ window.addEventListener('offline',()=>{toast(t('offline_msg'),3200,{type:'error'
 window.addEventListener('online',()=>{toast(t('online_back'),2200,{type:'success'});});
 
 // ── MASCOTTE LOUP — avatar universel ──
-// Affiche wolf.png si disponible, fallback 🐺 sinon
+// Affiche wolf.webp si disponible, fallback 🐺 sinon
 // size  : CSS string ex. '32px' | '52px'
 // extra : CSS inline supplémentaire
 function wolfAv(size='32px', extra=''){
-  return `<div class="wolf-av" style="width:${size};height:${size};${extra}"><img src="wolf.png" alt="WearAura" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<span class=\\'wolf-av-fallback\\'>🐺</span>')"><div class="wolf-av-fallback" style="display:none">🐺</div></div>`;
+  return `<div class="wolf-av" style="width:${size};height:${size};${extra}"><img src="wolf.webp" alt="WearAura" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<span class=\\'wolf-av-fallback\\'>🐺</span>')"><div class="wolf-av-fallback" style="display:none">🐺</div></div>`;
 }
 
 // ═══════════════════════════════════════════
