@@ -1347,10 +1347,11 @@ function renderAltTabLive(type = 'ethique') {
     const productUrl = safeUrl(a.url) !== '#'
       ? safeUrl(a.url)
       : `https://www.google.com/search?q=${encodeURIComponent((a.nom+' '+a.marque).trim())}`;
+    const altIdx=_bqRegister({...a,url:productUrl});
     const demoBadge=a._isDemo?`<div class="demo-badge demo-badge--sm">${t('demo_badge')}</div>`:'';
     const altCredit=a.image_photographer?`<div class="pexels-credit" style="font-size:7px;bottom:2px;right:2px;padding:1px 4px" title="Photo: ${escapeHtml(a.image_photographer)}"></div>`:'';
     return `
-    <div class="alt-result-card" onclick="window.open('${productUrl}','_blank')">
+    <div class="alt-result-card" onclick="bqOpenProduct(${altIdx})">
       <div class="alt-result-img" style="overflow:hidden;border-radius:8px;position:relative">${imgPart}${emojiFallback}${demoBadge}${altCredit}</div>
       <div class="flex-min">
         <div style="font-size:13px;font-weight:500;color:var(--white);margin-bottom:2px">${escapeHtml(a.nom)}</div>

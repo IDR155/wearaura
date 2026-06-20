@@ -337,6 +337,17 @@ function bqGoToProduct(idx){
   const p=_bqRegistry[idx];
   if(p) window.open(safeUrl(p.url),'_blank');
 }
+// Ferme la fiche produit. Si la liste d'alternatives (scan) est ouverte dessous, on y revient ;
+// sinon (boutique) on ferme aussi l'overlay.
+function closeBqProduct(){
+  const sheet=document.getElementById('bq-product-sheet');
+  if(sheet){sheet.classList.add('hiding');setTimeout(()=>sheet.classList.remove('show','hiding'),240);}
+  const alt=document.getElementById('alt-sheet');
+  if(!(alt&&alt.classList.contains('show'))){
+    const ov=document.getElementById('overlay');
+    if(ov&&ov.classList.contains('show')){ov.classList.add('hiding');setTimeout(()=>ov.classList.remove('show','hiding'),240);}
+  }
+}
 
 function bqCarouselCard(p){
   const idx=_bqRegister(p);
