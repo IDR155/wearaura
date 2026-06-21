@@ -1652,8 +1652,8 @@
 </div>
 
 <!-- CERT INFO SHEET — explication des labels de certification (tap sur un badge) -->
-<div id="cert-backdrop" onclick="closeCert()" style="display:none;position:fixed;inset:0;background:rgba(7,16,30,.6);backdrop-filter:blur(2px);z-index:9998"></div>
-<div id="cert-sheet" role="dialog" aria-modal="true" aria-label="À propos de ce label" style="display:none;position:fixed;left:0;right:0;bottom:0;z-index:9999;background:var(--black-3);border-top:1px solid var(--gold-b);border-radius:20px 20px 0 0;padding:18px 20px calc(20px + env(safe-area-inset-bottom));max-width:520px;margin:0 auto;box-shadow:0 -10px 40px rgba(0,0,0,.5)">
+<div id="cert-backdrop" onclick="closeCert()" style="display:none;position:absolute;inset:0;background:rgba(7,16,30,.6);backdrop-filter:blur(2px);z-index:9045"></div>
+<div id="cert-sheet" role="dialog" aria-modal="true" aria-label="À propos de ce label" style="display:none;position:absolute;left:0;right:0;bottom:0;z-index:9050;background:var(--black-3);border-top:1px solid var(--gold-b);border-radius:20px 20px 0 0;padding:18px 20px calc(20px + env(safe-area-inset-bottom));max-height:80%;overflow-y:auto;box-shadow:0 -10px 40px rgba(0,0,0,.5)">
   <div style="width:36px;height:4px;background:var(--gold-b);border-radius:2px;margin:0 auto 16px"></div>
   <div id="cert-sheet-body"></div>
   <button id="cert-close-btn" onclick="closeCert()" data-i18n="cert_close" style="margin-top:18px;width:100%;padding:13px;border-radius:12px;background:var(--gold);color:var(--black);border:none;font-weight:600;font-size:14px;cursor:pointer">Fermer</button>
@@ -2400,7 +2400,7 @@
 </div>
 
 <script src="js/config.js?v=10" defer></script>
-<script src="js/i18n.js?v=46" defer></script>
+<script src="js/i18n.js?v=47" defer></script>
 <script src="js/utils.js?v=4" defer></script>
 <script src="js/nav.js?v=11" defer></script>
 <script src="js/search.js?v=5" defer></script>
