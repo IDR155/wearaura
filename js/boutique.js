@@ -200,7 +200,7 @@ function renderBoutiqueContent(products,filter=''){
           <div style="font-size:12px;color:var(--wd);letter-spacing:.3px;margin-top:2px;display:flex;align-items:center;gap:6px">${sorted.length} pièce${sorted.length>1?'s':''} ${impactGaugesAbsVals(avgEau,avgCo2)}</div>
         </div>
       </div>
-      ${certifs.length?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${certifs.map(c=>`<span class="certif-badge">${escapeHtml(c)}</span>`).join('')}</div>`:''}
+      ${certifs.length?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${certifs.map(c=>{const _k=certKey(c);return _k?`<span class="certif-badge certif-badge--tap" role="button" tabindex="0" onclick="showCert('${_k}')">${escapeHtml(c)}</span>`:`<span class="certif-badge">${escapeHtml(c)}</span>`;}).join('')}</div>`:''}
     </div>
     <div class="bq-product-grid">${sorted.map(p=>bqProductCard(p)).join('')}</div>`;
     return;
@@ -305,7 +305,7 @@ function bqOpenProduct(idx){
     : (emp.eau!=null
         ? `${_hgauge(t('emp_eau_lbl'),'~'+emp.eau.toLocaleString('fr-FR')+' L',emp.eau/5000*100,'#5aa9bd')}${emp.co2!=null?_hgauge(t('emp_co2_lbl'),'~'+emp.co2+' kg CO₂',emp.co2/20*100,'#8f7fc0'):''}`
         : `<div style="font-size:13px;color:var(--wd)">${t('matiere_unknown')}</div>`);
-  const certifs = p.label?`<div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px"><span class="certif-badge">${escapeHtml(p.label)}</span></div>`:'';
+  const certifs = p.label?`<div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px">${(()=>{const _k=certKey(p.label);return _k?`<span class="certif-badge certif-badge--tap" role="button" tabindex="0" onclick="showCert('${_k}')">${escapeHtml(p.label)}</span>`:`<span class="certif-badge">${escapeHtml(p.label)}</span>`;})()}</div>`:'';
   const fbSvg=`<span style="position:absolute;inset:0;display:${p.image_url?'none':'flex'};align-items:center;justify-content:center"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="rgba(240,234,216,0.3)" stroke-width="1.2" stroke-linecap="round"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/></svg></span>`;
   document.getElementById('bq-prod-body').innerHTML=`
     <div style="display:flex;gap:14px;padding:18px 20px 6px;align-items:flex-start">
@@ -396,7 +396,7 @@ function bqProductCard(p){
     <div class="bq-product-img">
       ${imgContent}
       <div class="bq-emoji-fb" style="display:${p.image_url?'none':'flex'};width:100%;height:100%;align-items:center;justify-content:center">${_clotheSvgFb}</div>
-      ${p.label?`<div style="position:absolute;top:8px;right:8px"><span class="certif-badge">${escapeHtml(p.label)}</span></div>`:''}
+      ${p.label?`<div style="position:absolute;top:8px;right:8px">${(()=>{const _k=certKey(p.label);return _k?`<span class="certif-badge certif-badge--tap" role="button" tabindex="0" onclick="event.stopPropagation();showCert('${_k}')" ontouchstart="event.stopPropagation()" ontouchend="event.stopPropagation()">${escapeHtml(p.label)}</span>`:`<span class="certif-badge">${escapeHtml(p.label)}</span>`;})()}</div>`:''}
       ${demoBadge}
       ${credit}
     </div>

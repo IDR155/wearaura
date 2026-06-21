@@ -49,7 +49,7 @@
 <link rel="preconnect" href="https://whaxwmztbkgnfokuqlcc.supabase.co">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-<link rel="stylesheet" href="app.css?v=19">
+<link rel="stylesheet" href="app.css?v=20">
 </head>
 <body>
 <div class="phone" id="phone">
@@ -1651,6 +1651,14 @@
   <div id="bq-prod-body" style="overflow-y:auto;scrollbar-width:none;padding-bottom:24px"></div>
 </div>
 
+<!-- CERT INFO SHEET — explication des labels de certification (tap sur un badge) -->
+<div id="cert-backdrop" onclick="closeCert()" style="display:none;position:fixed;inset:0;background:rgba(7,16,30,.6);backdrop-filter:blur(2px);z-index:9998"></div>
+<div id="cert-sheet" role="dialog" aria-modal="true" aria-label="À propos de ce label" style="display:none;position:fixed;left:0;right:0;bottom:0;z-index:9999;background:var(--black-3);border-top:1px solid var(--gold-b);border-radius:20px 20px 0 0;padding:18px 20px calc(20px + env(safe-area-inset-bottom));max-width:520px;margin:0 auto;box-shadow:0 -10px 40px rgba(0,0,0,.5)">
+  <div style="width:36px;height:4px;background:var(--gold-b);border-radius:2px;margin:0 auto 16px"></div>
+  <div id="cert-sheet-body"></div>
+  <button id="cert-close-btn" onclick="closeCert()" data-i18n="cert_close" style="margin-top:18px;width:100%;padding:13px;border-radius:12px;background:var(--gold);color:var(--black);border:none;font-weight:600;font-size:14px;cursor:pointer">Fermer</button>
+</div>
+
 <!-- RETOUCHE SHEET -->
 <div class="prod-sheet" id="retouche-sheet" role="dialog" aria-modal="true" aria-label="Retouche">
   <div class="sheet-handle"></div>
@@ -2392,14 +2400,14 @@
 </div>
 
 <script src="js/config.js?v=10" defer></script>
-<script src="js/i18n.js?v=40" defer></script>
+<script src="js/i18n.js?v=41" defer></script>
 <script src="js/utils.js?v=4" defer></script>
 <script src="js/nav.js?v=11" defer></script>
 <script src="js/search.js?v=5" defer></script>
 <script src="js/auth.js?v=2" defer></script>
 <script src="js/camera.js?v=8" defer></script>
 <script src="js/feed.js?v=18" defer></script>
-<script src="js/boutique.js?v=17" defer></script>
+<script src="js/boutique.js?v=18" defer></script>
 <script src="js/create.js?v=22" defer></script>
 <script src="js/messages.js?v=15" defer></script>
 <script src="js/profile.js?v=30" defer></script>

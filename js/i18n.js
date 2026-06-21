@@ -52,7 +52,7 @@ const I18N = {
     synthetique:'Synthétique',recycle:'Recyclé',inconnu:'Je sais pas',
     casual:'Casual',chic:'Chic',sport:'Sport',vintage:'Vintage',
     minimal:'Minimal',streetwear:'Streetwear',boheme:'Bohème',luxe:'Luxe',
-    empreinte_titre:'Empreinte estimée',
+    empreinte_titre:'Empreinte estimée',cert_close:'Fermer',
     eau_label:"d'eau estimés",score_eco:'SCORE ÉCO',ig_eco:'Éco',ig_eau:'Eau',ig_co2:'CO₂',ig_high:'élevé',niv_faible:'Faible',niv_moyenne:'Moyenne',niv_elevee:'Élevée',emp_eau_lbl:'Empreinte eau',emp_co2_lbl:'Empreinte CO₂',ig_reuse:'Réutilisé',ig_reuse_hint:'Pièce de seconde main : réutilisée, donc pas de nouvelle production — empreinte quasi nulle.',ig_ref:'réf.',
     scan_mat_title:'Matière de ta pièce',scan_mat_sub:'On part d\'une estimation selon le type. Précise la vraie matière pour une comparaison plus juste.',scan_mat_note:'Estimation — touche pour préciser la matière',scan_mat_sources:'Estimations (ordres de grandeur) — sources : ADEME & Water Footprint Network.',scan_mat_ref:'Référence officielle : ADEME Ecobalyse →',
     donnees_estim:'* Estimations par matière (ordres de grandeur) — sources : ADEME & Water Footprint Network',
@@ -533,7 +533,7 @@ const I18N = {
     synthetique:'Synthetic',recycle:'Recycled',inconnu:'Not sure',
     casual:'Casual',chic:'Chic',sport:'Sport',vintage:'Vintage',
     minimal:'Minimal',streetwear:'Streetwear',boheme:'Boho',luxe:'Luxury',
-    empreinte_titre:'Estimated footprint',
+    empreinte_titre:'Estimated footprint',cert_close:'Close',
     eau_label:'of water estimated',score_eco:'ECO SCORE',ig_eco:'Eco',ig_eau:'Water',ig_co2:'CO₂',ig_high:'high',niv_faible:'Low',niv_moyenne:'Medium',niv_elevee:'High',emp_eau_lbl:'Water footprint',emp_co2_lbl:'Carbon footprint',ig_reuse:'Reused',ig_reuse_hint:'Second-hand item: reused, so no new production — near-zero footprint.',ig_ref:'ref.',
     scan_mat_title:'Your item\'s material',scan_mat_sub:'We start from an estimate based on the type. Set the real material for a more accurate comparison.',scan_mat_note:'Estimate — tap to set the material',scan_mat_sources:'Estimates (orders of magnitude) — sources: ADEME & Water Footprint Network.',scan_mat_ref:'Official reference: ADEME Ecobalyse →',
     donnees_estim:'* Per-material estimates (orders of magnitude) — sources: ADEME & Water Footprint Network',
@@ -1101,6 +1101,63 @@ function _matKey(m){
   return s;
 }
 function getEmpreinte(matiere){return EMPREINTE[_matKey(matiere)]||EMPREINTE['inconnu'];}
+
+// ═══ CERTIFICATIONS — explication des labels (traçabilité) ═══════
+// Données factuelles et mesurées (anti-greenwashing : chaque entrée précise le
+// PÉRIMÈTRE réel du label, et ce qu'il ne couvre pas). Affiché au tap (showCert).
+const CERTIFS = {
+  france:        {icon:'🇫🇷', fr:{name:'Fabriqué en France', desc:"Confection réalisée en France : circuit court (moins de transport) et respect du droit du travail et des normes environnementales françaises. N'indique pas toujours l'origine de la matière première."}, en:{name:'Made in France', desc:"Manufactured in France: shorter transport and compliance with French labour and environmental rules. It does not always cover where the raw material comes from."}},
+  gots:          {icon:'🌿', fr:{name:'GOTS — Global Organic Textile Standard', desc:"Label exigeant pour les fibres bio : au moins 70 % de fibres biologiques, produits chimiques restreints et critères sociaux sur toute la chaîne."}, en:{name:'GOTS — Global Organic Textile Standard', desc:"A strict standard for organic fibres: at least 70% organic fibres, restricted chemicals and social criteria across the whole supply chain."}},
+  european_linen:{icon:'🌾', fr:{name:'Lin européen', desc:"Lin cultivé en Europe de l'Ouest (France, Belgique, Pays-Bas). Le lin demande peu d'eau et de pesticides, et la culture européenne limite le transport."}, en:{name:'European Linen', desc:"Flax grown in Western Europe (France, Belgium, Netherlands). Linen needs little water or pesticides, and European farming keeps transport short."}},
+  grs:           {icon:'♻️', fr:{name:'GRS — Global Recycled Standard', desc:"Certifie la part de matières recyclées d'un produit et en vérifie la traçabilité, avec des critères sociaux et environnementaux sur la production."}, en:{name:'GRS — Global Recycled Standard', desc:"Certifies and traces the recycled content of a product, with social and environmental criteria on production."}},
+  lwg:           {icon:'🥾', fr:{name:'LWG — Leather Working Group', desc:"Audite les tanneries de cuir sur leur gestion de l'eau, de l'énergie et des produits chimiques. La mention « Gold » correspond au meilleur niveau."}, en:{name:'LWG — Leather Working Group', desc:"Audits leather tanneries on water, energy and chemical management. The \"Gold\" mention is the highest rating tier."}},
+  vegan:         {icon:'🌱', fr:{name:'Vegan', desc:"Aucun composant d'origine animale (ni cuir, laine, soie, duvet). À lui seul, ne garantit pas un faible impact écologique : vérifie aussi la matière."}, en:{name:'Vegan', desc:"No animal-derived components (no leather, wool, silk or down). On its own it doesn't guarantee a low environmental impact: check the material too."}},
+  fair_wear:     {icon:'🤝', fr:{name:'Fair Wear Foundation', desc:"Se concentre sur les conditions de travail dans les ateliers de confection (salaires, sécurité, horaires). Porte sur le social, pas sur l'environnement."}, en:{name:'Fair Wear Foundation', desc:"Focuses on working conditions in garment factories (wages, safety, hours). It covers social aspects, not the environment."}},
+  rws:           {icon:'🐑', fr:{name:'Laine responsable (RWS)', desc:"Responsible Wool Standard : bien-être des moutons (sans mulesing) et gestion durable des pâturages, avec traçabilité de la laine."}, en:{name:'Responsible Wool (RWS)', desc:"Responsible Wool Standard: sheep welfare (no mulesing) and sustainable land management, with wool traceability."}},
+  cashmere:      {icon:'🐐', fr:{name:'Cachemire responsable', desc:"Critères de bien-être des chèvres, de gestion des pâturages et de conditions de vie des éleveurs (ex. Good Cashmere Standard)."}, en:{name:'Responsible Cashmere', desc:"Criteria for goat welfare, grazing-land management and herders' livelihoods (e.g. Good Cashmere Standard)."}},
+  rds:           {icon:'🪶', fr:{name:'RDS — Responsible Down Standard', desc:"Garantit que le duvet provient d'animaux traités correctement : pas de plumage à vif ni de gavage."}, en:{name:'RDS — Responsible Down Standard', desc:"Ensures down comes from animals treated humanely: no live-plucking or force-feeding."}},
+  peace_silk:    {icon:'🦋', fr:{name:'Soie pacifique (Peace Silk)', desc:"Soie récoltée après que le papillon a quitté le cocon, sans tuer le ver. Production plus lente et plus rare."}, en:{name:'Peace Silk', desc:"Silk harvested after the moth leaves the cocoon, without killing the silkworm. Slower and rarer to produce."}},
+  fair_trade:    {icon:'⚖️', fr:{name:'Commerce équitable', desc:"Garantit un prix minimum et une prime aux producteurs, avec des critères sociaux. Porte surtout sur l'équité économique."}, en:{name:'Fair Trade', desc:"Guarantees a minimum price and premium to producers, with social criteria. Mainly about economic fairness."}},
+  zq_merino:     {icon:'🐑', fr:{name:'ZQ Merino', desc:"Laine mérinos certifiée pour le bien-être animal (sans mulesing), l'environnement et des conditions de travail correctes."}, en:{name:'ZQ Merino', desc:"Merino wool certified for animal welfare (no mulesing), environment and fair working conditions."}},
+  ecovero:       {icon:'🌿', fr:{name:'LENZING EcoVero', desc:"Viscose issue de bois certifié de forêts gérées durablement, avec nettement moins d'émissions et d'eau que la viscose classique."}, en:{name:'LENZING EcoVero', desc:"Viscose made from certified wood from sustainably managed forests, with far lower emissions and water use than conventional viscose."}},
+};
+// Normalise un libellé de certif libre vers une clé CERTIFS (slug sûr [a-z_]).
+function certKey(s){
+  if(!s) return null;
+  const x=(''+s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').trim();
+  if(x.includes('france')) return 'france';
+  if(x.includes('gots')) return 'gots';
+  if(x.includes('european linen')||x.includes('masters of linen')) return 'european_linen';
+  if(x==='grs'||x.includes('recycled standard')) return 'grs';
+  if(x.includes('lwg')||x.includes('leather working')) return 'lwg';
+  if(x.includes('vegan')) return 'vegan';
+  if(x.includes('fair wear')) return 'fair_wear';
+  if(x.includes('responsible wool')||x.includes('wool standard')||x==='rws') return 'rws';
+  if(x.includes('cashmere')) return 'cashmere';
+  if(x==='rds'||x.includes('responsible down')) return 'rds';
+  if(x.includes('peace silk')||x.includes('ahimsa')) return 'peace_silk';
+  if(x.includes('fair trade')) return 'fair_trade';
+  if(x.includes('zq')) return 'zq_merino';
+  if(x.includes('ecovero')) return 'ecovero';
+  return null;
+}
+function certInfo(key){const c=CERTIFS[key];if(!c)return null;const L=(currentLang==='en'&&c.en)?c.en:c.fr;return{icon:c.icon,name:L.name,desc:L.desc};}
+// Sheet d'explication d'un label (auto-portée, au-dessus des autres sheets).
+let _certLastFocus=null;
+function showCert(key){
+  const info=certInfo(key); if(!info) return;
+  const body=document.getElementById('cert-sheet-body'); if(!body) return;
+  body.innerHTML=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><span style="font-size:26px;line-height:1">${info.icon}</span><div style="font-family:var(--fd);font-size:19px;color:var(--white);line-height:1.2">${escapeHtml(info.name)}</div></div><div style="font-size:14px;color:var(--wd);line-height:1.65">${escapeHtml(info.desc)}</div>`;
+  _certLastFocus=document.activeElement;
+  document.getElementById('cert-backdrop').style.display='block';
+  document.getElementById('cert-sheet').style.display='block';
+  const btn=document.getElementById('cert-close-btn'); if(btn)btn.focus();
+}
+function closeCert(){
+  const b=document.getElementById('cert-backdrop'),s=document.getElementById('cert-sheet');
+  if(b)b.style.display='none'; if(s)s.style.display='none';
+  if(_certLastFocus&&_certLastFocus.focus){try{_certLastFocus.focus();}catch(_){}}
+}
 // Économie d'eau estimée vs coton conventionnel (réf. 2700 L)
 function waterSavedPct(matiere,refEau){
   const e=getEmpreinte(matiere);
