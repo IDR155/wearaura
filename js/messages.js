@@ -302,7 +302,10 @@ async function loadConversations(){
     document.getElementById('sc-notif')
   );
   const list=document.getElementById('conv-list');
-  list.innerHTML=skRows(5);
+  // Skeleton uniquement au 1er chargement (liste vide). Sinon on garde la liste
+  // affichée et on la rafraîchit en place : évite le clignotement de l'inbox
+  // pendant l'animation de retour depuis une conversation.
+  if(!list.querySelector('.conv-item'))list.innerHTML=skRows(5);
   if(!me||!dbOk){list.innerHTML=demoConversationsList();return;}
   let convs=null;
   try{
