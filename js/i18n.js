@@ -1245,7 +1245,7 @@ function impactGaugesAbsVals(eau,co2){
 }
 function impactGaugesAbs(p){
   if(!p) return '';
-  if(isSecondHand(p)) return `<span style="display:inline-flex;align-items:center">${_reuseBadge()}</span>`;
+  if(isSecondHand(p)) return '';
   const e=getEmpreinte(p.matiere);
   if(!e||e.eau==null) return '';
   return impactGaugesAbsVals(e.eau,e.co2);
@@ -1265,7 +1265,7 @@ function _reuseBadge(){
 }
 function impactGauges(p,ref){
   if(!p) return '';
-  if(isSecondHand(p)) return `<span style="display:inline-flex;align-items:center">${_reuseBadge()}</span>`;
+  if(isSecondHand(p)) return '';
   const w=waterSavedPct(p.matiere,ref&&ref.eau), c=co2SavedPct(p.matiere,ref&&ref.co2);
   return impactGaugesV(w?w.pct:null, c?c.pct:null);
 }
