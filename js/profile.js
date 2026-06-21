@@ -1361,7 +1361,7 @@ function renderAltTabLive(type = 'ethique') {
         <div class="row-tags">
           <div class="eco-score">${impactGauges(a, window._scanRef)}</div>
           ${a.matiere ? `<span class="txt-xxs-dim">${escapeHtml(a.matiere)}</span>` : ''}
-          ${a.label && certKey(a.label)!=='france' ? `<span style="font-size:11px;background:rgba(80,180,80,.15);color:#7dc97d;border:1px solid rgba(80,180,80,.3);padding:1px 6px;border-radius:10px">${escapeHtml(a.label)}</span>` : ''}
+          ${(()=>{if(!a.label||certKey(a.label)==='france')return'';const _k=certKey(a.label);const st='font-size:11px;background:rgba(80,180,80,.15);color:#7dc97d;border:1px solid rgba(80,180,80,.3);padding:1px 6px;border-radius:10px';return _k?`<span style="${st};cursor:pointer" role="button" tabindex="0" onclick="event.stopPropagation();showCert('${_k}')" ontouchstart="event.stopPropagation()" ontouchend="event.stopPropagation()">${escapeHtml(a.label)} ⓘ</span>`:`<span style="${st}">${escapeHtml(a.label)}</span>`;})()}
         </div>
         ${provenanceHtml(a)}
       </div>

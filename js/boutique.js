@@ -324,6 +324,7 @@ function bqOpenProduct(idx){
     <div style="margin:0 20px 16px;background:var(--black-3);border-radius:12px;padding:14px 16px;border:1px solid var(--gold-b)">
       <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px">${t('empreinte_titre')}</div>
       ${footprint}
+      ${(!sh&&emp.eau!=null)?`<div title="${t('douche_base')}" style="font-size:12px;color:var(--wd);margin-top:8px;opacity:.9">≈ ${Math.round(emp.eau/60).toLocaleString('fr-FR')} ${t('jours_douche')}</div>`:''}
       ${(!sh&&emp.info)?`<div style="font-size:12px;color:var(--wd);line-height:1.6;border-top:1px solid rgba(240,234,216,.1);padding-top:8px;margin-top:4px;font-style:italic">${emp.info}</div>`:''}
       <div style="font-size:11px;color:rgba(245,240,232,.3);margin-top:6px;letter-spacing:.5px">${t('donnees_estim')}</div>
     </div>
