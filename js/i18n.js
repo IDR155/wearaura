@@ -1142,6 +1142,9 @@ function certKey(s){
   return null;
 }
 function certInfo(key){const c=CERTIFS[key];if(!c)return null;const L=(currentLang==='en'&&c.en)?c.en:c.fr;return{icon:c.icon,name:L.name,desc:L.desc};}
+// Origine du produit. Pour l'instant : France si détectée dans le label de certif
+// (Made in France / Fabriqué en France). Renvoie {icon,name} ou null si non connue.
+function productOrigin(label){return certKey(label)==='france'?certInfo('france'):null;}
 // Sheet d'explication d'un label (auto-portée, au-dessus des autres sheets).
 let _certLastFocus=null;
 function showCert(key){

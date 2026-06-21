@@ -487,6 +487,7 @@ textarea.fi{resize:none;line-height:1.6}
 .certif-badge{font-size:11px;padding:2px 6px;border-radius:10px;background:rgba(80,180,80,.15);color:var(--vote-up);border:1px solid rgba(80,180,80,.3)}
 .certif-badge--tap{cursor:pointer}
 .certif-badge--tap::after{content:' ⓘ';opacity:.55;font-size:.92em}
+.prod-origin{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--white);opacity:.92}
 
 /* ── RETOUCHE PHOTO ── */
 .edit-slider{width:100%;-webkit-appearance:none;height:3px;border-radius:2px;background:var(--gold-b);outline:none;cursor:pointer}

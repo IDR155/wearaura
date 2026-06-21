@@ -1361,11 +1361,9 @@ function renderAltTabLive(type = 'ethique') {
         <div class="row-tags">
           <div class="eco-score">${impactGauges(a, window._scanRef)}</div>
           ${a.matiere ? `<span class="txt-xxs-dim">${escapeHtml(a.matiere)}</span>` : ''}
-          ${a.label ? `<span style="font-size:11px;background:rgba(80,180,80,.15);color:#7dc97d;border:1px solid rgba(80,180,80,.3);padding:1px 6px;border-radius:10px">${escapeHtml(a.label)}</span>` : ''}
+          ${a.label && certKey(a.label)!=='france' ? `<span style="font-size:11px;background:rgba(80,180,80,.15);color:#7dc97d;border:1px solid rgba(80,180,80,.3);padding:1px 6px;border-radius:10px">${escapeHtml(a.label)}</span>` : ''}
         </div>
-        <div style="margin-top:6px">
-          <span style="display:inline-block;font-size:11px;letter-spacing:1px;text-transform:uppercase;background:rgba(240,234,216,0.12);border:1px solid rgba(240,234,216,0.3);color:rgba(240,234,216,0.7);padding:2px 7px;border-radius:4px">${t('lien_affilie')}</span>
-        </div>
+        ${(()=>{const o=productOrigin(a.label);return o?`<div style="margin-top:6px"><span class="prod-origin">${o.icon} ${escapeHtml(o.name)}</span></div>`:'';})()}
       </div>
       <div style="text-align:right;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:4px">
         <div style="font-size:14px;font-weight:500;color:var(--gold-l)">${a.prix ? a.prix+'€' : '—'}</div>

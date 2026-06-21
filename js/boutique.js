@@ -376,7 +376,7 @@ function bqCarouselCard(p){
         <div class="bq-carousel-price">${escapeHtml(String(p.prix))}€</div>
         <div style="font-size:11px;color:var(--wd)">${t('bq_voir')}</div>
       </div>
-      <div class="aff-badge">${t('aff_badge')}</div>
+      ${(()=>{const o=productOrigin(p.label);return o?`<div style="margin-top:6px"><span class="prod-origin">${o.icon} ${escapeHtml(o.name)}</span></div>`:'';})()}
     </div>
   </div>`;
 }
@@ -396,7 +396,7 @@ function bqProductCard(p){
     <div class="bq-product-img">
       ${imgContent}
       <div class="bq-emoji-fb" style="display:${p.image_url?'none':'flex'};width:100%;height:100%;align-items:center;justify-content:center">${_clotheSvgFb}</div>
-      ${p.label?`<div style="position:absolute;top:8px;right:8px">${(()=>{const _k=certKey(p.label);return _k?`<span class="certif-badge certif-badge--tap" role="button" tabindex="0" onclick="event.stopPropagation();showCert('${_k}')" ontouchstart="event.stopPropagation()" ontouchend="event.stopPropagation()">${escapeHtml(p.label)}</span>`:`<span class="certif-badge">${escapeHtml(p.label)}</span>`;})()}</div>`:''}
+      ${(()=>{if(!p.label)return'';const _k=certKey(p.label);if(_k==='france')return'';const inner=_k?`<span class="certif-badge certif-badge--tap" role="button" tabindex="0" onclick="event.stopPropagation();showCert('${_k}')" ontouchstart="event.stopPropagation()" ontouchend="event.stopPropagation()">${escapeHtml(p.label)}</span>`:`<span class="certif-badge">${escapeHtml(p.label)}</span>`;return`<div style="position:absolute;top:8px;right:8px">${inner}</div>`;})()}
       ${demoBadge}
       ${credit}
     </div>
@@ -409,7 +409,7 @@ function bqProductCard(p){
         <div class="bq-product-price">${escapeHtml(String(p.prix))}€</div>
         <div class="bq-product-voir">${t('bq_voir')}</div>
       </div>
-      <div class="aff-badge">${t('aff_badge')}</div>
+      ${(()=>{const o=productOrigin(p.label);return o?`<div style="margin-top:6px"><span class="prod-origin">${o.icon} ${escapeHtml(o.name)}</span></div>`:'';})()}
     </div>
   </div>`;
 }
@@ -424,7 +424,7 @@ function bqSecondhandCard(p){
       <div style="font-size:12px;font-weight:500;color:var(--white);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(pNom(p))}</div>
       <div style="font-size:11px;color:var(--gold);margin-bottom:4px">${escapeHtml(p.marque)}</div>
       <div style="font-size:13px;color:var(--gold-l);font-weight:600;margin-bottom:4px">${escapeHtml(String(p.prix))}€</div>
-      <div class="aff-badge">${t('aff_badge')}</div>
+      ${(()=>{const o=productOrigin(p.label);return o?`<div style="margin-top:6px"><span class="prod-origin">${o.icon} ${escapeHtml(o.name)}</span></div>`:'';})()}
     </div>
   </div>`;
 }
