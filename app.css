@@ -488,6 +488,7 @@ textarea.fi{resize:none;line-height:1.6}
 .certif-badge--tap{cursor:pointer}
 .certif-badge--tap::after{content:' ⓘ';opacity:.55;font-size:.92em}
 .prod-origin{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--white);opacity:.92}
+.prov-reuse{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#8fcf8a;background:rgba(80,180,80,.12);border:1px solid rgba(80,180,80,.32);padding:3px 9px;border-radius:50px}
 
 /* ── RETOUCHE PHOTO ── */
 .edit-slider{width:100%;-webkit-appearance:none;height:3px;border-radius:2px;background:var(--gold-b);outline:none;cursor:pointer}

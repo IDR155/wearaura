@@ -1363,7 +1363,7 @@ function renderAltTabLive(type = 'ethique') {
           ${a.matiere ? `<span class="txt-xxs-dim">${escapeHtml(a.matiere)}</span>` : ''}
           ${a.label && certKey(a.label)!=='france' ? `<span style="font-size:11px;background:rgba(80,180,80,.15);color:#7dc97d;border:1px solid rgba(80,180,80,.3);padding:1px 6px;border-radius:10px">${escapeHtml(a.label)}</span>` : ''}
         </div>
-        ${(()=>{const o=productOrigin(a.label);return o?`<div style="margin-top:6px"><span class="prod-origin">${o.icon} ${escapeHtml(o.name)}</span></div>`:'';})()}
+        ${provenanceHtml(a)}
       </div>
       <div style="text-align:right;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:4px">
         <div style="font-size:14px;font-weight:500;color:var(--gold-l)">${a.prix ? a.prix+'€' : '—'}</div>

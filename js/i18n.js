@@ -52,7 +52,7 @@ const I18N = {
     synthetique:'Synthétique',recycle:'Recyclé',inconnu:'Je sais pas',
     casual:'Casual',chic:'Chic',sport:'Sport',vintage:'Vintage',
     minimal:'Minimal',streetwear:'Streetwear',boheme:'Bohème',luxe:'Luxe',
-    empreinte_titre:'Empreinte estimée',cert_close:'Fermer',
+    empreinte_titre:'Empreinte estimée',cert_close:'Fermer',seconde_main_badge:'Seconde main',
     eau_label:"d'eau estimés",score_eco:'SCORE ÉCO',ig_eco:'Éco',ig_eau:'Eau',ig_co2:'CO₂',ig_high:'élevé',niv_faible:'Faible',niv_moyenne:'Moyenne',niv_elevee:'Élevée',emp_eau_lbl:'Empreinte eau',emp_co2_lbl:'Empreinte CO₂',ig_reuse:'Réutilisé',ig_reuse_hint:'Pièce de seconde main : réutilisée, donc pas de nouvelle production — empreinte quasi nulle.',ig_ref:'réf.',
     scan_mat_title:'Matière de ta pièce',scan_mat_sub:'On part d\'une estimation selon le type. Précise la vraie matière pour une comparaison plus juste.',scan_mat_note:'Estimation — touche pour préciser la matière',scan_mat_sources:'Estimations (ordres de grandeur) — sources : ADEME & Water Footprint Network.',scan_mat_ref:'Référence officielle : ADEME Ecobalyse →',
     donnees_estim:'* Estimations par matière (ordres de grandeur) — sources : ADEME & Water Footprint Network',
@@ -533,7 +533,7 @@ const I18N = {
     synthetique:'Synthetic',recycle:'Recycled',inconnu:'Not sure',
     casual:'Casual',chic:'Chic',sport:'Sport',vintage:'Vintage',
     minimal:'Minimal',streetwear:'Streetwear',boheme:'Boho',luxe:'Luxury',
-    empreinte_titre:'Estimated footprint',cert_close:'Close',
+    empreinte_titre:'Estimated footprint',cert_close:'Close',seconde_main_badge:'Second-hand',
     eau_label:'of water estimated',score_eco:'ECO SCORE',ig_eco:'Eco',ig_eau:'Water',ig_co2:'CO₂',ig_high:'high',niv_faible:'Low',niv_moyenne:'Medium',niv_elevee:'High',emp_eau_lbl:'Water footprint',emp_co2_lbl:'Carbon footprint',ig_reuse:'Reused',ig_reuse_hint:'Second-hand item: reused, so no new production — near-zero footprint.',ig_ref:'ref.',
     scan_mat_title:'Your item\'s material',scan_mat_sub:'We start from an estimate based on the type. Set the real material for a more accurate comparison.',scan_mat_note:'Estimate — tap to set the material',scan_mat_sources:'Estimates (orders of magnitude) — sources: ADEME & Water Footprint Network.',scan_mat_ref:'Official reference: ADEME Ecobalyse →',
     donnees_estim:'* Per-material estimates (orders of magnitude) — sources: ADEME & Water Footprint Network',
@@ -1145,6 +1145,14 @@ function certInfo(key){const c=CERTIFS[key];if(!c)return null;const L=(currentLa
 // Origine du produit. Pour l'instant : France si détectée dans le label de certif
 // (Made in France / Fabriqué en France). Renvoie {icon,name} ou null si non connue.
 function productOrigin(label){return certKey(label)==='france'?certInfo('france'):null;}
+// Petit logo recyclage (seconde main)
+function _reuseSvg(){return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8fcf8a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>`;}
+// Ligne de "provenance" pour une carte : seconde main (prioritaire) > origine FR > rien.
+function provenanceHtml(p){
+  if(isSecondHand(p)) return `<div style="margin-top:6px"><span class="prov-reuse">${_reuseSvg()}${escapeHtml(t('seconde_main_badge'))}</span></div>`;
+  const o=productOrigin(p&&p.label);
+  return o?`<div style="margin-top:6px"><span class="prod-origin">${o.icon} ${escapeHtml(o.name)}</span></div>`:'';
+}
 // Sheet d'explication d'un label (auto-portée, au-dessus des autres sheets).
 let _certLastFocus=null;
 function showCert(key){

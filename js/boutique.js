@@ -317,6 +317,7 @@ function bqOpenProduct(idx){
       </div>
     </div>
     <div style="padding:0 20px 12px">
+      ${sh?`<div style="margin-bottom:8px"><span class="prov-reuse">${_reuseSvg()}${escapeHtml(t('seconde_main_badge'))}</span></div>`:''}
       ${p.matiere?`<div style="font-size:12px;color:var(--wd);letter-spacing:.5px">${t('matiere_prefix')} : ${escapeHtml(emp.label)}</div>`:''}
       ${certifs}
     </div>
@@ -376,7 +377,7 @@ function bqCarouselCard(p){
         <div class="bq-carousel-price">${escapeHtml(String(p.prix))}€</div>
         <div style="font-size:11px;color:var(--wd)">${t('bq_voir')}</div>
       </div>
-      ${(()=>{const o=productOrigin(p.label);return o?`<div style="margin-top:6px"><span class="prod-origin">${o.icon} ${escapeHtml(o.name)}</span></div>`:'';})()}
+      ${provenanceHtml(p)}
     </div>
   </div>`;
 }
@@ -409,7 +410,7 @@ function bqProductCard(p){
         <div class="bq-product-price">${escapeHtml(String(p.prix))}€</div>
         <div class="bq-product-voir">${t('bq_voir')}</div>
       </div>
-      ${(()=>{const o=productOrigin(p.label);return o?`<div style="margin-top:6px"><span class="prod-origin">${o.icon} ${escapeHtml(o.name)}</span></div>`:'';})()}
+      ${provenanceHtml(p)}
     </div>
   </div>`;
 }
@@ -424,7 +425,7 @@ function bqSecondhandCard(p){
       <div style="font-size:12px;font-weight:500;color:var(--white);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(pNom(p))}</div>
       <div style="font-size:11px;color:var(--gold);margin-bottom:4px">${escapeHtml(p.marque)}</div>
       <div style="font-size:13px;color:var(--gold-l);font-weight:600;margin-bottom:4px">${escapeHtml(String(p.prix))}€</div>
-      ${(()=>{const o=productOrigin(p.label);return o?`<div style="margin-top:6px"><span class="prod-origin">${o.icon} ${escapeHtml(o.name)}</span></div>`:'';})()}
+      ${provenanceHtml(p)}
     </div>
   </div>`;
 }
