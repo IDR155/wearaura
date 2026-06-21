@@ -76,7 +76,10 @@ init().catch(e => _DBG.err('init() rejeté', e));
   function anySheetOpen(){
     var ov=document.getElementById('overlay');
     if(ov&&ov.classList.contains('show')) return true;
-    return['share-overlay','post-opts-overlay','flw-overlay','new-msg-overlay','filter-overlay'].some(function(id){
+    // Sous-écrans messages (overlays plein écran au-dessus du track) : le swipe
+    // d'onglets ne doit pas s'y déclencher, sinon il navigue vers le feed.
+    return['share-overlay','post-opts-overlay','flw-overlay','new-msg-overlay','filter-overlay',
+           'sc-conversation','sc-new-dm','sc-new-group'].some(function(id){
       var el=document.getElementById(id);
       return el&&(el.style.display==='block'||el.style.display==='flex');
     });

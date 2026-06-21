@@ -684,41 +684,40 @@ function closeConversationScreen(){
   loadConversations();
 }
 
-// ── Swipe bord gauche → fermer la conversation ──
+// ── Glissement horizontal → fermer la conversation (revient à l'inbox) ──
+// Verrou de direction : on décide h/v au 1er mouvement significatif. Si vertical,
+// on ne touche à rien (la liste de messages défile normalement). Si horizontal
+// vers la droite, on suit le doigt et on ferme au-delà du seuil. Fonctionne
+// depuis n'importe où dans la conversation, pas seulement le bord.
 (function initConvSwipeBack(){
-  let _sx=0,_sy=0,_tracking=false;
-  const THRESHOLD=80,MAX_VERT=60;
+  let _sx=0,_sy=0,_dir=null; // _dir : null | 'h' | 'v'
+  const THRESHOLD=70,MIN=8;
+  const scEl=()=>{const sc=document.getElementById('sc-conversation');return(sc&&sc.style.display!=='none')?sc:null;};
   document.addEventListener('touchstart',e=>{
-    const sc=document.getElementById('sc-conversation');
-    if(!sc||sc.style.display==='none')return;
-    const t=e.touches[0];
-    _sx=t.clientX;_sy=t.clientY;
-    _tracking=true; // conversation ouverte : on suit le geste partout (pas seulement le bord)
+    const sc=scEl();if(!sc)return;
+    _sx=e.touches[0].clientX;_sy=e.touches[0].clientY;_dir=null;
     sc.style.transition='none';
   },{passive:true});
   document.addEventListener('touchmove',e=>{
-    if(!_tracking)return;
-    const sc=document.getElementById('sc-conversation');
-    if(!sc||sc.style.display==='none'){_tracking=false;return;}
-    const t=e.touches[0];
-    const dx=t.clientX-_sx;
-    const dy=Math.abs(t.clientY-_sy);
-    if(dy>MAX_VERT){_tracking=false;sc.style.transform='';return;}
-    if(dx>0&&dx>dy)sc.style.transform=`translateX(${dx}px)`; // glissement horizontal dominant uniquement
+    const sc=scEl();if(!sc){_dir=null;return;}
+    const dx=e.touches[0].clientX-_sx, dy=e.touches[0].clientY-_sy;
+    if(_dir===null){
+      if(Math.abs(dx)<MIN&&Math.abs(dy)<MIN)return;
+      _dir=Math.abs(dx)>Math.abs(dy)?'h':'v'; // décision unique
+    }
+    if(_dir==='h'&&dx>0)sc.style.transform=`translateX(${dx}px)`;
   },{passive:true});
   document.addEventListener('touchend',e=>{
-    if(!_tracking)return;
-    _tracking=false;
-    const sc=document.getElementById('sc-conversation');
-    if(!sc||sc.style.display==='none')return;
-    const dx=e.changedTouches[0].clientX-_sx;
-    if(dx>=THRESHOLD){
+    const sc=scEl();if(!sc){_dir=null;return;}
+    const dx=(e.changedTouches[0]?e.changedTouches[0].clientX:_sx)-_sx;
+    if(_dir==='h'&&dx>=THRESHOLD){
       closeConversationScreen();
     }else{
       sc.style.transition='transform .2s cubic-bezier(0.23,1,0.32,1)';
       sc.style.transform='';
       setTimeout(()=>{sc.style.transition='';},200);
     }
+    _dir=null;
   },{passive:true});
 })();
 function gotoConvUserProfile(){
