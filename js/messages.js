@@ -415,6 +415,9 @@ function demoConversationsList(){
 async function openConversationScreen(convId,otherUid,name,avatarUrl,sub,isGroup=false){
   currentConvId=convId;currentConvUid=otherUid;currentConvIsGroup=isGroup;
   const screen=document.getElementById('sc-conversation');screen.style.display='flex';
+  // Verrouille le scroll horizontal du track d'onglets pendant la conversation,
+  // sinon un glissement (hors bord) fait défiler vers le feed au lieu de revenir à l'inbox.
+  const _trk=document.getElementById('screens-track');if(_trk)_trk.style.overflowX='hidden';
   // La bnav (z-index:300) passe sinon par-dessus l'écran de conversation (z-index:155)
   // et bloque le clic dans le champ de saisie.
   const bnav=document.getElementById('shared-bnav');
@@ -669,6 +672,7 @@ function closeConversationScreen(){
   sc.style.transform='translateX(100%)';
   const bnav=document.getElementById('shared-bnav');
   if(bnav) bnav.style.display='';
+  const _trk=document.getElementById('screens-track');if(_trk)_trk.style.overflowX='';
   setTimeout(()=>{
     sc.style.display='none';
     sc.style.transform='';
@@ -683,14 +687,14 @@ function closeConversationScreen(){
 // ── Swipe bord gauche → fermer la conversation ──
 (function initConvSwipeBack(){
   let _sx=0,_sy=0,_tracking=false;
-  const EDGE=28,THRESHOLD=80,MAX_VERT=60;
+  const THRESHOLD=80,MAX_VERT=60;
   document.addEventListener('touchstart',e=>{
     const sc=document.getElementById('sc-conversation');
     if(!sc||sc.style.display==='none')return;
     const t=e.touches[0];
     _sx=t.clientX;_sy=t.clientY;
-    _tracking=_sx<=EDGE;
-    if(_tracking)sc.style.transition='none';
+    _tracking=true; // conversation ouverte : on suit le geste partout (pas seulement le bord)
+    sc.style.transition='none';
   },{passive:true});
   document.addEventListener('touchmove',e=>{
     if(!_tracking)return;
@@ -700,7 +704,7 @@ function closeConversationScreen(){
     const dx=t.clientX-_sx;
     const dy=Math.abs(t.clientY-_sy);
     if(dy>MAX_VERT){_tracking=false;sc.style.transform='';return;}
-    if(dx>0)sc.style.transform=`translateX(${dx}px)`;
+    if(dx>0&&dx>dy)sc.style.transform=`translateX(${dx}px)`; // glissement horizontal dominant uniquement
   },{passive:true});
   document.addEventListener('touchend',e=>{
     if(!_tracking)return;
