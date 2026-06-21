@@ -255,7 +255,7 @@ const I18N = {
     no_products:'Aucun produit trouvé.',
     bq_trending:'Tendances cette semaine',bq_ethical_section:'Coups de cœur éthiques',
     bq_secondhand_section:'Seconde main du moment',bq_brands_section:'Par marque',
-    bq_voir:'Voir →',aff_badge:'Lien affilié',
+    bq_voir:'Voir →',
     bq_ethique_label:'Éthique',bq_sm_label:'Seconde main',
     bq_product:'produit',bq_products:'produits',
     suivis_login:'Connecte-toi pour voir les posts des personnes que tu suis.',
@@ -736,7 +736,7 @@ const I18N = {
     no_products:'No products found.',
     bq_trending:'Trending this week',bq_ethical_section:'Ethical favourites',
     bq_secondhand_section:'Second-hand picks',bq_brands_section:'By brand',
-    bq_voir:'View →',aff_badge:'Affiliate link',
+    bq_voir:'View →',
     bq_ethique_label:'Ethical',bq_sm_label:'Second-hand',
     bq_product:'item',bq_products:'items',
     suivis_login:'Log in to see posts from people you follow.',
@@ -1210,7 +1210,7 @@ function co2SavedPct(matiere,refCo2){
 function _savedLabel(pct,posCol){
   if(pct>0) return {lbl:'−'+pct+'%',col:posCol};
   if(pct===0) return {lbl:t('ig_ref'),col:'rgba(237,228,207,0.6)'};
-  return {lbl:'+'+(-pct)+'%',col:'#d4a76a'};
+  return {lbl:(-pct>100?'> +100%':'+'+(-pct)+'%'),col:'#d4a76a'};
 }
 function _co2Gauge(pct){
   if(pct==null) return '';
@@ -1257,11 +1257,6 @@ function isSecondHand(p){
   if(cat.includes('seconde')||cat.includes('occasion')||cat==='seconde_main') return true;
   const txt=((p.nom||p.name||'')+' '+(p.marque||p.brand||'')).toLowerCase();
   return /vintage|occasion|seconde\s*main|pre-?loved|pre-?owned|friperie|recommerce|d'occasion/.test(txt);
-}
-function _reuseBadge(){
-  return `<span style="display:inline-flex;align-items:center;gap:5px" title="${t('ig_reuse_hint')}">`
-    +`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8fcf8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>`
-    +`<b style="font-size:12px;font-weight:600;color:#8fcf8a">${t('ig_reuse')}</b></span>`;
 }
 function impactGauges(p,ref){
   if(!p) return '';
