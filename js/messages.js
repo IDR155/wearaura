@@ -671,6 +671,10 @@ async function sendMessage(){
 
 function closeConversationScreen(){
   const sc=document.getElementById('sc-conversation');
+  // Idempotent : si déjà fermée ou en cours de fermeture, on ignore (évite la
+  // double animation quand le geste swipe ET le popstate (retour navigateur) tombent ensemble).
+  if(!sc||sc.style.display==='none'||sc._closing)return;
+  sc._closing=true;
   sc.style.transition='transform .25s cubic-bezier(0.23,1,0.32,1)';
   sc.style.transform='translateX(100%)';
   const bnav=document.getElementById('shared-bnav');
@@ -680,6 +684,7 @@ function closeConversationScreen(){
     sc.style.display='none';
     sc.style.transform='';
     sc.style.transition='';
+    sc._closing=false;
   },250);
   if(msgRealtimeSub){msgRealtimeSub.unsubscribe();msgRealtimeSub=null;}
   currentConvId=null;currentConvUid=null;currentConvIsGroup=false;
@@ -693,16 +698,22 @@ function closeConversationScreen(){
 // vers la droite, on suit le doigt et on ferme au-delà du seuil. Fonctionne
 // depuis n'importe où dans la conversation, pas seulement le bord.
 (function initConvSwipeBack(){
-  let _sx=0,_sy=0,_dir=null; // _dir : null | 'h' | 'v'
-  const THRESHOLD=70,MIN=8;
+  let _sx=0,_sy=0,_dir=null; // _dir : null | 'h' | 'v' | 'skip'
+  const THRESHOLD=70,MIN=8,EDGE=24;
+  // En navigateur, le bord gauche déclenche le geste « retour » natif (qui passe
+  // par popstate → ferme déjà la conversation). On ne double pas l'animation : on
+  // ignore ce bord. En PWA installée (standalone), aucun geste natif → on gère tout.
+  const standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true;
   const scEl=()=>{const sc=document.getElementById('sc-conversation');return(sc&&sc.style.display!=='none')?sc:null;};
   document.addEventListener('touchstart',e=>{
     const sc=scEl();if(!sc)return;
-    _sx=e.touches[0].clientX;_sy=e.touches[0].clientY;_dir=null;
-    sc.style.transition='none';
+    _sx=e.touches[0].clientX;_sy=e.touches[0].clientY;
+    _dir=(!standalone&&_sx<=EDGE)?'skip':null; // laisse le bord au navigateur
+    if(_dir!=='skip')sc.style.transition='none';
   },{passive:true});
   document.addEventListener('touchmove',e=>{
     const sc=scEl();if(!sc){_dir=null;return;}
+    if(_dir==='skip')return;
     const dx=e.touches[0].clientX-_sx, dy=e.touches[0].clientY-_sy;
     if(_dir===null){
       if(Math.abs(dx)<MIN&&Math.abs(dy)<MIN)return;
@@ -712,6 +723,7 @@ function closeConversationScreen(){
   },{passive:true});
   document.addEventListener('touchend',e=>{
     const sc=scEl();if(!sc){_dir=null;return;}
+    if(_dir==='skip'){_dir=null;return;}
     const dx=(e.changedTouches[0]?e.changedTouches[0].clientX:_sx)-_sx;
     if(_dir==='h'&&dx>=THRESHOLD){
       closeConversationScreen();
