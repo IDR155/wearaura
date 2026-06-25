@@ -76,8 +76,11 @@ init().catch(e => _DBG.err('init() rejeté', e));
   function anySheetOpen(){
     var ov=document.getElementById('overlay');
     if(ov&&ov.classList.contains('show')) return true;
-    // Sous-écrans messages (overlays plein écran au-dessus du track) : le swipe
-    // d'onglets ne doit pas s'y déclencher, sinon il navigue vers le feed.
+    // Tout écran plein écran hors-track actif (postview, vprofile, search, scan,
+    // create, auth…) : le swipe d'onglets ne doit JAMAIS se déclencher dessous,
+    // sinon le track glisse derrière l'overlay et laisse apparaître le fond.
+    if(document.querySelector('.screen:not(.track-screen).active')) return true;
+    // Sous-écrans messages (overlays plein écran pilotés par style.display).
     return['share-overlay','post-opts-overlay','flw-overlay','new-msg-overlay','filter-overlay',
            'sc-conversation','sc-new-dm','sc-new-group'].some(function(id){
       var el=document.getElementById(id);

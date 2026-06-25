@@ -42,42 +42,8 @@ function closeSearch(){
 }
 
 // ── Swipe bord gauche → fermer la recherche ──
-(function initSearchSwipeBack(){
-  let _sx=0,_sy=0,_tracking=false;
-  const EDGE=28,THRESHOLD=80,MAX_VERT=60;
-  document.addEventListener('touchstart',e=>{
-    const sc=document.getElementById('sc-search');
-    if(!sc||!sc.classList.contains('active'))return;
-    const t=e.touches[0];
-    _sx=t.clientX;_sy=t.clientY;
-    _tracking=_sx<=EDGE;
-    if(_tracking)sc.style.transition='none';
-  },{passive:true});
-  document.addEventListener('touchmove',e=>{
-    if(!_tracking)return;
-    const sc=document.getElementById('sc-search');
-    if(!sc||!sc.classList.contains('active')){_tracking=false;return;}
-    const t=e.touches[0];
-    const dx=t.clientX-_sx;
-    const dy=Math.abs(t.clientY-_sy);
-    if(dy>MAX_VERT){_tracking=false;sc.style.transform='';return;}
-    if(dx>0)sc.style.transform=`translateX(${dx}px)`;
-  },{passive:true});
-  document.addEventListener('touchend',e=>{
-    if(!_tracking)return;
-    _tracking=false;
-    const sc=document.getElementById('sc-search');
-    if(!sc||!sc.classList.contains('active'))return;
-    const dx=e.changedTouches[0].clientX-_sx;
-    if(dx>=THRESHOLD){
-      closeSearch();
-    }else{
-      sc.style.transition='transform .2s cubic-bezier(0.23,1,0.32,1)';
-      sc.style.transform='';
-      setTimeout(()=>{sc.style.transition='';},200);
-    }
-  },{passive:true});
-})();
+// Géré désormais par le handler « retour » unifié dans nav.js (initEdgeSwipeBack),
+// commun à tous les écrans plein écran. closeSearch() reste la fonction de fermeture.
 
 function srchQuick(q){ const inp=document.getElementById('srch-input'); if(inp){inp.value=q;doSearchGlobal(q);} }
 

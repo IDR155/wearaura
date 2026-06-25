@@ -296,8 +296,18 @@ function moveFtSlider(el){
 // puis ré-arme la sentinelle. Sur le feed sans overlay : toast + sortie au
 // retour suivant (comportement natif Android).
 // ═══════════════════════════════════════════
+// iOS en PWA installée : depuis iOS 16, le geste « swipe-retour » natif au bord
+// de l'écran navigue dans l'historique et révèle l'état précédent (le feed) sous
+// l'écran courant — c'est l'effet « cassé » signalé (boutique/conversation qui
+// glissent et laissent voir le feed). Comme iOS standalone n'a PAS de bouton retour
+// matériel, la sentinelle ne sert à rien là ; on ne l'arme donc pas. Sans entrée
+// arrière dans l'historique, le geste natif n'a rien à révéler. Android la garde.
+var _IS_IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+var _IS_STANDALONE = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+var _IOS_PWA = _IS_IOS && _IS_STANDALONE;
 function _armBack(){
   if(!me)return;
+  if(_IOS_PWA)return;
   if(!history.state||!history.state.wa)history.pushState({wa:1},'');
 }
 function _bkShow(id){const el=document.getElementById(id);return !!el&&el.classList.contains('show');}
@@ -349,6 +359,110 @@ window.addEventListener('popstate',()=>{
   // Sur le feed, rien d'ouvert : prévenir, le retour suivant quitte l'app
   try{toast(typeof currentLang!=='undefined'&&currentLang==='en'?'Press back again to exit':'Appuie encore pour quitter');}catch(_){}
 });
+
+// ═══════════════════════════════════════════
+// GESTE « RETOUR » UNIFIÉ — glisser vers la droite pour fermer
+// Jumeau gestuel du bouton retour ci-dessus. UN SEUL handler pour TOUS les écrans
+// plein écran (conversation, recherche, postview, vprofile, new-dm/group), au lieu
+// d'un handler dupliqué par écran (sources de l'effet « fond navy qui apparaît »).
+// Règles : verrou de direction h/v au 1er mouvement ; on suit le doigt sur l'écran
+// du dessus ; au-delà du seuil → on appelle SA fonction de fermeture. En navigateur
+// (non-standalone) on laisse le bord gauche au geste retour natif. On ignore les
+// scrollers horizontaux internes (carrousels) pour ne pas voler leur glissement.
+// ═══════════════════════════════════════════
+(function initEdgeSwipeBack(){
+  const EDGE=30, THRESHOLD=70, MIN=8;
+  const standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true;
+  // kind : 'act' = classe .active ; 'disp' = style.display.
+  // anim : true  = la fonction de fermeture anime DÉJÀ sa sortie (translateX 100%)
+  //               → on la laisse continuer le glissement depuis la position du doigt.
+  //        false = fermeture instantanée → c'est NOTRE handler qui anime la sortie.
+  const SCREENS=[
+    ['sc-conversation','disp', ()=>closeConversationScreen(), true ],
+    ['sc-new-group',   'disp', ()=>closeNewGroup(),           false],
+    ['sc-new-dm',      'disp', ()=>closeNewDM(),              true ],
+    ['sc-search',      'act',  ()=>closeSearch(),             true ],
+    ['sc-scan',        'act',  ()=>closeScan(),               false],
+    ['sc-postview',    'act',  ()=>goS(prevScreen),           false],
+    ['sc-vprofile',    'act',  ()=>goS(prevScreen),           false],
+  ];
+  function topScreen(){
+    for(const[id,kind,close,anim]of SCREENS){
+      const el=document.getElementById(id);if(!el)continue;
+      const open=kind==='act'?el.classList.contains('active'):getComputedStyle(el).display!=='none';
+      if(open)return{el,close,anim};
+    }
+    return null;
+  }
+  // On ne saute QUE les vrais carrousels horizontaux explicites. La détection
+  // générique via overflowX était trop large : les conteneurs à scroll vertical
+  // (recherche, scan) ont souvent un léger débord horizontal → faux positif qui
+  // bloquait le swipe-retour sur ces écrans.
+  function insideHScroll(el){
+    while(el&&el!==document.body){
+      const c=el.classList;
+      if(c&&(c.contains('bq-carousel')||c.contains('bq-sm-scroll')||c.contains('pv-carousel')||c.contains('story-carousel')))return true;
+      el=el.parentElement;
+    }
+    return false;
+  }
+  let tg=null,sx=0,sy=0,dir=null; // dir: null|'h'|'v'|'skip'
+  document.addEventListener('touchstart',e=>{
+    tg=null;dir=null;
+    if(e.touches.length!==1)return;
+    const t=topScreen();if(!t)return;                 // rien d'ouvert → no-op (ex: feed)
+    if(insideHScroll(e.target))return;                // carrousel interne → on laisse
+    sx=e.touches[0].clientX;sy=e.touches[0].clientY;tg=t;
+    dir=(!standalone&&sx<=EDGE)?'skip':null;          // bord laissé au navigateur
+    if(dir!=='skip')tg.el.style.transition='none';
+  },{passive:true});
+  document.addEventListener('touchmove',e=>{
+    if(!tg||dir==='skip'||e.touches.length!==1)return;
+    const dx=e.touches[0].clientX-sx, dy=e.touches[0].clientY-sy;
+    if(dir===null){
+      if(Math.abs(dx)<MIN&&Math.abs(dy)<MIN)return;
+      dir=Math.abs(dx)>Math.abs(dy)?'h':'v';          // décision unique
+    }
+    if(dir==='h'&&dx>0)tg.el.style.transform=`translateX(${dx}px)`;
+  },{passive:true});
+  document.addEventListener('touchend',e=>{
+    if(!tg){dir=null;return;}
+    const cur=tg;tg=null;
+    if(dir==='skip'||dir==='v'){dir=null;return;}
+    const dx=(e.changedTouches[0]?e.changedTouches[0].clientX:sx)-sx;
+    if(dir==='h'&&dx>=THRESHOLD){
+      if(cur.anim){
+        // Sa fonction de fermeture anime déjà la sortie : on la laisse continuer
+        // le glissement depuis la position du doigt. On enlève le transition:none
+        // (posé pendant le drag) et on force un reflow pour que SA transition prenne.
+        cur.el.style.transition='';
+        void cur.el.offsetWidth;
+        try{cur.close();}catch(err){_DBG&&_DBG.err&&_DBG.err('edgeSwipeBack',err);}
+      }else{
+        // Fermeture instantanée : on fait glisser la sortie nous-mêmes, puis on ferme.
+        // Le reflow (offsetWidth) est indispensable : sans lui, passer de transition:none
+        // à une transition dans la même frame ne s'anime pas → l'écran « saute ».
+        const el=cur.el, close=cur.close;
+        el.style.transition='transform .22s cubic-bezier(0.23,1,0.32,1)';
+        void el.offsetWidth;
+        el.style.transform='translateX(100%)';
+        setTimeout(()=>{
+          try{close();}catch(err){_DBG&&_DBG.err&&_DBG.err('edgeSwipeBack',err);}
+          el.style.transition='';el.style.transform='';
+        },220);
+      }
+    }else{
+      cur.el.style.transition='transform .2s cubic-bezier(0.23,1,0.32,1)';
+      cur.el.style.transform='';
+      setTimeout(()=>{cur.el.style.transition='';},200);
+    }
+    dir=null;
+  },{passive:true});
+  document.addEventListener('touchcancel',()=>{
+    if(tg){tg.el.style.transition='';tg.el.style.transform='';}
+    tg=null;dir=null;
+  },{passive:true});
+})();
 
 function ftSelect(el, tab) {
   document.querySelectorAll('.ft').forEach(ftEl => {ftEl.classList.remove('active');ftEl.setAttribute('aria-selected','false');ftEl.setAttribute('tabindex','-1');});

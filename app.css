@@ -123,7 +123,10 @@ body{background:var(--black);font-family:var(--fb);color:var(--white);overflow:h
 .step-anim-left{animation:stepLeft 220ms cubic-bezier(0.23,1,0.32,1) both}
 
 /* ── Screen tab fade-in ── */
-.screen.active{animation:screenIn 200ms cubic-bezier(0.23,1,0.32,1) both}
+/* fill-mode 'backwards' (et non 'both') : l'animation d'entrée joue pareil, mais ne
+   FIGE PLUS transform:translateY(0) après coup — sinon ce transform persistant écrase
+   le translateX(dx) inline du swipe-retour (l'écran restait figé pendant le glissement). */
+.screen.active{animation:screenIn 200ms cubic-bezier(0.23,1,0.32,1) backwards}
 
 /* ── Tactile button animations ── */
 .heart-spring  {animation:heartSpring  380ms cubic-bezier(0.23,1,0.32,1) forwards}
