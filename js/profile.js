@@ -1330,7 +1330,18 @@ function setScanMaterial(key){
 
 function renderAltTabLive(type = 'ethique') {
   window._scanTab = type;
-  const items = currentAltData[type] || [];
+  let items = currentAltData[type] || [];
+  // Onglet éthique : on relègue en bas les pièces dont la MATIÈRE est pire que la pièce
+  // scannée (ex. soie « Made in France » vs lin) — sinon une alternative plus polluante
+  // apparaît en tête, ce qui n'a aucun sens. L'ordre par pertinence (_match) est conservé
+  // à l'intérieur de chaque groupe.
+  if (type === 'ethique' && window._scanRef) {
+    const RANK = { reuse:0, better:1, same:2, unknown:2, worse:3 };
+    items = items.slice().sort((a,b) => {
+      const ra = RANK[altFootprintCmp(a, window._scanRef)], rb = RANK[altFootprintCmp(b, window._scanRef)];
+      return ra !== rb ? ra - rb : (b._match||0) - (a._match||0);
+    });
+  }
   const container = document.getElementById('alt-content');
   if (!items.length) {
     container.innerHTML = `<div class="empty-state"><img src="mascote_ivory/the_balance.png" alt=""><div>${t('no_alt_found')}<div class="es-note">${t('donnees_estim')}</div></div></div>`;
@@ -1359,7 +1370,7 @@ function renderAltTabLive(type = 'ethique') {
         <div style="font-size:13px;font-weight:500;color:var(--white);margin-bottom:2px">${escapeHtml(a.nom)}</div>
         <div class="txt-xs-gold-mb">${escapeHtml(a.marque)}</div>
         <div class="row-tags">
-          <div class="eco-score">${impactGauges(a, window._scanRef)}</div>
+          <div class="eco-score">${altImpactDisplay(a, window._scanRef, type)}</div>
           ${a.matiere ? `<span class="txt-xxs-dim">${escapeHtml(a.matiere)}</span>` : ''}
           ${(()=>{if(!a.label||certKey(a.label)==='france')return'';const _k=certKey(a.label);const st='font-size:11px;background:rgba(80,180,80,.15);color:#7dc97d;border:1px solid rgba(80,180,80,.3);padding:1px 6px;border-radius:10px';return _k?`<span style="${st};cursor:pointer" role="button" tabindex="0" onclick="event.stopPropagation();showCert('${_k}')" ontouchstart="event.stopPropagation()" ontouchend="event.stopPropagation()">${escapeHtml(a.label)} ⓘ</span>`:`<span style="${st}">${escapeHtml(a.label)}</span>`;})()}
         </div>

@@ -1266,6 +1266,31 @@ function impactGauges(p,ref){
   const w=waterSavedPct(p.matiere,ref&&ref.eau), c=co2SavedPct(p.matiere,ref&&ref.co2);
   return impactGaugesV(w?w.pct:null, c?c.pct:null);
 }
+// ── Classe l'empreinte matière d'une alternative VS la pièce scannée (ref) ──
+// 'reuse' (seconde main) | 'better' (économise) | 'same' (déjà aussi bas) | 'worse' (pire) | 'unknown'
+function altFootprintCmp(a,ref){
+  if(isSecondHand(a)) return 'reuse';
+  if(!ref) return 'unknown';
+  const w=waterSavedPct(a.matiere,ref.eau), c=co2SavedPct(a.matiere,ref.co2);
+  if(!w||!c) return 'unknown';
+  const avg=(w.pct+c.pct)/2;
+  if(avg>=8) return 'better';
+  if(avg<=-8) return 'worse';
+  return 'same';
+}
+// ── Affichage d'impact contextuel dans une carte d'alternative ──
+// Chaque carte montre TOUJOURS un indicateur (jamais vide) :
+//  • mieux que la pièce scannée → jauges d'ÉCONOMIE (−% eau / −% CO₂), le vrai argument
+//  • égal / pire / matière inconnue → empreinte ABSOLUE de la matière (≈ X L · Y kg),
+//    neutre, jamais alarmante (pas de « +100% »), comparable à la puce scannée en haut
+//  • seconde main → rien ici (le badge « réutilisé » porte déjà le message)
+function altImpactDisplay(a,ref,tab){
+  const cls=altFootprintCmp(a,ref);
+  if(cls==='reuse')  return '';
+  if(cls==='better') return impactGauges(a,ref);
+  const e=getEmpreinte(a.matiere);
+  return (e&&e.eau!=null) ? impactGaugesAbsVals(e.eau,e.co2) : '';
+}
 // ── Traçabilité du SCAN : matière par défaut selon le type (B), corrigeable par l'utilisateur (A) ──
 const TYPE_DEFAULT_MAT = {
   blazer:'laine', veste:'coton', manteau:'laine', robe:'viscose', jupe:'coton',
@@ -1286,7 +1311,7 @@ function scannedMatChip(matKey){
   const editIco = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;opacity:.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`;
   return `<span onclick="openScanMatPicker()" title="${t('scan_mat_title')}" style="display:inline-flex;align-items:center;gap:7px;cursor:pointer;background:var(--gold-dim);border:1px solid var(--gold-b);border-radius:50px;padding:3px 11px;font-size:11px;color:var(--gold-l);vertical-align:middle">`
     +`<span style="font-weight:500">${escapeHtml(e.label)}</span>`
-    +`<span style="opacity:.7">≈ ${eau} · ${co2} CO₂</span>`
+    +`<span style="opacity:.7">≈ ${co2} CO₂ · ${eau}</span>`
     +editIco+`</span>`;
 }
 // Jauge horizontale Faible → Élevée (niveau absolu d'une empreinte), pour le panneau détaillé

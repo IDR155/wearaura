@@ -706,7 +706,9 @@ function deleteScanItem(itemId, event) {
     localStorage.setItem(_SCAN_HIST_KEY, JSON.stringify(local));
   } catch(e) {}
   // Supprimer de Supabase (non-bloquant)
-  if (me) sb.from('scan_history').delete().eq('id', itemId).eq('user_id', me.id).catch(() => {});
+  // Le query builder Supabase est un « thenable », pas une vraie Promise → pas de .catch().
+  // On utilise .then(ok, err) comme partout ailleurs (le 2e arg ignore l'erreur, non-bloquant).
+  if (me) sb.from('scan_history').delete().eq('id', itemId).eq('user_id', me.id).then(() => {}, () => {});
   _renderScanHistory(_scan.history);
 }
 
