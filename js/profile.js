@@ -1019,27 +1019,24 @@ async function fetchAlternatives(detectedType, categorie = '') {
     const catalog = await loadDemoCatalog();
     if (!catalog || !catalog.length) return getFallbackAlternatives(detectedType, categorie);
 
-    let filtered = catalog;
-    // Filtre par type (avec fallback large via getSimilarTypes)
+    // Base catégorie (ethique / seconde_main) ; le budget pioche dans tout le catalogue
+    let base = catalog;
+    if (categorie && categorie !== 'budget') {
+      base = base.filter(p => p.categorie === categorie || p.categorie_alt === categorie);
+    }
+    // Filtre TYPE : d'abord le groupe exact (chemise → chemise/shirt/blouse)
+    let filtered = base;
     if (detectedType && detectedType !== 'vetement') {
       const similarTypes = getSimilarTypes(detectedType);
-      filtered = filtered.filter(p => similarTypes.includes(p.type) || similarTypes.includes(p.type_precis));
+      filtered = base.filter(p => similarTypes.includes(p.type) || similarTypes.includes(p.type_precis));
     }
-    // Filtre par catégorie (ethique / seconde_main)
-    if (categorie && categorie !== 'budget') {
-      filtered = filtered.filter(p => p.categorie === categorie || p.categorie_alt === categorie);
-    } else if (categorie === 'budget') {
-      // Pour "budget" : on prend les moins chers
-      filtered = [...filtered].sort((a, b) => (a.prix || 999) - (b.prix || 999));
-    }
-    // Si pas de match sur type, fallback sur la catégorie seule
-    if (!filtered.length && categorie) {
-      filtered = catalog.filter(p => p.categorie === categorie || p.categorie_alt === categorie);
-    }
-    // Tri par score eco descendant
-    if (categorie !== 'budget') {
-      filtered = [...filtered].sort((a, b) => (b.score_eco || 0) - (a.score_eco || 0));
-    }
+    // Rien du MÊME type (chemise → chemise/blouse) → on n'invente pas (pas de veste pour
+    // une chemise) : l'UI affiche « pas d'alternative pour le moment ».
+    if (!filtered.length) return [];
+    // Tri : budget = prix croissant, sinon score éco décroissant
+    filtered = (categorie === 'budget')
+      ? [...filtered].sort((a, b) => (a.prix || 999) - (b.prix || 999))
+      : [...filtered].sort((a, b) => (b.score_eco || 0) - (a.score_eco || 0));
     return filtered.slice(0, 6);
   } catch(e) {
     console.warn('Demo catalog fetch failed:', e.message);
@@ -1066,7 +1063,11 @@ async function fetchAlternativesFallback(categorie) {
 function getFallbackAlternatives(type, categorie) {
   const all = {
     ethique: [
+      { nom:'Chemise en lin', marque:'Asphalte', type:'chemise', matiere:'lin', prix:75, url:'https://www.asphalte.com', score_eco:5, emoji:'👔', label:'', categorie:'ethique', image_url:null },
+      { nom:'T-shirt coton bio', marque:'Loom', type:'t-shirt', matiere:'coton bio', prix:30, url:'https://www.loom.fr', score_eco:5, emoji:'👕', label:'GOTS', categorie:'ethique', image_url:null },
       { nom:'Better Sweater Fleece', marque:'Patagonia', type:'pull', matiere:'recyclé', prix:129, url:'https://www.patagonia.com/fr/shop/fleece-jackets', score_eco:5, emoji:'🧥', label:'Fair Trade', categorie:'ethique', image_url:'https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&h=400&w=400' },
+      { nom:'Pantalon chino bio', marque:'Hopaal', type:'pantalon', matiere:'coton bio', prix:95, url:'https://www.hopaal.com', score_eco:5, emoji:'👖', label:'', categorie:'ethique', image_url:null },
+      { nom:'Robe Tencel', marque:'People Tree', type:'robe', matiere:'lyocell', prix:89, url:'https://www.peopletree.co.uk', score_eco:5, emoji:'👗', label:'Fair Trade', categorie:'ethique', image_url:null },
       { nom:'Campo Sneaker', marque:'Veja', type:'sneaker', matiere:'coton bio', prix:120, url:'https://www.veja-store.com/fr/sneakers/campo/', score_eco:5, emoji:'👟', label:'GOTS', categorie:'ethique', image_url:'https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&h=400&w=400' },
       { nom:'Blazer Coton Bio', marque:'Thinking Mu', type:'blazer', matiere:'coton bio', prix:195, url:'https://www.thinkingmu.com/collections/blazers', score_eco:5, emoji:'🧥', label:'GOTS', categorie:'ethique', image_url:'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&h=400&w=400' },
     ],
@@ -1083,8 +1084,7 @@ function getFallbackAlternatives(type, categorie) {
   const items = all[categorie] || all.ethique;
   if (type && type !== 'vetement') {
     const similar = getSimilarTypes(type);
-    const filtered = items.filter(i => similar.includes(i.type));
-    if (filtered.length) return filtered;
+    return items.filter(i => similar.includes(i.type)); // peut être [] → empty-state (pas de mismatch)
   }
   return items;
 }
@@ -1242,6 +1242,11 @@ async function openAlt(item) {
     } else {
       detectedType = detectTypeFromKeywords(p.name || '') || 'vetement';
     }
+    // Filet : si l'IA reste incertaine, on s'appuie sur le NOM de la pièce
+    // (« chemise…tunique » → chemise) plutôt que de proposer n'importe quel type.
+    if (!detectedType || detectedType === 'vetement') {
+      detectedType = detectTypeFromKeywords(p.name || '') || detectedType || 'vetement';
+    }
 
     // === Airtable : charge les 3 onglets en parallèle ===
     const [ethique, seconde_main, budget] = await Promise.all([
@@ -1274,11 +1279,13 @@ async function openAlt(item) {
   } catch(e) {
     console.error('openAlt error:', e);
     clearInterval(iv);
+    // Même en cas d'erreur, on type-match via le nom (pas de fallback tous types confondus)
+    const _errType = detectTypeFromKeywords(p.name || '') || '';
     currentAltData = await applyMatchScores({
-      ethique:      getFallbackAlternatives('', 'ethique'),
-      seconde_main: getFallbackAlternatives('', 'seconde_main'),
-      budget:       getFallbackAlternatives('', 'budget'),
-    }, null, null);
+      ethique:      getFallbackAlternatives(_errType, 'ethique'),
+      seconde_main: getFallbackAlternatives(_errType, 'seconde_main'),
+      budget:       getFallbackAlternatives(_errType, 'budget'),
+    }, _errType || null, null);
     document.getElementById('scan-bar').style.width = '100%';
     setTimeout(() => {
       document.getElementById('scan-phase').style.display = 'none';
@@ -1344,7 +1351,7 @@ function renderAltTabLive(type = 'ethique') {
   }
   const container = document.getElementById('alt-content');
   if (!items.length) {
-    container.innerHTML = `<div class="empty-state"><img src="mascote_ivory/the_balance.png" alt=""><div>${t('no_alt_found')}<div class="es-note">${t('donnees_estim')}</div></div></div>`;
+    container.innerHTML = `<div class="empty-state"><img src="mascote_ivory/the_knot_weaver.png" alt=""><div>${t('no_alt_found')}<div class="es-note">${t('no_alt_note')}</div></div></div>`;
     return;
   }
   container.innerHTML = items.map(a => {
