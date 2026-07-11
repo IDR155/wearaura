@@ -186,13 +186,13 @@ function renderSlides(posts,isDemo,containerId='feed-scroll'){
         const dotY=h.y??35;
         const dotX=h.x??50;
         const size =h.size||30;
-        return `<div class="slide-hotspot" role="button" tabindex="0" aria-label="Voir l'alternative pour ${escapeHtml(h.label||'cette pièce')}"
+        return `<div class="slide-hotspot" role="button" tabindex="0" aria-label="${t('aria_see_alt_for')} ${escapeHtml(h.label||t('this_item'))}"
           data-x="${dotX}" data-y="${dotY}"
           style="top:${dotY}%;left:${dotX}%;width:${size}px;height:${size}px;animation-delay:${idx*0.3}s"
           onclick="event.stopPropagation();_clickHspot('${pid}',${idx})"
           onkeydown="if(event.key==='Enter'||event.key===' '){event.stopPropagation();_clickHspot('${pid}',${idx})}">
         </div>`;
-      }).join('')||`<div class="slide-hotspot" role="button" tabindex="0" aria-label="Voir l'alternative" style="top:35%;left:50%"></div>`;
+      }).join('')||`<div class="slide-hotspot" role="button" tabindex="0" aria-label="${t('aria_see_alt')}" style="top:35%;left:50%"></div>`;
       // hzone sera repositionné par _fitHzone() au chargement de l'image
       hotspotsZone=`<div id="hzone-${pid}" style="position:absolute;top:0;left:0;right:0;bottom:0;z-index:9;cursor:pointer" onclick="showHotspots('${pid}')"><div id="hdots-${pid}" style="display:none;position:absolute;inset:0">${dots}</div></div>`;
     }
@@ -201,22 +201,22 @@ function renderSlides(posts,isDemo,containerId='feed-scroll'){
       ${img}<div class="slide-gradient"></div>
       ${p.lookDuJour?`<div class="ldj-badge">${t('look_du_jour')}</div>`:''}
       ${hotspotsZone}
-      <div class="slide-right" role="group" aria-label="Actions sur ce post">
-        <div class="slide-action" role="button" tabindex="0" aria-label="${!isDemo&&p.liked?'Retirer le like':'Aimer ce post'}" aria-pressed="${!isDemo&&p.liked?'true':'false'}" onclick="${isDemo?'demLike(this)':'toggleLike(\''+pid+'\')'}" onkeydown="if(event.key==='Enter'||event.key===' '){${isDemo?'demLike(this)':'toggleLike(\''+pid+'\')'}}">
+      <div class="slide-right" role="group" aria-label="${t('aria_post_actions')}">
+        <div class="slide-action" role="button" tabindex="0" aria-label="${!isDemo&&p.liked?t('aria_unlike'):t('aria_like')}" aria-pressed="${!isDemo&&p.liked?'true':'false'}" onclick="${isDemo?'demLike(this)':'toggleLike(\''+pid+'\')'}" onkeydown="if(event.key==='Enter'||event.key===' '){${isDemo?'demLike(this)':'toggleLike(\''+pid+'\')'}}">
           <svg id="heart-${pid}" data-liked="${!isDemo&&p.liked?'1':'0'}" viewBox="0 0 24 24" aria-hidden="true" style="fill:${!isDemo&&p.liked?'#1E4FD8':'none'};stroke:${!isDemo&&p.liked?'var(--accent)':'var(--white)'};transition:fill .2s,stroke .2s"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
           <span id="like-count-${pid}" data-count="${p.likes||0}">${fmtN(p.likes)}</span>
         </div>
-        <div class="slide-action" role="button" tabindex="0" aria-label="Commenter" onclick="openComments('${p.id}','${isDemo}')" onkeydown="if(event.key==='Enter'||event.key===' ')openComments('${p.id}','${isDemo}')">
+        <div class="slide-action" role="button" tabindex="0" aria-label="${t('aria_comment')}" onclick="openComments('${p.id}','${isDemo}')" onkeydown="if(event.key==='Enter'||event.key===' ')openComments('${p.id}','${isDemo}')">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           <span id="comment-count-${pid}">${p.comments_count||0}</span>
         </div>
-        <div class="slide-action" role="button" tabindex="0" aria-label="${!isDemo&&p.saved?'Retirer la sauvegarde':'Sauvegarder'}" aria-pressed="${!isDemo&&p.saved?'true':'false'}" onclick="${isDemo?'':'toggleSave(\''+pid+'\')'}" onkeydown="if(event.key==='Enter'||event.key===' '){${isDemo?'':'toggleSave(\''+pid+'\')'}}">
+        <div class="slide-action" role="button" tabindex="0" aria-label="${!isDemo&&p.saved?t('aria_unsave'):t('aria_save_post')}" aria-pressed="${!isDemo&&p.saved?'true':'false'}" onclick="${isDemo?'':'toggleSave(\''+pid+'\')'}" onkeydown="if(event.key==='Enter'||event.key===' '){${isDemo?'':'toggleSave(\''+pid+'\')'}}">
           <svg id="save-${pid}" viewBox="0 0 24 24" aria-hidden="true" style="fill:${!isDemo&&p.saved?'var(--gold)':'none'};stroke:${!isDemo&&p.saved?'var(--gold)':'var(--white)'};transition:fill .2s,stroke .2s"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
         </div>
-        <div class="slide-action" role="button" tabindex="0" aria-label="Partager" onclick="sharePost('${p.id}')" onkeydown="if(event.key==='Enter'||event.key===' ')sharePost('${p.id}')">
+        <div class="slide-action" role="button" tabindex="0" aria-label="${t('aria_share')}" onclick="sharePost('${p.id}')" onkeydown="if(event.key==='Enter'||event.key===' ')sharePost('${p.id}')">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
         </div>
-        ${isDemo?'':`<div class="slide-action" role="button" tabindex="0" aria-label="Options du post" onclick="openPostOptions('${p.id}','${p.uid}','${escapeHtml(p.user||'')}')" onkeydown="if(event.key==='Enter'||event.key===' ')openPostOptions('${p.id}','${p.uid}','${escapeHtml(p.user||'')}')">
+        ${isDemo?'':`<div class="slide-action" role="button" tabindex="0" aria-label="${t('aria_post_options')}" onclick="openPostOptions('${p.id}','${p.uid}','${escapeHtml(p.user||'')}')" onkeydown="if(event.key==='Enter'||event.key===' ')openPostOptions('${p.id}','${p.uid}','${escapeHtml(p.user||'')}')">
           <svg viewBox="0 0 24 24" aria-hidden="true" fill="white"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
         </div>`}
         <div onclick="toggleSound(this)" data-music="${escapeHtml(p.musicUrl||'')}" data-music-title="${escapeHtml(p.musicTitle||'')}" data-music-start="${p.musicStart||0}" style="display:flex;flex-direction:column;align-items:center;visibility:${p.musicUrl?'visible':'hidden'};pointer-events:${p.musicUrl?'auto':'none'}">
@@ -231,8 +231,8 @@ function renderSlides(posts,isDemo,containerId='feed-scroll'){
       </div>
       <div class="slide-bottom">
         <div class="slide-user">
-          <div class="slide-avatar" data-uid="${p.uid}" role="button" tabindex="0" aria-label="Voir le profil de ${escapeHtml(p.user)}" onclick="openUserProfile('${p.uid}')" onkeydown="if(event.key==='Enter'||event.key===' ')openUserProfile('${p.uid}')">${avImg}</div>
-          <span class="slide-username" role="button" tabindex="0" aria-label="Voir le profil de ${escapeHtml(p.user)}" onclick="openUserProfile('${p.uid}')" onkeydown="if(event.key==='Enter'||event.key===' ')openUserProfile('${p.uid}')">${escapeHtml(p.user)}</span>
+          <div class="slide-avatar" data-uid="${p.uid}" role="button" tabindex="0" aria-label="${t('aria_see_profile_of')} ${escapeHtml(p.user)}" onclick="openUserProfile('${p.uid}')" onkeydown="if(event.key==='Enter'||event.key===' ')openUserProfile('${p.uid}')">${avImg}</div>
+          <span class="slide-username" role="button" tabindex="0" aria-label="${t('aria_see_profile_of')} ${escapeHtml(p.user)}" onclick="openUserProfile('${p.uid}')" onkeydown="if(event.key==='Enter'||event.key===' ')openUserProfile('${p.uid}')">${escapeHtml(p.user)}</span>
           ${followBtn}
         </div>
         <div class="slide-caption">${escapeHtml(p.caption)}</div>
@@ -764,7 +764,7 @@ function _cancelEdit(){
 
 async function deleteComment(cid){
   if(!me)return;
-  if(!confirm('Supprimer ce commentaire ?'))return;
+  if(!confirm(t('confirm_del_comment')))return;
   await sb.from('comments').delete().eq('id',cid).eq('user_id',me.id);
   const {count}=await sb.from('comments').select('*',{count:'exact',head:true}).eq('post_id',curPostId);
   await sb.from('posts').update({comments_count:count||0}).eq('id',curPostId);
@@ -894,11 +894,11 @@ function _showSaveOverlay(blobUrl){
   img.setAttribute('draggable','false');
 
   const hint=document.createElement('div');
-  hint.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(240,234,216,.7)" stroke-width="1.8" stroke-linecap="round" style="flex-shrink:0"><path d="M12 2a5 5 0 0 1 5 5v6a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg><span>Appuie longuement sur la photo → <strong style="color:#EDE4CF">Enregistrer dans la galerie</strong></span>';
+  hint.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(240,234,216,.7)" stroke-width="1.8" stroke-linecap="round" style="flex-shrink:0"><path d="M12 2a5 5 0 0 1 5 5v6a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg><span>'+t('longpress_save_hint')+'</span>';
   hint.style.cssText='display:flex;align-items:center;gap:10px;font-family:Montserrat,sans-serif;font-size:13px;color:rgba(240,234,216,.65);text-align:center;line-height:1.6;max-width:280px';
 
   const closeBtn=document.createElement('div');
-  closeBtn.textContent='Fermer';
+  closeBtn.textContent=t('btn_fermer');
   closeBtn.style.cssText='margin-top:8px;padding:12px 32px;border:1px solid rgba(240,234,216,.25);border-radius:50px;font-family:Montserrat,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(240,234,216,.6);cursor:pointer';
   closeBtn.onclick=()=>{ ov.remove(); URL.revokeObjectURL(blobUrl); };
 
@@ -923,7 +923,7 @@ async function doComment(){
       const{data,error}=await sb.from('comments').update({content:text}).eq('id',cid).eq('user_id',me.id).select();
       if(error){
         console.error('[doComment edit]',error);
-        toast(friendlyError?friendlyError(error):'Erreur de modification');
+        toast(friendlyError?friendlyError(error):t('err_edit'));
         return;
       }
       if(!data||!data.length){

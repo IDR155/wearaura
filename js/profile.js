@@ -545,7 +545,7 @@ async function confirmCrop(){
 
 async function deleteProfilePhoto(){
   if(!me) return;
-  if(!confirm('Supprimer ta photo de profil ?')) return;
+  if(!confirm(t('confirm_del_avatar'))) return;
   const {error}=await sb.from('profiles').update({avatar_url:null,avatar_portrait_url:null}).eq('id',me.id);
   if(error){ toast(t('toast_delete_error')); return; }
   await sb.storage.from('posts').remove([`avatars/${me.id}.jpg`,`avatars/${me.id}_p.jpg`]).catch(()=>{});
@@ -805,6 +805,67 @@ function openPieceSheet(h){
   document.getElementById('prod-sheet').classList.add('show');
 }
 
+// ── VIGNETTES RECADRÉES DEPUIS LA PHOTO ──────
+// Stratagème : chaque pièce détectée porte des coords x/y (en %) sur la photo.
+// On recadre un petit carré autour de ce point côté client (canvas) → vraie
+// vignette du vêtement scanné. Gratuit, pas d'IA, pas d'upload. Si le crop
+// échoue (CORS, photo absente), on garde l'icône en fallback (aucune régression).
+const _cropImgCache = {};
+function _loadCropImg(url){
+  if(_cropImgCache[url]) return _cropImgCache[url];
+  const p = new Promise((resolve,reject)=>{
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = ()=>resolve(img);
+    img.onerror = reject;
+    img.src = url;
+  });
+  _cropImgCache[url] = p;
+  return p;
+}
+async function cropFromPhoto(url, x, y, fracPct){
+  if(!url || x==null || y==null) return null;
+  try{
+    const img = await _loadCropImg(url);
+    const w = img.naturalWidth, h = img.naturalHeight;
+    if(!w || !h) return null;
+    const side = Math.round(Math.min(w,h) * ((fracPct||40)/100));
+    const cx = w*(x/100), cy = h*(y/100);
+    const sx = Math.max(0, Math.min(w-side, Math.round(cx-side/2)));
+    const sy = Math.max(0, Math.min(h-side, Math.round(cy-side/2)));
+    const out = 112; // 56px @2x pour la netteté
+    const cv = document.createElement('canvas');
+    cv.width = out; cv.height = out;
+    cv.getContext('2d').drawImage(img, sx, sy, side, side, 0, 0, out, out);
+    return cv.toDataURL('image/jpeg', 0.85);
+  }catch(_){ return null; }
+}
+// Zoom adapté au type : une chaussure remplit la vignette (crop serré),
+// un haut/bas montre sa forme (crop plus large). Inconnu → 40% (défaut).
+function _cropZoomForType(type){
+  var s = (type||'').toLowerCase();
+  if(/chaussure|sneaker|basket|mocassin|botte|sandale|derby|\btalon|shoe|accessoire|sac|ceinture|montre|lunette|bijou|chapeau|casquette/.test(s)) return 26;
+  if(/haut|top|chemise|chemisier|blouse|t-?shirt|tee|pull|sweat|veste|manteau|blouson|blazer|gilet|robe|débardeur/.test(s)) return 46;
+  if(/pantalon|jean|chino|bas|jupe|short|legging|jogging/.test(s)) return 40;
+  return 40;
+}
+function hydrateCropThumbs(container, url){
+  if(!container || !url) return;
+  container.querySelectorAll('.look-item-img[data-crop-x]').forEach(el=>{
+    const x = parseFloat(el.getAttribute('data-crop-x'));
+    const y = parseFloat(el.getAttribute('data-crop-y'));
+    if(isNaN(x) || isNaN(y)) return;
+    const zoom = _cropZoomForType(el.getAttribute('data-crop-type') || '');
+    cropFromPhoto(url, x, y, zoom).then(dataUrl=>{
+      if(!dataUrl) return;
+      el.style.backgroundImage = 'url('+dataUrl+')';
+      el.style.backgroundSize = 'cover';
+      el.style.backgroundPosition = 'center';
+      el.innerHTML = '';
+    });
+  });
+}
+
 // ── LOOK COMPLET ─────────────────────────────
 function openLookComplet(look){
   if(!look)return;
@@ -821,7 +882,7 @@ function openLookComplet(look){
 
   const pieces=(look.hotspots||[]);
   const piecesHTML=pieces.length>0
-    ?pieces.map(h=>`<div class="look-item" onclick="closeAll();setTimeout(()=>openPieceSheet(${JSON.stringify({...h,tags:look.tags,postId:look.id}).replace(/"/g,'&quot;')}),250)"><div class="look-item-img">${h.emoji||'🏷️'}</div><div class="look-item-info"><div class="look-item-name">${escapeHtml(h.name||'—')}</div><div class="look-item-brand">${escapeHtml(h.brand||'')}</div><div class="look-item-ref">${escapeHtml(h.price||'')}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">${h.type?`<span style="font-size:11px;color:var(--gold);opacity:.7">${escapeHtml(h.type)}</span>`:''} ${h.matiere?`<span style="font-size:11px;color:var(--wd)">${escapeHtml(h.matiere)}</span>`:''}<span style="color:var(--gold);font-size:16px;opacity:.4">›</span></div></div>`).join('')
+    ?pieces.map(h=>`<div class="look-item" onclick="closeAll();setTimeout(()=>openPieceSheet(${JSON.stringify({...h,tags:look.tags,postId:look.id}).replace(/"/g,'&quot;')}),250)"><div class="look-item-img"${(h.x!=null&&h.y!=null)?` data-crop-x="${h.x}" data-crop-y="${h.y}" data-crop-type="${escapeHtml(h.type||'')}"`:''}>${h.emoji||'🏷️'}</div><div class="look-item-info"><div class="look-item-name">${escapeHtml(h.name||'—')}</div><div class="look-item-brand">${escapeHtml(h.brand||'')}</div><div class="look-item-ref">${escapeHtml(h.price||'')}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">${h.type?`<span style="font-size:11px;color:var(--gold);opacity:.7">${escapeHtml(h.type)}</span>`:''} ${h.matiere?`<span style="font-size:11px;color:var(--wd)">${escapeHtml(h.matiere)}</span>`:''}<span style="color:var(--gold);font-size:16px;opacity:.4">›</span></div></div>`).join('')
     :`<div style="text-align:center;padding:20px;color:var(--wd);font-size:12px">${t('aucune_piece')}</div>`;
 
   document.getElementById('look-products').innerHTML=`
@@ -830,6 +891,9 @@ function openLookComplet(look){
       <div style="display:flex;flex-direction:column;gap:8px">${piecesHTML}</div>
       <div style="margin-top:12px;padding:10px;background:var(--black-3);border-radius:10px;border:1px solid rgba(240,234,216,.1);text-align:center"><div style="font-size:12px;color:var(--wd);letter-spacing:.5px">${t('click_piece')}</div></div>
     </div>`;
+
+  // Recadre une vignette de chaque pièce depuis la photo du look
+  hydrateCropThumbs(document.getElementById('look-products'), look.imageUrl);
 
   document.getElementById('overlay').classList.add('show');
   document.getElementById('prod-sheet').classList.add('show');
@@ -1208,7 +1272,7 @@ async function applyMatchScores(altsByCategory, detectedType, detectedColor){
   return altsByCategory;
 }
 
-async function openAlt(item) {
+async function openAlt(item, typeHint) {
   const p = item || currentLook || { emoji:'👗', name:t('this_item'), brand:'—', price:'—', eco:3 };
   // La pièce scannée = la référence : les alternatives se comparent à SON empreinte (pas à un coton fixe)
   const _refEmp = getEmpreinte(p.matiere || (p.tags && p.tags.matiere));
@@ -1231,21 +1295,28 @@ async function openAlt(item) {
     // === CLIP : détecte le type de vêtement depuis l'image ===
     let detectedType = null;
     let detectionMethod = 'keywords';
-    const imgEl = document.getElementById('look-img-real');
-    const hasRealImage = imgEl && imgEl.style.display !== 'none' && imgEl.src;
-    if (hasRealImage) {
-      const detection = await detectVetement(imgEl, p.name || '');
-      detectedType = detection.type;
-      detectionMethod = detection.method;
-      currentDetection = detection;
-      console.log(`🎯 CLIP détecte: ${detectedType} (${Math.round(detection.confidence*100)}% conf, méthode: ${detectionMethod})`);
+    if (typeHint) {
+      // Appel depuis la boutique : le type du produit est déjà connu → on l'utilise
+      // directement, sans CLIP (évite de re-détecter sur une vieille image de scan).
+      detectedType = typeHint;
+      currentDetection = null;
     } else {
-      detectedType = detectTypeFromKeywords(p.name || '') || 'vetement';
-    }
-    // Filet : si l'IA reste incertaine, on s'appuie sur le NOM de la pièce
-    // (« chemise…tunique » → chemise) plutôt que de proposer n'importe quel type.
-    if (!detectedType || detectedType === 'vetement') {
-      detectedType = detectTypeFromKeywords(p.name || '') || detectedType || 'vetement';
+      const imgEl = document.getElementById('look-img-real');
+      const hasRealImage = imgEl && imgEl.style.display !== 'none' && imgEl.src;
+      if (hasRealImage) {
+        const detection = await detectVetement(imgEl, p.name || '');
+        detectedType = detection.type;
+        detectionMethod = detection.method;
+        currentDetection = detection;
+        console.log(`🎯 CLIP détecte: ${detectedType} (${Math.round(detection.confidence*100)}% conf, méthode: ${detectionMethod})`);
+      } else {
+        detectedType = detectTypeFromKeywords(p.name || '') || 'vetement';
+      }
+      // Filet : si l'IA reste incertaine, on s'appuie sur le NOM de la pièce
+      // (« chemise…tunique » → chemise) plutôt que de proposer n'importe quel type.
+      if (!detectedType || detectedType === 'vetement') {
+        detectedType = detectTypeFromKeywords(p.name || '') || detectedType || 'vetement';
+      }
     }
 
     // === Airtable : charge les 3 onglets en parallèle ===
@@ -1279,8 +1350,9 @@ async function openAlt(item) {
   } catch(e) {
     console.error('openAlt error:', e);
     clearInterval(iv);
-    // Même en cas d'erreur, on type-match via le nom (pas de fallback tous types confondus)
-    const _errType = detectTypeFromKeywords(p.name || '') || '';
+    // Même en cas d'erreur, on type-match via l'indice (boutique) ou le nom (scan) —
+    // pas de fallback tous types confondus.
+    const _errType = typeHint || detectTypeFromKeywords(p.name || '') || '';
     currentAltData = await applyMatchScores({
       ethique:      getFallbackAlternatives(_errType, 'ethique'),
       seconde_main: getFallbackAlternatives(_errType, 'seconde_main'),
@@ -1590,7 +1662,7 @@ async function savePassword(){
   if(!me)return;
   const pw=document.getElementById('new-pw').value;
   const pw2=document.getElementById('new-pw-confirm').value;
-  if(!pw||pw.length<6)return toast(t('pw_too_short'));
+  if(!pw||pw.length<8)return toast(t('pw_too_short'));
   if(pw!==pw2)return toast(t('pw_mismatch'));
   const{error}=await sb.auth.updateUser({password:pw});
   if(error)return toast('❌ '+error.message);
@@ -2253,7 +2325,7 @@ async function openEditProfilePanel(){
   const msgEl=document.getElementById('ep-username-msg');
   msgEl.style.opacity='0';msgEl.textContent='';
   const btn=document.getElementById('ep-save-btn');
-  btn.disabled=false;btn.textContent='Enregistrer';
+  btn.disabled=false;btn.textContent=t('btn_enregistrer');
 
   // Animate in
   const panel=document.getElementById('edit-profile-panel');
@@ -2327,13 +2399,13 @@ async function saveProfile2(){
   if(username!==_epOriginalUsername){
     const{data:ex}=await sb.from('profiles').select('id').eq('username',username).neq('id',me.id).maybeSingle();
     if(ex){
-      btn.disabled=false;btn.textContent='Enregistrer';
+      btn.disabled=false;btn.textContent=t('btn_enregistrer');
       return toast(t('toast_username_taken'));
     }
   }
 
   const{error}=await sb.from('profiles').upsert({id:me.id,full_name,username,bio});
-  btn.disabled=false;btn.textContent='Enregistrer';
+  btn.disabled=false;btn.textContent=t('btn_enregistrer');
   if(error)return toast(`❌ ${t('toast_error')}: ${error.message}`);
 
   invalidateProfileCache(me.id); // cache invalidé → prochain accès re-fetch
@@ -2445,12 +2517,12 @@ async function openBlockedUsers(){
     const profs=await getProfiles(ids);
     const profMap={};profs.forEach(p=>profMap[p.id]=p);
     list.innerHTML=blocks.map(b=>{
-      const p=profMap[b.blocked_id]||{username:'inconnu',full_name:'Utilisateur inconnu'};
+      const p=profMap[b.blocked_id]||{username:'',full_name:t('user_unknown')};
       const av=p.avatar_url?`<img src="${escapeHtml(p.avatar_url)}" alt="" loading="lazy" class="img-cover">`:`<span style="font-size:14px;color:var(--gold);text-transform:uppercase">${(p.username||'?').charAt(0)}</span>`;
       return `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(240,234,216,0.08)">
         <div style="width:40px;height:40px;border-radius:var(--r-md);background:var(--black-3);overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0">${av}</div>
         <div class="flex-min">
-          <div style="font-size:13px;color:var(--white);overflow:hidden;text-overflow:ellipsis">${escapeHtml(p.full_name||p.username||'Utilisateur')}</div>
+          <div style="font-size:13px;color:var(--white);overflow:hidden;text-overflow:ellipsis">${escapeHtml(p.full_name||p.username||t('user_label'))}</div>
           <div class="txt-xs-dim">${escapeHtml(p.username||'')}</div>
         </div>
         <button onclick="unblockUser('${b.blocked_id}')" style="background:transparent;border:1px solid var(--gold-b);border-radius:var(--r-pill);padding:5px 12px;color:var(--gold);font-size:11px;letter-spacing:.5px;cursor:pointer">${t('unblock_btn')}</button>
@@ -2601,12 +2673,12 @@ async function sendPostAsDM(recipientUid,recipientName,btnEl){
     // Notif au destinataire
     try{await sb.from('notifications').insert({user_id:recipientUid,from_user_id:me.id,type:'message',post_id:_sharePostId});}catch(e){}
     if(btnEl){btnEl.textContent=t('sent_check');btnEl.style.background='rgba(125,201,125,0.18)';btnEl.style.color='#7dc97d';btnEl.style.borderColor='rgba(125,201,125,0.4)';}
-    toast(`Envoyé à ${recipientName}`);
+    toast(`${t('sent_to')} ${recipientName}`);
     setTimeout(()=>closeShareSheet(),700);
   }catch(e){
     console.error('[sendPostAsDM]',e);
     toast(t('toast_send_error'));
-    if(btnEl){btnEl.disabled=false;btnEl.textContent='Envoyer';btnEl.style.opacity='1';}
+    if(btnEl){btnEl.disabled=false;btnEl.textContent=t('btn_envoyer');btnEl.style.opacity='1';}
   }
 }
 function sharePostExternal(){

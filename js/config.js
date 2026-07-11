@@ -14,6 +14,18 @@ const _DBG = {
 // contenu utilisateur (pseudos, légendes, commentaires, messages) en innerHTML.
 function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
 
+// ── Compte supprimé (anonymisé par l'Edge Function delete-account) ──
+// La fonction pose username='deleted_<8 hex>' + full_name='Utilisateur supprimé'.
+// On détecte ça pour afficher un libellé propre au lieu du slug technique.
+function waIsDeletedProfile(p){
+  if(!p)return false;
+  return p.full_name==='Utilisateur supprimé' || /^deleted_[0-9a-f]{8}$/.test(p.username||'');
+}
+function waDisplayName(p,fallback){
+  if(waIsDeletedProfile(p))return (typeof t==='function'?t('deleted_account'):'Compte supprimé');
+  return (p&&(p.username||p.full_name))||fallback||(typeof t==='function'?t('someone'):'');
+}
+
 // ── Préférence "réduire les animations" (accessibilité) ──
 // Lecture live : l'utilisateur peut changer le réglage système en cours de session.
 function prefersReducedMotion(){return !!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);}

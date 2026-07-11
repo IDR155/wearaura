@@ -326,7 +326,7 @@ function _updateMusicConfirmBtn() {
     const dur = _previewTrackData.endTime!=null
       ? Math.round(_previewTrackData.endTime - (_previewTrackData.startTime||0))
       : 30;
-    if (label) label.textContent = `Ajouter · ${short}${timeStr} · ${dur}s`;
+    if (label) label.textContent = `${t('add_label')} · ${short}${timeStr} · ${dur}s`;
     _syncRangeUI();
   } else {
     bar.style.display = 'none';
@@ -447,7 +447,7 @@ function clearStoryMusic() {
   const label = document.getElementById('story-music-label');
   const clear = document.getElementById('story-music-clear');
   const btn   = document.getElementById('story-music-btn');
-  if (label) { label.textContent = 'Ajouter une musique'; label.style.color = 'var(--wd)'; }
+  if (label) { label.textContent = t('add_music'); label.style.color = 'var(--wd)'; }
   if (clear) clear.style.display = 'none';
   if (btn)   btn.style.borderColor = 'rgba(240,234,216,0.12)';
 }
@@ -476,7 +476,7 @@ function setStoryVisibility(v, el) {
 async function loadStories() {
   const bar = document.getElementById('stories-bar');
   if (!bar) return;
-  bar.innerHTML = `<div class="story-item" role="button" tabindex="0" aria-label="Ajouter une story" onclick="openStoryCam()" onkeydown="if(event.key==='Enter'||event.key===' ')openStoryCam()">
+  bar.innerHTML = `<div class="story-item" role="button" tabindex="0" aria-label="${t('add_story')}" onclick="openStoryCam()" onkeydown="if(event.key==='Enter'||event.key===' ')openStoryCam()">
     ${_myStoryBubble(null)}<div class="story-label">${t('ma_story')}</div></div>`;
   if (!dbOk || !me) return;
 
@@ -517,7 +517,7 @@ async function loadStories() {
 
   const myData = _storiesData[me.id] || null;
   const myAction = myData ? `openStoryViewer('${me.id}')` : 'openStoryCam()';
-  const myLabel = myData ? 'Voir ma story' : 'Ajouter une story';
+  const myLabel = myData ? t('view_my_story') : t('add_story');
   let html = `<div class="story-item" role="button" tabindex="0" aria-label="${myLabel}" onclick="${myAction}" onkeydown="if(event.key==='Enter'||event.key===' ')${myAction}">
     ${_myStoryBubble(myData)}<div class="story-label">${t('ma_story')}</div></div>`;
 
@@ -608,7 +608,7 @@ function _renderStoryViewer() {
   if (reactBar) reactBar.style.display = isOwnStory ? 'none' : 'block';
   if (replyInput) {
     const author = data.profile?.username || 'user';
-    replyInput.placeholder = `Répondre à ${author}…`;
+    replyInput.placeholder = `${t('reply_to_prefix')} ${author}…`;
     replyInput.value = '';
   }
 
@@ -1047,7 +1047,7 @@ async function openStoryViewsPanel() {
 
     list.innerHTML = views.map(v => {
       const p = profMap[v.viewer_id] || {};
-      const name = p.full_name || p.username || 'Utilisateur';
+      const name = p.full_name || p.username || t('user_label');
       const handle = p.username ? '@' + p.username : '';
       const av = p.avatar_url
         ? `<img src="${escapeHtml(p.avatar_url)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
@@ -1463,7 +1463,7 @@ async function _startRecording() {
     const acts   = document.getElementById('mrec-actions');
     if (btn)    btn.classList.add('mrec-btn--active');
     if (btn)    btn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="rgba(255,90,90,.95)" stroke="none"><rect x="4" y="4" width="16" height="16" rx="3"/></svg>`;
-    if (status) status.textContent = 'Enregistrement… (max 2 min)';
+    if (status) status.textContent = t('recording_max');
     if (acts)   acts.style.display = 'none';
     if (timer)  timer.textContent  = '0:00';
 

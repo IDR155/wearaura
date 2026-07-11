@@ -330,6 +330,7 @@ function bqOpenProduct(idx){
     </div>
     <div style="padding:0 20px">
       <div style="margin-bottom:10px"><span style="display:inline-block;font-size:11px;letter-spacing:1px;text-transform:uppercase;background:rgba(240,234,216,0.12);border:1px solid rgba(240,234,216,0.3);color:rgba(240,234,216,0.7);padding:2px 7px;border-radius:4px">${t('lien_affilie')}</span></div>
+      <button class="btn-alt" style="margin-bottom:10px" onclick="bqOpenAlt(${idx})">${t('bq_voir_alt')}</button>
       <button class="btn" onclick="bqGoToProduct(${idx})">${t('bq_voir_produit')}</button>
     </div>`;
   document.getElementById('overlay').classList.add('show');
@@ -338,6 +339,24 @@ function bqOpenProduct(idx){
 function bqGoToProduct(idx){
   const p=_bqRegistry[idx];
   if(p) window.open(safeUrl(p.url),'_blank');
+}
+// Ouvre la vue alternatives (même que le scan) pour un produit boutique.
+// On passe le type connu du produit en indice → matching fiable, sans CLIP.
+function bqOpenAlt(idx){
+  const p=_bqRegistry[idx];
+  if(!p||typeof openAlt!=='function')return;
+  const item={
+    name:    pNom(p),
+    brand:   p.marque||'',
+    price:   p.prix?String(p.prix)+'€':'',
+    matiere: p.matiere||'',
+    type:    p.type||'',
+    image_url: p.image_url||''
+  };
+  // Masque la fiche boutique et ouvre les alternatives par-dessus
+  const sheet=document.getElementById('bq-product-sheet');
+  if(sheet)sheet.classList.remove('show','hiding');
+  openAlt(item, p.type||null);
 }
 // Ferme la fiche produit. Si la liste d'alternatives (scan) est ouverte dessous, on y revient ;
 // sinon (boutique) on ferme aussi l'overlay.

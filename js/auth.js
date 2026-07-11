@@ -32,7 +32,7 @@ async function doSignup(){
   if(!document.getElementById('s-consent')?.checked)return showErr(t('accept_terms'));
   // Le champ username ne doit pas contenir d'email (autofill Safari) — message clair
   if(un.includes('@'))return showErr(t('username_no_email'));
-  if(pw.length<6)return showErr(t('password_too_short'));
+  if(pw.length<8)return showErr(t('password_too_short'));
   const btn=document.getElementById('btn-signup');btn.disabled=true;btn.textContent=t('creating');
   // Vérifie la disponibilité du username AVANT de créer le compte (sinon erreur générique)
   const {data:taken}=await sb.from('profiles').select('id').ilike('username',un).maybeSingle();
@@ -51,6 +51,39 @@ async function doSignup(){
   setTimeout(()=>showPreferencesScreen(),1600);
 }
 async function doLogout(){stopGlobalRealtime();await sb.auth.signOut();me=null;invalidateUserPrefsCache();invalidateProfileCache();closeSettings();goS('sc-auth');}
+
+// ── Suppression de compte (RGPD) ──
+function openDeleteAccount(){
+  const m=document.getElementById('delete-account-modal');if(!m)return;
+  m.style.display='flex';
+}
+function closeDeleteAccount(){
+  const m=document.getElementById('delete-account-modal');if(m)m.style.display='none';
+}
+async function confirmDeleteAccount(){
+  const btn=document.getElementById('da-confirm-btn');
+  if(btn){btn.disabled=true;btn.textContent=t('deleting');}
+  try{
+    const{data,error}=await sb.functions.invoke('delete-account');
+    if(error||!data||data.ok!==true){
+      if(btn){btn.disabled=false;btn.textContent=t('delete_account_btn');}
+      toast(t('delete_account_failed'),3200,{type:'error'});
+      return;
+    }
+  }catch(e){
+    if(btn){btn.disabled=false;btn.textContent=t('delete_account_btn');}
+    toast(t('delete_account_failed'),3200,{type:'error'});
+    return;
+  }
+  // Compte supprimé : on nettoie la session locale et on repart à zéro
+  closeDeleteAccount();closeSettings();
+  try{await sb.auth.signOut();}catch(e){}
+  me=null;
+  try{invalidateUserPrefsCache();invalidateProfileCache();}catch(e){}
+  try{localStorage.clear();}catch(e){}
+  toast(t('delete_account_done'),3000,{type:'success'});
+  setTimeout(()=>goS('sc-auth'),1200);
+}
 async function doForgot(){
   const email=document.getElementById('forgot-em').value.trim();
   if(!email)return toast(t('enter_email'));

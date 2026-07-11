@@ -155,7 +155,8 @@ async function _loadDMSuggestions(){
     if(!ids.length){results.innerHTML=`<div style="font-size:12px;color:var(--wd);text-align:center;padding:30px">${t('dm_search_hint')}</div>`;return;}
     const{data}=await sb.from('profiles').select('id,username,full_name,avatar_url').in('id',ids);
     if(!data?.length){results.innerHTML=`<div style="font-size:12px;color:var(--wd);text-align:center;padding:30px">${t('dm_search_hint')}</div>`;return;}
-    results.innerHTML=data.map(p=>userRowItem(p,`startConversation('${p.id}','${(p.full_name||p.username||'User').replace(/'/g,"&#39;").replace(/"/g,'&quot;')}','${(p.avatar_url||'').replace(/'/g,'%27').replace(/"/g,'%22')}','${p.username?('@'+p.username).replace(/'/g,'&#39;').replace(/"/g,'&quot;'):''}')`)).join('');
+    results.innerHTML=`<div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);opacity:.7;padding:4px 0 8px">${t('suggestions')}</div>`
+      +data.map(p=>userRowItem(p,`startConversation('${p.id}','${(p.full_name||p.username||'User').replace(/'/g,"&#39;").replace(/"/g,'&quot;')}','${(p.avatar_url||'').replace(/'/g,'%27').replace(/"/g,'%22')}','${p.username?('@'+p.username).replace(/'/g,'&#39;').replace(/"/g,'&quot;'):''}')`)).join('');
   }catch(e){results.innerHTML=`<div style="font-size:12px;color:var(--wd);text-align:center;padding:30px">${t('dm_search_hint')}</div>`;}
 }
 function closeNewDM(){
@@ -282,7 +283,7 @@ async function createGroup(){
     const{data:conv,error}=await sb.from('conversations').insert({
       is_group:true,group_name:name,participants:allParticipants,created_by:me.id,
       participant_1:me.id,participant_2:me.id,
-      last_message:`Groupe créé`,
+      last_message:t('group_created'),
     }).select().single();
     if(error)throw error;
     closeNewGroup();
@@ -350,7 +351,7 @@ async function loadConversations(){
     }else{
       const otherId=conv.participant_1===me.id?conv.participant_2:conv.participant_1;
       const prof=profileMap[otherId]||{};
-      const name=prof.username||prof.full_name||t('someone');
+      const name=waDisplayName(prof,t('someone'));
       const handle='';
       return convItemHtml(conv.id,otherId,prof.avatar_url,name,handle,conv.last_message||t('conv_start'),timeAgo(conv.last_message_at),unread,false,conv);
     }
@@ -531,7 +532,7 @@ function appendMessage(msg,scroll=true){
   const isSent=msg.sender_id===me?.id;
   const showSender=currentConvIsGroup&&!isSent;
   const senderProf=showSender?(_groupProfileCache[msg.sender_id]||null):null;
-  const senderName=senderProf?(senderProf.username||senderProf.full_name||'?'):'';
+  const senderName=senderProf?waDisplayName(senderProf,'?'):'';
   const senderAv=senderProf?.avatar_url||'';
   list.querySelector('.loader')?.remove();
 
@@ -558,7 +559,7 @@ function appendMessage(msg,scroll=true){
   div.dataset.msgt=msg.created_at||new Date().toISOString();
   div.dataset.sent=isSent?'1':'0';
   const safeContent=msg.content.replace(/'/g,"\\'").replace(/"/g,'&quot;');
-  const dotsBtn=isSent?`<button class="msg-dots-btn" aria-label="Options" onclick="event.stopPropagation();showMsgCtx('${msg.id}','${safeContent}','${msg.created_at}',this.closest('.msg-sent-wrap'),event)">⋮</button>`:'';
+  const dotsBtn=isSent?`<button class="msg-dots-btn" aria-label="${t('aria_options')}" onclick="event.stopPropagation();showMsgCtx('${msg.id}','${safeContent}','${msg.created_at}',this.closest('.msg-sent-wrap'),event)">⋮</button>`:'';
   const senderTag=showSender?`<div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">${senderAv?`<img src="${escapeHtml(senderAv)}" alt="" style="width:20px;height:20px;border-radius:50%;object-fit:cover;flex-shrink:0">`:`<div style="width:20px;height:20px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-b);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;color:var(--gold)">${escapeHtml((senderName||'?').charAt(0).toUpperCase())}</div>`}<span style="font-size:11px;color:var(--gold);font-weight:600">@${escapeHtml(senderName)}</span></div>`:'';
 
   // Détecter les posts partagés [POST:id]
@@ -773,7 +774,7 @@ async function loadActivityNotifications(){
 
 function renderActivityItem(n){
   const prof=n.profiles||{};
-  const name=escapeHtml(prof.username||prof.full_name||t('someone'));
+  const name=escapeHtml(waDisplayName(prof,t('someone')));
   const av=prof.avatar_url?`<img src="${escapeHtml(prof.avatar_url)}" alt="" style="width:100%;height:100%;object-fit:cover">`:`<span style="font-size:18px">${name.charAt(0)}</span>`;
   const time=timeAgo(n.created_at);
   const icons={
@@ -1070,7 +1071,7 @@ async function confirmEditMsg(msgId){
   if(!newContent)return;
   try{
     const{data,error}=await sb.from('messages').update({content:newContent}).eq('id',msgId).select();
-    if(error){console.error('[editMsg]',error);toast(friendlyError?friendlyError(error):'Erreur de modification');return;}
+    if(error){console.error('[editMsg]',error);toast(friendlyError?friendlyError(error):t('err_edit'));return;}
     if(!data||!data.length){console.warn('[editMsg] no rows updated — RLS or id mismatch',{msgId});toast(t('toast_edit_denied'));return;}
     const bubble=document.getElementById('bubble-'+msgId);
     if(bubble) bubble.innerHTML=escapeHtml(newContent)+'<span style="font-size:11px;color:rgba(12,21,34,0.5);margin-left:6px">'+escapeHtml(t('msg_edited_label'))+'</span>';
@@ -1148,11 +1149,42 @@ async function dismissMsgRequest(notifId){
 }
 
 // ── Compatibilité ──
+// Ligne de résultat (réutilisée par la recherche ET les suggestions)
+function _msgSrchRow(p,isFollowing){
+  const av=p.avatar_url?`<img src="${escapeHtml(p.avatar_url)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="rgba(240,234,216,0.4)" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+  const badge=isFollowing?'':`<span style="font-size:11px;padding:3px 8px;border-radius:50px;background:rgba(240,234,216,0.1);border:1px solid rgba(240,234,216,0.2);color:var(--wd);margin-left:auto;flex-shrink:0">Demande</span>`;
+  return `<div onclick="startMsgFromSearch('${p.id}','${(p.full_name||p.username||'').replace(/'/g,"&#39;")}','${(p.avatar_url||'').replace(/'/g,'%27')}','${(p.username||'').replace(/'/g,"&#39;")}',${isFollowing})"
+    style="display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;transition:background .15s;border-radius:12px;margin:0 8px"
+    onmouseover="this.style.background='rgba(240,234,216,0.05)'" onmouseout="this.style.background='transparent'">
+    <div style="width:44px;height:44px;border-radius:50%;background:var(--wf);border:1px solid var(--gold-b);overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0">${av}</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:14px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.username||p.full_name||t('user_label')}</div>
+      <div style="font-size:12px;color:var(--wd)">${p.full_name||''}</div>
+    </div>
+    ${badge}
+  </div>`;
+}
+// À l'ouverture / champ vide : suggère les comptes suivis (plus rapide qu'une recherche à vide)
+async function _loadMsgSearchSuggestions(){
+  const res=document.getElementById('msg-srch-results');
+  if(!res)return;
+  if(!me){res.innerHTML='';return;}
+  res.innerHTML=skRows(3);
+  try{
+    const{data:follows}=await sb.from('follows').select('following_id').eq('follower_id',me.id).limit(20);
+    const ids=(follows||[]).map(f=>f.following_id);
+    if(!ids.length){res.innerHTML='';return;}
+    const{data}=await sb.from('profiles').select('id,username,full_name,avatar_url').in('id',ids);
+    if(!data?.length){res.innerHTML='';return;}
+    res.innerHTML=`<div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);opacity:.7;padding:14px 16px 6px">${t('suggestions')}</div>`
+      +data.map(p=>_msgSrchRow(p,true)).join('');
+  }catch(e){res.innerHTML='';}
+}
 function openMsgSearch(){
   const panel=document.getElementById('msg-search-panel');
   if(!panel)return;
   panel.style.display='flex';
-  document.getElementById('msg-srch-results').innerHTML='';
+  _loadMsgSearchSuggestions();
   setTimeout(()=>document.getElementById('msg-srch-input')?.focus(),200);
 }
 function closeMsgSearch(){
@@ -1166,14 +1198,14 @@ function clearMsgSearch(){
   const inp=document.getElementById('msg-srch-input');
   if(inp){inp.value='';inp.focus();}
   document.getElementById('msg-srch-clear').style.display='none';
-  document.getElementById('msg-srch-results').innerHTML='';
+  _loadMsgSearchSuggestions();
 }
 let _msgSrchTimer=null;
 function doMsgSearch(q){
   const clr=document.getElementById('msg-srch-clear');
   if(clr)clr.style.display=q.length>0?'block':'none';
   clearTimeout(_msgSrchTimer);
-  if(!q.trim()){document.getElementById('msg-srch-results').innerHTML='';return;}
+  if(!q.trim()){_loadMsgSearchSuggestions();return;}
   _msgSrchTimer=setTimeout(async()=>{
     const res=document.getElementById('msg-srch-results');
     res.innerHTML=`<div style="text-align:center;padding:30px;color:var(--wd);font-size:13px">Recherche…</div>`;
@@ -1189,21 +1221,7 @@ function doMsgSearch(q){
       const ids=data.map(p=>p.id);
       const{data:followData}=await sb.from('follows').select('following_id').eq('follower_id',me.id).in('following_id',ids);
       const followingSet=new Set((followData||[]).map(f=>f.following_id));
-      res.innerHTML=data.map(p=>{
-        const isFollowing=followingSet.has(p.id);
-        const av=p.avatar_url?`<img src="${escapeHtml(p.avatar_url)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="rgba(240,234,216,0.4)" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
-        const badge=isFollowing?'':`<span style="font-size:11px;padding:3px 8px;border-radius:50px;background:rgba(240,234,216,0.1);border:1px solid rgba(240,234,216,0.2);color:var(--wd);margin-left:auto;flex-shrink:0">Demande</span>`;
-        return `<div onclick="startMsgFromSearch('${p.id}','${(p.full_name||p.username||'').replace(/'/g,"&#39;")}','${(p.avatar_url||'').replace(/'/g,'%27')}','${(p.username||'').replace(/'/g,"&#39;")}',${isFollowing})"
-          style="display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;transition:background .15s;border-radius:12px;margin:0 8px"
-          onmouseover="this.style.background='rgba(240,234,216,0.05)'" onmouseout="this.style.background='transparent'">
-          <div style="width:44px;height:44px;border-radius:50%;background:var(--wf);border:1px solid var(--gold-b);overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0">${av}</div>
-          <div style="flex:1;min-width:0">
-            <div style="font-size:14px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.username||p.full_name||'Utilisateur'}</div>
-            <div style="font-size:12px;color:var(--wd)">${p.full_name||''}</div>
-          </div>
-          ${badge}
-        </div>`;
-      }).join('');
+      res.innerHTML=data.map(p=>_msgSrchRow(p,followingSet.has(p.id))).join('');
     }catch(e){
       document.getElementById('msg-srch-results').innerHTML=`<div style="text-align:center;padding:40px 20px;color:var(--wd);font-size:13px">Erreur de recherche</div>`;
     }
@@ -1220,7 +1238,7 @@ async function openGroupInfo(){
   sheet.style.display='flex';
   const title=document.getElementById('gi-title');
   const memberList=document.getElementById('gi-members');
-  if(title)title.textContent=document.getElementById('conv-screen-name')?.textContent||'Groupe';
+  if(title)title.textContent=document.getElementById('conv-screen-name')?.textContent||t('group_label');
   if(memberList)memberList.innerHTML=skRows(3);
   try{
     const{data:conv}=await sb.from('conversations').select('participants,group_name,created_by').eq('id',currentConvId).single();
@@ -1231,7 +1249,7 @@ async function openGroupInfo(){
     if(memberList)memberList.innerHTML=profs.map(p=>{
       const isMe=p.id===me?.id;
       const isAdmin=p.id===conv.created_by;
-      const name=p.username||p.full_name||'?';
+      const name=waDisplayName(p,'?');
       const av=p.avatar_url?`<img src="${escapeHtml(p.avatar_url)}" alt="" style="width:42px;height:42px;border-radius:50%;object-fit:cover">`:`<div style="width:42px;height:42px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-b);display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--gold)">${escapeHtml(name.charAt(0).toUpperCase())}</div>`;
       return `<div style="display:flex;align-items:center;gap:12px;padding:10px 20px;cursor:${isMe?'default':'pointer'}" ${isMe?'':` onclick="closeGroupInfo();openUserProfile('${p.id}')"`}>
         ${av}

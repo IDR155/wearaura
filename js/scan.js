@@ -666,7 +666,7 @@ function _renderScanHistory(items) {
     const date  = new Date(item.created_at).toLocaleDateString('fr', { day: 'numeric', month: 'short' });
     const count = (item.detected_pieces || []).length;
     const delBtn = em
-      ? `<button class="scan-hist-del-btn" onclick="deleteScanItem('${item.id}',event)" aria-label="Supprimer">
+      ? `<button class="scan-hist-del-btn" onclick="deleteScanItem('${item.id}',event)" aria-label="${t('aria_delete')}">
            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
          </button>`
       : '';
@@ -956,5 +956,5 @@ async function autoDetectHspots(dataUrl) {
   });
 
   if (typeof renderHspotsEditor === 'function') renderHspotsEditor();
-  toast(`✨ ${pieces.length} pièce${pieces.length > 1 ? 's' : ''} détectée${pieces.length > 1 ? 's' : ''} — ajuste si besoin`, 3500, { type: 'success' });
+  toast(t('scan_n_detected').replace('{n}', pieces.length).replace(/\{s\}/g, pieces.length > 1 ? 's' : ''), 3500, { type: 'success' });
 }

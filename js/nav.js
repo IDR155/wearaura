@@ -42,7 +42,7 @@ function togglePrefChip(el,cat,max){
   const idx=list.indexOf(val);
   if(idx>=0){list.splice(idx,1);el.classList.remove('selected');}
   else{
-    if(max&&list.length>=max){toast(`Maximum ${max} sélection${max>1?'s':''}`);return;}
+    if(max&&list.length>=max){toast(`${t('maximum')} ${max} ${t('selection')}${max>1?'s':''}`);return;}
     list.push(val);el.classList.add('selected');
   }
   _prefData[cat]=list;

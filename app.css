@@ -1094,3 +1094,14 @@ img.img-lazy--in{animation:imgFadeIn 380ms cubic-bezier(0.23,1,0.32,1) forwards}
 #auto-hspot-hint{display:none;align-items:center;gap:8px;padding:8px 14px;background:var(--gold-dim);border:1px solid var(--gold-b);border-radius:var(--rs);margin:8px 16px;font-size:12px;color:var(--gold);letter-spacing:.3px;flex-shrink:0}
 #auto-hspot-hint .scan-ring-sm{width:14px;height:14px;border:1.5px solid rgba(240,234,216,0.3);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
 
+/* ── Case à cocher consentement (inscription) ── */
+/* Case native masquée + case custom : état coché bien visible (le retour testeur
+   disait qu'on ne voyait pas si c'était coché). Cochée = fond crème + coche
+   dessinée dans le bleu du fond de page. */
+.wa-consent-cb{position:absolute;opacity:0;width:0;height:0;margin:0;pointer-events:none}
+.wa-consent-box{width:20px;height:20px;flex-shrink:0;margin-top:0;border:1.5px solid var(--gold-b);border-radius:5px;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s,border-color .15s}
+.wa-consent-box::after{content:"";width:5px;height:9px;border-right:2.5px solid #07101E;border-bottom:2.5px solid #07101E;transform:rotate(45deg) scale(0);transform-origin:center;transition:transform .15s cubic-bezier(0.23,1,0.32,1);margin-bottom:2px}
+.wa-consent-cb:checked + .wa-consent-box{background-color:var(--gold);border-color:var(--gold)}
+.wa-consent-cb:checked + .wa-consent-box::after{transform:rotate(45deg) scale(1)}
+.wa-consent-cb:focus-visible + .wa-consent-box{outline:2px solid var(--gold);outline-offset:2px}
+
