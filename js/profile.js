@@ -882,7 +882,7 @@ function openLookComplet(look){
 
   const pieces=(look.hotspots||[]);
   const piecesHTML=pieces.length>0
-    ?pieces.map(h=>`<div class="look-item" onclick="closeAll();setTimeout(()=>openPieceSheet(${JSON.stringify({...h,tags:look.tags,postId:look.id}).replace(/"/g,'&quot;')}),250)"><div class="look-item-img"${(h.x!=null&&h.y!=null)?` data-crop-x="${h.x}" data-crop-y="${h.y}" data-crop-type="${escapeHtml(h.type||'')}"`:''}>${h.emoji||'🏷️'}</div><div class="look-item-info"><div class="look-item-name">${escapeHtml(h.name||'—')}</div><div class="look-item-brand">${escapeHtml(h.brand||'')}</div><div class="look-item-ref">${escapeHtml(h.price||'')}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">${h.type?`<span style="font-size:11px;color:var(--gold);opacity:.7">${escapeHtml(h.type)}</span>`:''} ${h.matiere?`<span style="font-size:11px;color:var(--wd)">${escapeHtml(h.matiere)}</span>`:''}<span style="color:var(--gold);font-size:16px;opacity:.4">›</span></div></div>`).join('')
+    ?pieces.map(h=>`<div class="look-item" onclick="closeAll();setTimeout(()=>openPieceSheet(${JSON.stringify({...h,tags:look.tags,postId:look.id}).replace(/"/g,'&quot;')}),250)"><div class="look-item-img"${(h.x!=null&&h.y!=null)?` data-crop-x="${h.x}" data-crop-y="${h.y}" data-crop-type="${escapeHtml(h.type||'')}"`:''}>${h.emoji||'🏷️'}</div><div class="look-item-info"><div class="look-item-name">${escapeHtml(h.name||'—')}</div><div class="look-item-brand">${escapeHtml(h.brand||'')}</div><div class="look-item-ref">${escapeHtml(h.price||'')}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">${h.type?`<span style="font-size:11px;color:var(--gold);opacity:.7">${escapeHtml(h.type)}</span>`:''} ${h.matiere?`<span style="font-size:11px;color:var(--wd)">${escapeHtml(matiereLabel(h.matiere))}</span>`:''}<span style="color:var(--gold);font-size:16px;opacity:.4">›</span></div></div>`).join('')
     :`<div style="text-align:center;padding:20px;color:var(--wd);font-size:12px">${t('aucune_piece')}</div>`;
 
   document.getElementById('look-products').innerHTML=`
@@ -946,7 +946,7 @@ function openSingleProduct(hspotData) {
   let descHtml = '';
   if (item.brand)   descHtml += `<div style="font-size:13px;color:var(--gold);font-weight:500;margin-bottom:4px">${escapeHtml(item.brand)}</div>`;
   if (item.price)   descHtml += `<div style="font-size:18px;color:var(--gold-l);font-weight:600;margin-bottom:8px">${escapeHtml(item.price)}</div>`;
-  if (item.matiere) descHtml += `<div style="font-size:12px;color:var(--wd);margin-bottom:4px">Matière : ${escapeHtml(item.matiere)}</div>`;
+  if (item.matiere) descHtml += `<div style="font-size:12px;color:var(--wd);margin-bottom:4px">${t('matiere_prefix')} : ${escapeHtml(matiereLabel(item.matiere))}</div>`;
   if (item.ref)     descHtml += `<div class="txt-xs-dim">${escapeHtml(item.ref)}</div>`;
   desc.innerHTML = descHtml || '';
   document.getElementById('look-products').innerHTML = `
@@ -955,7 +955,7 @@ function openSingleProduct(hspotData) {
       <div class="look-item-info">
         <div class="look-item-name">${escapeHtml(currentLook.name)}</div>
         ${item.brand   ? `<div class="look-item-brand">${escapeHtml(item.brand)}</div>` : ''}
-        ${item.matiere ? `<div class="look-item-ref">Matière : ${escapeHtml(item.matiere)}</div>` : ''}
+        ${item.matiere ? `<div class="look-item-ref">${t('matiere_prefix')} : ${escapeHtml(matiereLabel(item.matiere))}</div>` : ''}
         ${item.price   ? `<div class="look-item-ref" style="color:var(--gold-l);font-size:13px;font-weight:600">${escapeHtml(item.price)}</div>` : ''}
       </div>
     </div>`;
@@ -1078,7 +1078,7 @@ function mapAirtableRecord(r) {
   };
 }
 
-async function fetchAlternatives(detectedType, categorie = '') {
+async function fetchAlternatives(detectedType, categorie = '', excludeKey = null) {
   try {
     const catalog = await loadDemoCatalog();
     if (!catalog || !catalog.length) return getFallbackAlternatives(detectedType, categorie);
@@ -1094,6 +1094,8 @@ async function fetchAlternatives(detectedType, categorie = '') {
       const similarTypes = getSimilarTypes(detectedType);
       filtered = base.filter(p => similarTypes.includes(p.type) || similarTypes.includes(p.type_precis));
     }
+    // Exclut la pièce source elle-même (ex. produit boutique ouvert) de ses alternatives.
+    if (excludeKey) filtered = filtered.filter(p => p.id !== excludeKey);
     // Rien du MÊME type (chemise → chemise/blouse) → on n'invente pas (pas de veste pour
     // une chemise) : l'UI affiche « pas d'alternative pour le moment ».
     if (!filtered.length) return [];
@@ -1319,11 +1321,13 @@ async function openAlt(item, typeHint) {
       }
     }
 
+    // La pièce source (produit boutique) ne doit jamais figurer dans ses propres alternatives.
+    const _excludeKey = p.id || null;
     // === Airtable : charge les 3 onglets en parallèle ===
     const [ethique, seconde_main, budget] = await Promise.all([
-      fetchAlternatives(detectedType, 'ethique'),
-      fetchAlternatives(detectedType, 'seconde_main'),
-      fetchAlternatives(detectedType, 'budget'),
+      fetchAlternatives(detectedType, 'ethique', _excludeKey),
+      fetchAlternatives(detectedType, 'seconde_main', _excludeKey),
+      fetchAlternatives(detectedType, 'budget', _excludeKey),
     ]);
     currentAltData = await applyMatchScores({ ethique, seconde_main, budget }, detectedType, currentDetection?.couleur);
     await loadAltVotes();
@@ -1450,7 +1454,7 @@ function renderAltTabLive(type = 'ethique') {
         <div class="txt-xs-gold-mb">${escapeHtml(a.marque)}</div>
         <div class="row-tags">
           <div class="eco-score">${altImpactDisplay(a, window._scanRef, type)}</div>
-          ${a.matiere ? `<span class="txt-xxs-dim">${escapeHtml(a.matiere)}</span>` : ''}
+          ${a.matiere ? `<span class="txt-xxs-dim">${escapeHtml(matiereLabel(a.matiere))}</span>` : ''}
           ${(()=>{if(!a.label||certKey(a.label)==='france')return'';const _k=certKey(a.label);const st='font-size:11px;background:rgba(80,180,80,.15);color:#7dc97d;border:1px solid rgba(80,180,80,.3);padding:1px 6px;border-radius:10px';return _k?`<span style="${st};cursor:pointer" role="button" tabindex="0" onclick="event.stopPropagation();showCert('${_k}')" ontouchstart="event.stopPropagation()" ontouchend="event.stopPropagation()">${escapeHtml(a.label)} ⓘ</span>`:`<span style="${st}">${escapeHtml(a.label)}</span>`;})()}
         </div>
         ${provenanceHtml(a)}

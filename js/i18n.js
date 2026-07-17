@@ -1164,6 +1164,28 @@ function getEmpreinte(matiere){
   }
   return e;
 }
+// Libellé matière SPÉCIFIQUE et bilingue (garde « laine recyclée » → « recycled wool »,
+// contrairement à getEmpreinte().label qui normalise en libellé générique).
+// FR : renvoie la matière telle quelle. EN : traduit chaque terme, repli sur le mot FR si inconnu.
+const MATIERE_EN = {
+  'coton':'cotton', 'coton bio':'organic cotton', 'lin':'linen', 'laine':'wool',
+  'laine mérinos':'merino wool', 'laine recyclée':'recycled wool', 'cachemire':'cashmere',
+  'mohair':'mohair', 'soie':'silk', 'cuir':'leather', 'cuir vegan':'vegan leather',
+  'cuir lwg':'LWG leather', 'daim':'suede', 'suède':'suede', 'polyester':'polyester',
+  'polyester recyclé':'recycled polyester', 'nylon recyclé':'recycled nylon',
+  'viscose':'viscose', 'viscose ecovero':'EcoVero viscose', 'acétate biosourcé':'bio-based acetate',
+  'denim':'denim', 'denim bio':'organic denim', 'denim recyclé':'recycled denim', 'denim brut':'raw denim',
+  'caoutchouc naturel':'natural rubber', 'plumes éthiques':'ethical down',
+  'paille naturelle':'natural straw', 'toile':'canvas', 'toile coton':'cotton canvas',
+};
+function matiereLabel(matiere){
+  if(!matiere) return '';
+  if(typeof currentLang==='undefined' || currentLang==='fr') return matiere;
+  return String(matiere).split(',').map(part=>{
+    const key=part.trim().toLowerCase();
+    return MATIERE_EN[key] || part.trim();
+  }).join(', ');
+}
 
 // ═══ CERTIFICATIONS — explication des labels (traçabilité) ═══════
 // Données factuelles et mesurées (anti-greenwashing : chaque entrée précise le

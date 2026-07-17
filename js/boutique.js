@@ -346,6 +346,7 @@ function bqOpenAlt(idx){
   const p=_bqRegistry[idx];
   if(!p||typeof openAlt!=='function')return;
   const item={
+    id:      p.id||'',
     name:    pNom(p),
     brand:   p.marque||'',
     price:   p.prix?String(p.prix)+'€':'',
@@ -424,7 +425,7 @@ function bqProductCard(p){
     <div class="bq-product-info">
       <div class="bq-product-name">${escapeHtml(pNom(p))}</div>
       <div class="bq-product-brand">${escapeHtml(p.marque)}</div>
-      ${p.matiere?`<div style="font-size:11px;color:var(--wd);margin-bottom:4px">${escapeHtml(p.matiere)}</div>`:''}
+      ${p.matiere?`<div style="font-size:11px;color:var(--wd);margin-bottom:4px">${escapeHtml(matiereLabel(p.matiere))}</div>`:''}
       <div style="margin-bottom:6px">${impactGaugesAbs(p)}</div>
       <div class="bq-product-footer">
         <div class="bq-product-price">${escapeHtml(String(p.prix))}€</div>
