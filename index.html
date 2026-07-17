@@ -125,7 +125,7 @@
         <div class="ft active" role="tab" aria-selected="true" tabindex="0" data-i18n="for_you" onclick="ftSelect(this,'pourtoi')">Pour toi</div>
       </div>
       <div class="ft-scan" role="button" tabindex="0" aria-label="WearScan" onclick="openScan()" onkeydown="if(event.key==='Enter'||event.key===' ')openScan()"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 8V5a1 1 0 011-1h3"/><path d="M4 16v3a1 1 0 001 1h3"/><path d="M16 4h3a1 1 0 011 1v3"/><path d="M20 16v3a1 1 0 01-1 1h-3"/><circle cx="12" cy="12" r="2.5" fill="currentColor" opacity=".7"/></svg></div>
-      <div class="ft-search" role="button" tabindex="0" aria-label="Rechercher" onclick="openSearch()" onkeydown="if(event.key==='Enter'||event.key===' ')openSearch()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <div class="ft-search" role="button" tabindex="0" aria-label="Rechercher" data-i18n="aria_search" data-i18n-attr="aria-label" onclick="openSearch()" onkeydown="if(event.key==='Enter'||event.key===' ')openSearch()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
     </div>
     <div id="feed-country-chips" style="display:none">
       <div class="chips" style="padding:6px 12px">
@@ -162,7 +162,7 @@
       </div>
       <div class="exp-search-wrap flex-1">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(237,228,207,0.4)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="srch-input" placeholder="Rechercher…" oninput="doSearchGlobal(this.value)" class="exp-search-input" style="font-size:14px">
+        <input type="text" id="srch-input" data-i18n="srch_ph" data-i18n-attr="placeholder" placeholder="Rechercher…" oninput="doSearchGlobal(this.value)" class="exp-search-input" style="font-size:14px">
         <div id="srch-clear" onclick="clearSearch()" style="display:none;cursor:pointer;color:var(--wd);font-size:20px;line-height:1;padding:0 2px">×</div>
       </div>
     </div>
@@ -183,7 +183,7 @@
   <div id="srch-results" aria-live="polite" aria-atomic="false" style="display:none;flex:1;overflow-y:auto;scrollbar-width:none;padding-bottom:20px">
     <div id="srch-tabs-bar" style="padding:10px 16px;position:sticky;top:0;background:var(--black);z-index:5">
       <div style="display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none">
-        <div class="srch-chip active" onclick="srchTabSelect(this,'all')">TOUT</div>
+        <div class="srch-chip active" data-i18n="filter_all" onclick="srchTabSelect(this,'all')">TOUT</div>
         <div class="srch-chip" onclick="srchTabSelect(this,'posts')">LOOKS</div>
         <div class="srch-chip" onclick="srchTabSelect(this,'people')">PROFILS</div>
         <div class="srch-chip" onclick="srchTabSelect(this,'hashtags')">HASHTAGS</div>
@@ -780,11 +780,11 @@
           </div>
           <!-- Boutons en bas -->
           <div style="display:flex;gap:8px">
-            <button class="prof-btn-edit" style="flex:1;border-radius:10px;padding:10px 0;font-size:12px;border-color:var(--gold-b);color:var(--gold);display:flex;align-items:center;justify-content:center;gap:6px" onclick="openEditProfile()">
+            <button class="prof-btn-edit" style="flex:1;border-radius:10px;padding:10px 0;font-size:12px;border-color:var(--gold-b);color:var(--gold);display:flex;align-items:center;justify-content:center;gap:6px" onclick="openEditProfilePanel()">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
               <span data-i18n="modifier">Modifier</span>
             </button>
-            <button class="prof-btn-share" onclick="navigator.share&&navigator.share({title:'WearAura',url:location.href})" style="border-radius:10px;padding:10px 12px">
+            <button class="prof-btn-share" onclick="shareProfile()" style="border-radius:10px;padding:10px 12px">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
             </button>
           </div>
@@ -1405,7 +1405,7 @@
       <div onclick="closeStoryCreate()" class="link-muted">Annuler</div>
     </div>
     <!-- Zone image -->
-    <div onclick="storyPickImage()" style="width:100%;aspect-ratio:9/16;max-height:52vh;background:var(--black-3);border:1px dashed rgba(240,234,216,0.2);border-radius:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;margin-bottom:14px">
+    <div onclick="scPickGallery()" style="width:100%;aspect-ratio:9/16;max-height:52vh;background:var(--black-3);border:1px dashed rgba(240,234,216,0.2);border-radius:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;margin-bottom:14px">
       <img id="story-preview-img" src="" alt="" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:16px">
       <video id="story-preview-video" autoplay playsinline loop muted style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:16px"></video>
       <div id="story-pick-hint" style="display:flex;flex-direction:column;align-items:center;gap:10px;color:rgba(240,234,216,.35)">
@@ -2120,7 +2120,7 @@
   <div style="padding:12px 16px 8px;flex-shrink:0">
     <div class="exp-search-wrap" class="bg-subtle">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(237,228,207,0.4)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" id="flw-search" placeholder="Rechercher" oninput="filterFollowList(this.value)" class="exp-search-input" style="font-size:13px">
+      <input type="text" id="flw-search" data-i18n="srch_ph" data-i18n-attr="placeholder" placeholder="Rechercher" oninput="filterFollowList(this.value)" class="exp-search-input" style="font-size:13px">
     </div>
   </div>
   <div id="flw-list" style="flex:1;overflow-y:auto;scrollbar-width:none;padding:0 16px calc(20px + var(--sab,0px))"></div>
@@ -2419,19 +2419,19 @@
 </div>
 
 <script src="js/config.js?v=11" defer></script>
-<script src="js/i18n.js?v=59" defer></script>
+<script src="js/i18n.js?v=64" defer></script>
 <script src="js/utils.js?v=4" defer></script>
 <script src="js/nav.js?v=17" defer></script>
-<script src="js/search.js?v=6" defer></script>
+<script src="js/search.js?v=7" defer></script>
 <script src="js/auth.js?v=5" defer></script>
 <script src="js/camera.js?v=8" defer></script>
-<script src="js/feed.js?v=21" defer></script>
-<script src="js/boutique.js?v=22" defer></script>
+<script src="js/feed.js?v=23" defer></script>
+<script src="js/boutique.js?v=23" defer></script>
 <script src="js/create.js?v=22" defer></script>
 <script src="js/messages.js?v=25" defer></script>
-<script src="js/profile.js?v=44" defer></script>
-<script src="js/stories.js?v=14" defer></script>
-<script src="js/scan.js?v=62" defer></script>
+<script src="js/profile.js?v=47" defer></script>
+<script src="js/stories.js?v=15" defer></script>
+<script src="js/scan.js?v=64" defer></script>
 <script src="js/coach.js?v=3" defer></script>
 <script src="js/app.js?v=7" defer></script>
 <!-- ═══════════════════════════════════════════ -->

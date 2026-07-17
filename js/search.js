@@ -77,7 +77,7 @@ function srchFcat(el,cat){
   if(!chips)return;
   const filters=_srchFilters[cat]||_srchFilters.pays;
   chips.innerHTML=filters.map((f,i)=>
-    `<div class="chip${i===0?' active':''}" onclick="countrySel(this,'${f.v}')">${f.l}</div>`
+    `<div class="chip${i===0?' active':''}" onclick="countrySel(this,'${f.v}')">${trFilter(f.l)}</div>`
   ).join('');
   countrySel(chips.querySelector('.chip.active'),'');
 }

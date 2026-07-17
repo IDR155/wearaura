@@ -522,7 +522,7 @@ async function bqCtxSave(){
         alt_name:p.nom,alt_brand:p.marque,alt_url:p.url,
         alt_price:String(p.prix),alt_score_eco:p.score_eco||0,
         alt_image_url:p.image_url||null,alt_type:p.type||null
-      }).catch(()=>{});
+      }).then(()=>{},()=>{});
     }
   }
   localStorage.setItem('bq_saved',JSON.stringify([..._bqSavedKeys]));

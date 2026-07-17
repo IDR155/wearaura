@@ -22,7 +22,6 @@ const I18N = {
     delete_hotspot:'Supprimer',caption_ph:'Décris ton look…',
     city:'Ville',country:'Pays',
     publish:'Publier le Look',publishing:'Upload de la photo…',
-    saving:'Enregistrement…',
     lean_vision_label:'Lean Vision — Décris le look',
     lean_vision_sub:'(tourne sur ton appareil)',
     type_label:'TYPE',color_label:'COULEUR',
@@ -232,7 +231,7 @@ const I18N = {
     detected_visual:'— détecté via analyse visuelle ✓',
     dm_search_hint:'Recherche un utilisateur',
     suggestions:'Suggestions',
-    ph_caption:'Décris ton look…',ph_confirm_pw:'même mot de passe',ph_report_desc:'Décris le problème en détail…',ph_reply:'Répondre à…',ph_story_caption:'Ajoute une légende…',ph_pw_min:'min. 8 caractères',btn_enregistrer:'Enregistrer',btn_envoyer:'Envoyer',btn_fermer:'Fermer',sent_to:'Envoyé à',err_edit:'Erreur de modification',group_created:'Groupe créé',add_label:'Ajouter',add_music:'Ajouter une musique',add_story:'Ajouter une story',view_my_story:'Voir ma story',recording_max:'Enregistrement… (max 2 min)',reply_to_prefix:'Répondre à',maximum:'Maximum',selection:'sélection',scan_n_detected:'✨ {n} pièce{s} détectée{s} — ajuste si besoin',longpress_save_hint:'Appuie longuement sur la photo → <strong style="color:#EDE4CF">Enregistrer dans la galerie</strong>',user_label:'Utilisateur',user_unknown:'Utilisateur inconnu',group_label:'Groupe',confirm_del_comment:'Supprimer ce commentaire ?',confirm_del_avatar:'Supprimer ta photo de profil ?',aria_create_post:'Créer un post',aria_close_cam:'Fermer la caméra',aria_flip_cam:'Retourner la caméra',aria_redetect:'Relancer la détection IA',aria_piece_importance:'Importance de la pièce',aria_look_detail:'Détail du look',aria_product_detail:'Détail du produit',aria_fix_piece:'Corriger la pièce',aria_eth_alts:'Alternatives éthiques',aria_delete:'Supprimer',aria_options:'Options',aria_see_alt:"Voir l'alternative",aria_see_alt_for:"Voir l'alternative pour",aria_post_actions:'Actions sur ce post',aria_unlike:'Retirer le like',aria_like:'Aimer ce post',aria_comment:'Commenter',aria_unsave:'Retirer la sauvegarde',aria_save_post:'Sauvegarder',aria_share:'Partager',aria_post_options:'Options du post',aria_see_profile_of:'Voir le profil de',
+    ph_caption:'Décris ton look…',ph_confirm_pw:'même mot de passe',ph_report_desc:'Décris le problème en détail…',ph_reply:'Répondre à…',ph_story_caption:'Ajoute une légende…',ph_pw_min:'min. 8 caractères',btn_enregistrer:'Enregistrer',btn_envoyer:'Envoyer',btn_fermer:'Fermer',sent_to:'Envoyé à',err_edit:'Erreur de modification',add_label:'Ajouter',add_music:'Ajouter une musique',add_story:'Ajouter une story',view_my_story:'Voir ma story',recording_max:'Enregistrement… (max 2 min)',reply_to_prefix:'Répondre à',maximum:'Maximum',selection:'sélection',scan_n_detected:'✨ {n} pièce{s} détectée{s} — ajuste si besoin',longpress_save_hint:'Appuie longuement sur la photo → <strong style="color:#EDE4CF">Enregistrer dans la galerie</strong>',user_label:'Utilisateur',user_unknown:'Utilisateur inconnu',group_label:'Groupe',confirm_del_comment:'Supprimer ce commentaire ?',confirm_del_avatar:'Supprimer ta photo de profil ?',this_user:'cet utilisateur',err_delete:'Impossible de supprimer.',filter_all:'TOUT',aria_search:'Rechercher',aria_create_post:'Créer un post',aria_close_cam:'Fermer la caméra',aria_flip_cam:'Retourner la caméra',aria_redetect:'Relancer la détection IA',aria_piece_importance:'Importance de la pièce',aria_look_detail:'Détail du look',aria_product_detail:'Détail du produit',aria_fix_piece:'Corriger la pièce',aria_eth_alts:'Alternatives éthiques',aria_delete:'Supprimer',aria_options:'Options',aria_see_alt:"Voir l'alternative",aria_see_alt_for:"Voir l'alternative pour",aria_post_actions:'Actions sur ce post',aria_unlike:'Retirer le like',aria_like:'Aimer ce post',aria_comment:'Commenter',aria_unsave:'Retirer la sauvegarde',aria_save_post:'Sauvegarder',aria_share:'Partager',aria_post_options:'Options du post',aria_see_profile_of:'Voir le profil de',
     group_search_hint:'Recherche des membres à ajouter',
     min_chars:'Tape au moins 2 caractères',no_user_found:'Aucun utilisateur trouvé',
     search_error:'Erreur de recherche',group_members_hint:'Recherche des membres',
@@ -482,7 +481,7 @@ const I18N = {
     confirm_irreversible:'Cette action est irréversible.',
     notif_wants_message:"veut t'envoyer un message",
     notif_story_reaction:'a réagi à ta story',
-    scan_empty_title:"Aucun scan pour l'instant",
+    scan_hist_empty_title:"Aucun scan pour l'instant",
     scan_empty_cta:'Analyse ta première tenue',
     unblock_btn:'Débloquer',
     demo_badge:'Démo',
@@ -726,7 +725,7 @@ const I18N = {
     detected_visual:'— detected via visual analysis ✓',
     dm_search_hint:'Search a user',
     suggestions:'Suggestions',
-    ph_caption:'Describe your look…',ph_confirm_pw:'same password',ph_report_desc:'Describe the problem in detail…',ph_reply:'Reply to…',ph_story_caption:'Add a caption…',ph_pw_min:'min. 8 characters',btn_enregistrer:'Save',btn_envoyer:'Send',btn_fermer:'Close',sent_to:'Sent to',err_edit:'Edit failed',group_created:'Group created',add_label:'Add',add_music:'Add music',add_story:'Add a story',view_my_story:'View my story',recording_max:'Recording… (max 2 min)',reply_to_prefix:'Reply to',maximum:'Maximum',selection:'selection',scan_n_detected:'✨ {n} item{s} detected — adjust if needed',longpress_save_hint:'Press and hold the photo → <strong style="color:#EDE4CF">Save to gallery</strong>',user_label:'User',user_unknown:'Unknown user',group_label:'Group',confirm_del_comment:'Delete this comment?',confirm_del_avatar:'Delete your profile photo?',aria_create_post:'Create a post',aria_close_cam:'Close camera',aria_flip_cam:'Flip camera',aria_redetect:'Restart AI detection',aria_piece_importance:'Item importance',aria_look_detail:'Look details',aria_product_detail:'Product details',aria_fix_piece:'Fix the item',aria_eth_alts:'Ethical alternatives',aria_delete:'Delete',aria_options:'Options',aria_see_alt:'See the alternative',aria_see_alt_for:'See the alternative for',aria_post_actions:'Post actions',aria_unlike:'Unlike',aria_like:'Like this post',aria_comment:'Comment',aria_unsave:'Remove bookmark',aria_save_post:'Save',aria_share:'Share',aria_post_options:'Post options',aria_see_profile_of:'View profile of',
+    ph_caption:'Describe your look…',ph_confirm_pw:'same password',ph_report_desc:'Describe the problem in detail…',ph_reply:'Reply to…',ph_story_caption:'Add a caption…',ph_pw_min:'min. 8 characters',btn_enregistrer:'Save',btn_envoyer:'Send',btn_fermer:'Close',sent_to:'Sent to',err_edit:'Edit failed',add_label:'Add',add_music:'Add music',add_story:'Add a story',view_my_story:'View my story',recording_max:'Recording… (max 2 min)',reply_to_prefix:'Reply to',maximum:'Maximum',selection:'selection',scan_n_detected:'✨ {n} item{s} detected — adjust if needed',longpress_save_hint:'Press and hold the photo → <strong style="color:#EDE4CF">Save to gallery</strong>',user_label:'User',user_unknown:'Unknown user',group_label:'Group',confirm_del_comment:'Delete this comment?',confirm_del_avatar:'Delete your profile photo?',this_user:'this user',err_delete:'Could not delete.',filter_all:'ALL',aria_search:'Search',aria_create_post:'Create a post',aria_close_cam:'Close camera',aria_flip_cam:'Flip camera',aria_redetect:'Restart AI detection',aria_piece_importance:'Item importance',aria_look_detail:'Look details',aria_product_detail:'Product details',aria_fix_piece:'Fix the item',aria_eth_alts:'Ethical alternatives',aria_delete:'Delete',aria_options:'Options',aria_see_alt:'See the alternative',aria_see_alt_for:'See the alternative for',aria_post_actions:'Post actions',aria_unlike:'Unlike',aria_like:'Like this post',aria_comment:'Comment',aria_unsave:'Remove bookmark',aria_save_post:'Save',aria_share:'Share',aria_post_options:'Post options',aria_see_profile_of:'View profile of',
     group_search_hint:'Search members to add',
     min_chars:'Type at least 2 characters',no_user_found:'No users found',
     search_error:'Search error',group_members_hint:'Search members',
@@ -976,7 +975,7 @@ const I18N = {
     confirm_irreversible:'This action is irreversible.',
     notif_wants_message:'wants to message you',
     notif_story_reaction:'reacted to your story',
-    scan_empty_title:'No scans yet',
+    scan_hist_empty_title:'No scans yet',
     scan_empty_cta:'Analyze your first outfit',
     unblock_btn:'Unblock',
     demo_badge:'Demo',
@@ -994,6 +993,17 @@ const I18N = {
 // ── Langue active ──────────────────────────────
 let currentLang = 'fr';
 function t(key){return I18N[currentLang]?.[key]||I18N['fr']?.[key]||key;}
+
+// Traduction des labels de filtres (pays/style/occasion) rendus depuis les listes
+// _srchFilters (search.js) et _mixedChips (feed.js). Garde l'emoji drapeau.
+const _FILTER_TR = {
+  'Tout':'All',
+  '🇫🇷 France':'🇫🇷 France','🇯🇵 Japon':'🇯🇵 Japan','🇺🇸 USA':'🇺🇸 USA','🇮🇹 Italie':'🇮🇹 Italy',
+  '🇰🇷 Corée':'🇰🇷 Korea','🇲🇦 Maroc':'🇲🇦 Morocco','🇬🇧 UK':'🇬🇧 UK','🇩🇪 Allemagne':'🇩🇪 Germany','🇪🇸 Espagne':'🇪🇸 Spain',
+  'Minimaliste':'Minimal','Streetwear':'Streetwear','Vintage':'Vintage','Casual':'Casual','Luxe':'Luxury','Éco':'Eco','Smart':'Smart','Coloré':'Colorful',
+  'Date':'Date','Travail':'Work','Plage':'Beach','Soirée':'Party','Sport':'Sport','Weekend':'Weekend','Voyage':'Travel','Cérémonie':'Ceremony'
+};
+function trFilter(l){ return (currentLang==='en' && _FILTER_TR[l]) ? _FILTER_TR[l] : l; }
 
 function initLang(){
   const saved=localStorage.getItem('wa_lang');
@@ -1126,7 +1136,34 @@ function _matKey(m){
   if(/coton|cotton/.test(s)) return 'coton';
   return s;
 }
-function getEmpreinte(matiere){return EMPREINTE[_matKey(matiere)]||EMPREINTE['inconnu'];}
+// Traductions EN des libellés/infos matières (les chiffres eau/co2 restent communs).
+const EMPREINTE_EN = {
+  'coton':      {label:'Conventional cotton',     info:'Cotton is very water- and pesticide-intensive.'},
+  'lin':        {label:'Natural linen',           info:'Linen grows without irrigation or pesticides, but the impact depends on the country of cultivation and any treatments.'},
+  'laine':      {label:'Wool',                    info:'High carbon footprint due to farming. Imported wool often undergoes strong chemical treatments (anti-moth, anti-felting).'},
+  'soie':       {label:'Silk',                    info:'Silk uses little water but requires a lot of labour.'},
+  'cuir':       {label:'Animal leather',          info:'Leather has one of the heaviest footprints in fashion.'},
+  'cuir-vegan': {label:'Vegan leather',           info:'Much better than animal leather, depending on composition.'},
+  'denim':      {label:'Denim / Jeans',           info:'A pair of jeans ≈ 7,500 L of water and ~25 kg CO₂e over its life cycle (ADEME, Water Footprint Network).'},
+  'recyclé':    {label:'Recycled material',       info:'Recycled fibres cut the footprint by 70% on average.'},
+  'synthétique':{label:'Synthetic (polyester…)',  info:'Little water, but sheds microplastics when washed.'},
+  'coton bio':  {label:'Organic cotton',          info:'Organic cotton uses ~2× less water and excludes synthetic pesticides.'},
+  'chanvre':    {label:'Hemp',                     info:'Hemp grows without irrigation or pesticides.'},
+  'lyocell':    {label:'Lyocell / Tencel',        info:'Wood fibre made in a closed loop, low water use.'},
+  'viscose':    {label:'Viscose',                  info:'Wood fibre; impact varies with production.'},
+  'polyester':  {label:'Polyester',               info:'Very little water, but petroleum-based and microplastics when washed.'},
+  'polyester recyclé':{label:'Recycled polyester',info:'~2× less CO₂ than virgin polyester.'},
+  'inconnu':    {label:'Material not specified',   info:'Ask the creator for this item’s composition.'},
+};
+function getEmpreinte(matiere){
+  const k=_matKey(matiere);
+  const e=EMPREINTE[k]||EMPREINTE['inconnu'];
+  if(currentLang==='en'){
+    const en=EMPREINTE_EN[k]||EMPREINTE_EN['inconnu'];
+    if(en) return {...e, label:en.label, info:en.info};
+  }
+  return e;
+}
 
 // ═══ CERTIFICATIONS — explication des labels (traçabilité) ═══════
 // Données factuelles et mesurées (anti-greenwashing : chaque entrée précise le

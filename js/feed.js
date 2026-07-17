@@ -809,37 +809,8 @@ async function trackView(postId, postOwnerId){
     .catch(()=>{}); // silencieux — jamais bloquant
 }
 
-async function sharePost(pid){
-  const look=window.__looks?.[pid];
-  const user=look?.user||'WearAura';
-  const caption=look?.caption||'';
-  const url=`${location.origin}${location.pathname}?post=${pid}`;
-
-  const shareData={
-    title:`Look de ${user} sur WearAura`,
-    text:caption?`"${caption}" — Découvre ce look sur WearAura ✨`:`Découvre ce look sur WearAura ✨`,
-    url
-  };
-
-  // Mobile — feuille de partage native
-  if(navigator.share){
-    try{
-      await navigator.share(shareData);
-    }catch(e){
-      // AbortError = l'utilisateur a fermé la feuille → silencieux
-      if(e.name!=='AbortError') toast(t('toast_share_unavailable'));
-    }
-    return;
-  }
-
-  // Desktop — copie du lien
-  try{
-    await navigator.clipboard.writeText(url);
-    toast(t('toast_link_copied'));
-  }catch(e){
-    toast(t('toast_link_copy_fail'));
-  }
-}
+// (sharePost en double supprimé — la version de profile.js, chargée après, écrase
+//  celle-ci : c'est la feuille de partage in-app « envoyer à un ami » + option externe.)
 
 function savePostFromOptions(){
   const pid=_poTarget?.postId;
@@ -1024,7 +995,7 @@ function initMixedChips(){
   if(!cc)return;
   cc.innerHTML=_mixedChips.map(f=>{
     const isActive=f.reset&&_bsSelected.size===0;
-    return `<div class="chip${isActive?' active':''}" onclick="quickChipSel(this,'${f.cat}','${f.v}',${!!f.reset})">${f.l}</div>`;
+    return `<div class="chip${isActive?' active':''}" onclick="quickChipSel(this,'${f.cat}','${f.v}',${!!f.reset})">${trFilter(f.l)}</div>`;
   }).join('');
 }
 
@@ -1091,7 +1062,7 @@ function renderBsChips(cat){
   bs.innerHTML=filters.map(f=>{
     const key=cat+':'+f.v;
     const isActive=_bsSelected.has(key);
-    return `<div class="chip${isActive?' active':''}" onclick="toggleBsChip(this,'${cat}','${f.v}')">${f.l}</div>`;
+    return `<div class="chip${isActive?' active':''}" onclick="toggleBsChip(this,'${cat}','${f.v}')">${trFilter(f.l)}</div>`;
   }).join('');
 }
 function toggleBsChip(el,cat,val){
@@ -1155,7 +1126,7 @@ function applyBsFilters(){
       const selChips=_mixedChips.filter(f=>f.reset||_bsSelected.has(f.cat+':'+f.v));
       cc.innerHTML=selChips.map(f=>{
         const isActive=!f.reset&&_bsSelected.has(f.cat+':'+f.v);
-        return `<div class="chip${isActive?' active':''}" onclick="quickChipSel(this,'${f.cat}','${f.v}',${!!f.reset})">${f.l}</div>`;
+        return `<div class="chip${isActive?' active':''}" onclick="quickChipSel(this,'${f.cat}','${f.v}',${!!f.reset})">${trFilter(f.l)}</div>`;
       }).join('');
     }
   }

@@ -291,7 +291,21 @@ async function _processScan(dataUrl) {
 
 // ── MISTRAL PIXTRAL — via Edge Function Supabase (clé jamais exposée) ──
 async function _callPixtral(dataUrl, timeoutMs = null) {
-  const prompt = `Tu es un expert mode. Identifie TOUTES les pièces vestimentaires visibles sur cette photo. Il y a forcément au moins un vêtement. Pour chaque pièce :
+  // Prompt dans la langue de l'app → l'IA génère les noms/couleurs/matières dans cette langue.
+  // Les clés JSON restent identiques (le code lit p.piece/couleur/matiere/style) ; seules
+  // les VALEURS changent de langue. detectTypeFromKeywords + _matKey sont déjà bilingues.
+  const _en = (typeof currentLang !== 'undefined' && currentLang === 'en');
+  const prompt = _en
+    ? `You are a fashion expert. Identify ALL visible clothing items in this photo. There is always at least one garment. For each item:
+- "piece": precise name in English (e.g. "checked flannel jacket")
+- "couleur": main color, in English
+- "matiere": apparent material in English (cotton, denim, leather, wool…)
+- "style": cut (slim, oversized, regular, cropped…)
+- "x" / "y": position of the CENTER of the item on the body in % (x=left→right, y=top→bottom)
+
+Maximum 5 items. Each item MUST be a complete object with its 6 fields. Always give your best concrete estimate: NEVER use "unidentifiable", "unclear" or "blurry". If unsure, pick the most likely garment type (e.g. "t-shirt", "sweater", "jacket"). Reply ONLY with the raw JSON array, no markdown, no surrounding text.
+Example: [{"piece":"blue slim jeans","couleur":"indigo blue","matiere":"denim","style":"slim","x":50,"y":72}]`
+    : `Tu es un expert mode. Identifie TOUTES les pièces vestimentaires visibles sur cette photo. Il y a forcément au moins un vêtement. Pour chaque pièce :
 - "piece" : nom précis en français (ex: "veste en flanelle à carreaux")
 - "couleur" : couleur principale
 - "matiere" : matière apparente (coton, denim, cuir, laine…)
@@ -626,7 +640,7 @@ async function loadScanHistory() {
     if (localItems.length === 0) {
       grid.innerHTML = `<div class="scan-hist-empty">
         <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--wd)" stroke-width="1.5" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <p>${t('scan_empty_title')}</p>
+        <p>${t('scan_hist_empty_title')}</p>
         <span>${t('scan_empty_cta')}</span>
       </div>`;
     }
@@ -656,7 +670,7 @@ function _renderScanHistory(items) {
     _syncHistEditBtn();
     grid.innerHTML = `<div class="scan-hist-empty">
       <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--wd)" stroke-width="1.5" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-      <p>${t('scan_empty_title')}</p>
+      <p>${t('scan_hist_empty_title')}</p>
       <span>${t('scan_empty_cta')}</span>
     </div>`;
     return;

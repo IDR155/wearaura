@@ -2140,13 +2140,7 @@ async function removeFollower(uid,btn){
   toast(t('toast_follower_removed'));
 }
 
-async function openBlockedUsers(){
-  if(!me)return;
-  const{data}=await sb.from('profiles').select('blocked_users').eq('id',me.id).maybeSingle();
-  const blocked=data?.blocked_users||[];
-  if(!blocked.length)return toast(t('aucun_bloque'));
-  toast(`${blocked.length} ${t('blocked_users_label')}`);
-}
+// (openBlockedUsers en double supprimé — la version « table blocked_users » plus bas est la seule active)
 
 // ── Centre d'aide ──────────────────────────────
 function openHelp(){
@@ -2449,7 +2443,7 @@ let _poTarget=null;
 function openPostOptions(postId, uid, username){
   if(!me)return toast(t('login_required'));
   _poTarget={postId,uid,username};
-  document.getElementById('po-username').textContent=username||'cet utilisateur';
+  document.getElementById('po-username').textContent=username||t('this_user');
   // Affiche le bon groupe d'options selon si c'est notre post ou celui d'un autre
   const isOwn=postId&&uid&&me&&uid===me.id;
   const ownOpts=document.getElementById('po-own-opts');
@@ -2467,7 +2461,7 @@ async function deletePostFromFeed(){
   const slide=document.querySelector(`.feed-slide[data-pid="${postId}"]`);
   if(slide)slide.remove();
   // Supprimer en base
-  const{error}=await safeRun(sb.from('posts').delete().eq('id',postId).eq('user_id',me.id),{friendly:'Impossible de supprimer.',context:'deletePostFromFeed'});
+  const{error}=await safeRun(sb.from('posts').delete().eq('id',postId).eq('user_id',me.id),{friendly:t('err_delete'),context:'deletePostFromFeed'});
   if(error)return;
   // Supprimer aussi du profil grid si visible
   const pgridItem=document.querySelector(`.pgrid-item[data-post-id="${postId}"]`);
@@ -2693,6 +2687,17 @@ async function sharePostExternalUrl(postId){
     catch(e){/* user cancelled */}
   } else {
     try{await navigator.clipboard.writeText(url);toast(t('link_copied'));}catch(e){toast(t('toast_link_label')+' : '+url);}
+  }
+}
+// Partage du profil : Web Share si dispo, sinon copie du lien (fallback robuste).
+async function shareProfile(){
+  const url=window.location.origin;
+  if(navigator.share){
+    try{await navigator.share({title:'WearAura',text:'WearAura 🌿',url});}
+    catch(e){/* annulé par l'utilisateur */}
+  }else{
+    try{await navigator.clipboard.writeText(url);toast(t('link_copied'));}
+    catch(e){toast(url);}
   }
 }
 function shareAction(platform){

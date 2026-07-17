@@ -1154,7 +1154,7 @@ async function _sendStoryDM(toUid, content) {
       .select().single();
     convId = newConv?.id;
     // Notification message_request
-    await sb.from('notifications').insert({ user_id: toUid, from_user_id: me.id, type: 'message_request', read: false }).catch(()=>{});
+    await sb.from('notifications').insert({ user_id: toUid, from_user_id: me.id, type: 'message_request', read: false }).then(()=>{},()=>{});
   }
 
   if (!convId) throw new Error('no conv');
